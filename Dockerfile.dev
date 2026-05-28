@@ -1,0 +1,15 @@
+FROM node:20-alpine
+
+WORKDIR /app
+
+# Copiar manifiestos primero (capa cacheada si no cambian)
+COPY package*.json ./
+RUN npm install
+
+# Copiar el resto del código fuente
+COPY . .
+
+# Exponer puerto
+EXPOSE 3000
+
+CMD ["npm", "run", "dev"]
