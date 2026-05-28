@@ -1,36 +1,74 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# Nexus Frontend
 
-## Getting Started
+Dashboard web multi-tenant para la plataforma Nexus. Construido con Next.js 15 App Router.
 
-First, run the development server:
+> Para el setup completo ver el [README raíz](../README.md).
 
-```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
+## Stack
+
+- **Next.js 15** — App Router, React Server Components
+- **Tailwind CSS** — estilos
+- **TanStack Query** — fetching y caché de datos
+- **Zustand** — estado global (auth)
+- **Recharts** — gráficos del dashboard
+- **React Hook Form + Zod** — formularios y validación
+
+## Variables de entorno
+
+| Variable                    | Descripción                              | Ejemplo                          |
+|-----------------------------|------------------------------------------|----------------------------------|
+| `NEXT_PUBLIC_API_URL`       | URL base del backend                     | `http://localhost:4000/api/v1`   |
+| `NEXT_PUBLIC_SA_TENANT_SLUG`| Slug del tenant super admin              | `super-admin`                    |
+
+## Estructura de páginas
+
+```
+src/app/
+├── (auth)/                     Páginas públicas
+│   └── login/                  Login de tenant
+├── (dashboard)/                Dashboard (requiere auth de tenant)
+│   └── dashboard/
+│       ├── page.tsx            Dashboard principal — KPIs + 5 módulos
+│       ├── clients/            Clientes (listado, detalle, importación CSV)
+│       ├── readings/           Lotes de lectura y generación de facturas
+│       ├── billing/            Facturas emitidas
+│       ├── payments/           Cobros registrados
+│       ├── financing/          Planes de financiación
+│       ├── reports/            Reportes exportables (XLSX)
+│       ├── catalogs/           Catálogos (estratos, barrios, tarifas…)
+│       ├── users/              Usuarios y roles del tenant
+│       └── settings/
+│           ├── billing/        Configuración de facturación
+│           ├── invoice-template/ Plantilla visual de facturas (live preview)
+│           └── api-keys/       API keys del tenant
+└── (super-admin)/              Panel super admin (tenant independiente)
+    └── super-admin/
+        ├── login/
+        └── tenants/            CRUD de tenants
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+## Comandos
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+```bash
+# Instalar dependencias
+npm install
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+# Desarrollo
+npm run dev        # http://localhost:3000
 
-## Learn More
+# Build
+npm run build
+npm start
 
-To learn more about Next.js, take a look at the following resources:
+# Lint
+npm run lint
+```
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+## Autenticación
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+El frontend mantiene dos stores Zustand independientes con `persist` en `localStorage`:
 
-## Deploy on Vercel
+- `auth.store.ts` — sesión del usuario de tenant (`/dashboard/*`)
+- `super-admin-auth.store.ts` — sesión del super admin (`/super-admin/*`)
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
-
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+El token de acceso expira en 15 minutos. El cliente Axios (`src/lib/api.ts`) intercepta los 401 y rota automáticamente el refresh token sin cerrar sesión.
