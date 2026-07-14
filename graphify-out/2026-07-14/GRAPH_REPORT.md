@@ -1,16 +1,16 @@
-# Graph Report - frontend  (2026-07-14)
+# Graph Report - frontend  (2026-07-13)
 
 ## Corpus Check
-- 87 files · ~41,521 words
+- 87 files · ~41,514 words
 - Verdict: corpus is large enough that graph structure adds value.
 
 ## Summary
-- 529 nodes · 1112 edges · 28 communities (23 shown, 5 thin omitted)
+- 529 nodes · 1110 edges · 28 communities (23 shown, 5 thin omitted)
 - Extraction: 100% EXTRACTED · 0% INFERRED · 0% AMBIGUOUS
 - Token cost: 0 input · 0 output
 
 ## Graph Freshness
-- Built from commit: `6e57733b`
+- Built from commit: `ea55a89b`
 - Run `git rev-parse HEAD` and compare to check if the graph is stale.
 - Run `graphify update .` after code changes (no API cost).
 
@@ -62,8 +62,8 @@
   src/app/(dashboard)/dashboard/pqr/[id]/page.tsx → src/lib/utils.ts
 - `ReadingBatchPage()` --calls--> `formatMonth()`  [EXTRACTED]
   src/app/(dashboard)/dashboard/readings/[id]/page.tsx → src/lib/utils.ts
-- `Badge()` --calls--> `cn()`  [EXTRACTED]
-  src/components/ui/badge.tsx → src/lib/utils.ts
+- `UsersTab()` --calls--> `useAuthStore`  [EXTRACTED]
+  src/app/(dashboard)/dashboard/users/page.tsx → src/store/auth.store.ts
 
 ## Import Cycles
 - None detected.
@@ -72,7 +72,7 @@
 
 ### Community 0 - "card.tsx"
 Cohesion: 0.07
-Nodes (35): Tab, TABS, CdpForm(), Props, COLUMNS, STATUS_CONFIG, Step, PqrDetailPage() (+27 more)
+Nodes (38): Tab, TABS, CdpForm(), Props, COLUMNS, STATUS_CONFIG, Step, PqrDetailPage() (+30 more)
 
 ### Community 1 - "formatCurrency"
 Cohesion: 0.08
@@ -80,11 +80,11 @@ Nodes (31): CostRow(), CreditNoteForm, creditNoteSchema, InvoiceDetailPage(), It
 
 ### Community 2 - "page.tsx"
 Cohesion: 0.08
-Nodes (19): ChangePasswordForm, changePasswordSchema, CreateRoleForm, createRoleSchema, CreateUserForm, createUserSchema, EditUserForm, editUserSchema (+11 more)
+Nodes (20): ChangePasswordForm, changePasswordSchema, CreateRoleForm, createRoleSchema, CreateUserForm, createUserSchema, EditUserForm, editUserSchema (+12 more)
 
 ### Community 3 - "page.tsx"
 Cohesion: 0.05
-Nodes (36): AGING_COLORS, CountTooltip(), CurrencyTooltip(), DashboardPage(), fmtM(), STRATA_COLORS, SuperAdminLayout(), FormData (+28 more)
+Nodes (33): AGING_COLORS, CountTooltip(), CurrencyTooltip(), DashboardPage(), fmtM(), STRATA_COLORS, SuperAdminLayout(), FormData (+25 more)
 
 ### Community 4 - "utils.ts"
 Cohesion: 0.07
@@ -96,7 +96,7 @@ Nodes (33): axios, class-variance-authority, clsx, @hookform/resolvers, js-cooki
 
 ### Community 6 - "index.ts"
 Cohesion: 0.10
-Nodes (24): FormData, LoginPage(), schema, buildVoucherText(), PAYMENT_TYPES, PaymentDetailPage(), TYPE_COLORS, UsersTab() (+16 more)
+Nodes (24): FormData, LoginPage(), schema, buildVoucherText(), PAYMENT_TYPES, PaymentDetailPage(), TYPE_COLORS, DashboardLayout() (+16 more)
 
 ### Community 7 - "compilerOptions"
 Cohesion: 0.06
@@ -115,8 +115,8 @@ Cohesion: 0.12
 Nodes (15): AccountingAccount, Budget, BudgetCategory, BudgetDetail, BudgetFilters, BudgetRp, BudgetTemplate, CreateAccountingAccountDto (+7 more)
 
 ### Community 11 - "page.tsx"
-Cohesion: 0.20
-Nodes (7): BillingTrendPoint, DashboardPortfolioData, DashboardUsersData, MONTHS, reportsService, TariffRecord, DashboardSummary
+Cohesion: 0.22
+Nodes (6): BillingTrendPoint, DashboardPortfolioData, DashboardUsersData, MONTHS, reportsService, TariffRecord
 
 ### Community 12 - "page.tsx"
 Cohesion: 0.10
@@ -132,7 +132,7 @@ Nodes (4): geistMono, geistSans, metadata, Providers()
 
 ### Community 23 - "index.ts"
 Cohesion: 0.25
-Nodes (7): Client, Invoice, LoginResponse, Payment, Printer, Reading, Tenant
+Nodes (7): Client, DashboardSummary, Invoice, Payment, Printer, Reading, Tenant
 
 ### Community 24 - "payments.service.ts"
 Cohesion: 0.29
@@ -167,8 +167,8 @@ _Questions this graph is uniquely positioned to answer:_
 - **What connects `eslintConfig`, `nextConfig`, `name` to the rest of the system?**
   _209 weakly-connected nodes found - possible documentation gaps or missing edges._
 - **Should `card.tsx` be split into smaller, more focused modules?**
-  _Cohesion score 0.07115384615384615 - nodes in this community are weakly interconnected._
+  _Cohesion score 0.06625258799171843 - nodes in this community are weakly interconnected._
 - **Should `formatCurrency` be split into smaller, more focused modules?**
   _Cohesion score 0.07510204081632653 - nodes in this community are weakly interconnected._
 - **Should `page.tsx` be split into smaller, more focused modules?**
-  _Cohesion score 0.08465608465608465 - nodes in this community are weakly interconnected._
+  _Cohesion score 0.0812807881773399 - nodes in this community are weakly interconnected._

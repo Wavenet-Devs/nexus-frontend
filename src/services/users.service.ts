@@ -1,4 +1,5 @@
 import { api } from '@/lib/api';
+import type { PaginatedResponse } from '@/types';
 
 export interface UserListItem {
   id:         string;
@@ -64,7 +65,7 @@ export interface SetPermissionsDto {
 export const usersService = {
   // ── Usuarios ──────────────────────────────────────────────────────────────
   findAll:        (page = 1, limit = 50) =>
-    api.get<UserListItem[]>('/users', { params: { page, limit } }).then((r) => r.data),
+    api.get<PaginatedResponse<UserListItem>>('/users', { params: { page, limit } }).then((r) => r.data.data),
   findOne:        (id: string) =>
     api.get<UserListItem>(`/users/${id}`).then((r) => r.data),
   create:         (dto: CreateUserDto) =>
