@@ -4,7 +4,7 @@ import Link from 'next/link';
 import { usePathname } from 'next/navigation';
 import {
   LayoutDashboard, Users, FileText, CreditCard, BarChart2,
-  Settings, LogOut, Zap, BookOpen, Gauge, Banknote, X,
+  Settings, LogOut, Zap, BookOpen, Gauge, Banknote, Wallet, MessageSquare, X,
 } from 'lucide-react';
 import { cn } from '@/lib/utils';
 import { useAuthStore } from '@/store/auth.store';
@@ -17,8 +17,11 @@ const navItems = [
   { label: 'Facturación',  href: '/dashboard/billing',  icon: FileText        },
   { label: 'Cobros',       href: '/dashboard/payments', icon: CreditCard      },
   { label: 'Financiación', href: '/dashboard/financing',icon: Banknote        },
+  { label: 'Presupuesto',  href: '/dashboard/budget',   icon: Wallet          },
+  { label: 'PQR',          href: '/dashboard/pqr',      icon: MessageSquare   },
   { label: 'Reportes',     href: '/dashboard/reports',  icon: BarChart2       },
   { label: 'Catálogos',    href: '/dashboard/catalogs', icon: BookOpen        },
+  { label: 'Usuarios',     href: '/dashboard/users',    icon: Users           },
   { label: 'Configuración',href: '/dashboard/settings', icon: Settings        },
 ];
 

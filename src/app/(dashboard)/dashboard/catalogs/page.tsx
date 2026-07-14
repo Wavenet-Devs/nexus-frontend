@@ -14,7 +14,7 @@ import { Dialog } from '@/components/ui/dialog';
 import { formatCurrency } from '@/lib/utils';
 
 // ─── Tab types ────────────────────────────────────────────────────────────────
-type Tab = 'stratums' | 'neighborhoods' | 'routes' | 'circuits' | 'causals' | 'meters' | 'id-types' | 'unit-costs';
+type Tab = 'stratums' | 'neighborhoods' | 'routes' | 'circuits' | 'causals' | 'meters' | 'id-types' | 'calc-methods' | 'unit-costs';
 
 const TABS: { key: Tab; label: string }[] = [
   { key: 'stratums',      label: 'Estratos' },
@@ -24,6 +24,7 @@ const TABS: { key: Tab; label: string }[] = [
   { key: 'causals',       label: 'Causales' },
   { key: 'meters',        label: 'Medidores' },
   { key: 'id-types',      label: 'Tipos de ID' },
+  { key: 'calc-methods',  label: 'Métodos de cálculo' },
   { key: 'unit-costs',    label: 'Costos CU' },
 ];
 
@@ -59,6 +60,7 @@ export default function CatalogsPage() {
       {tab === 'causals'       && <CausalsTab />}
       {tab === 'meters'        && <MetersTab />}
       {tab === 'id-types'      && <SimpleTab type="id-types"      label="Tipo de identificación" />}
+      {tab === 'calc-methods'  && <SimpleTab type="calc-methods"  label="Método de cálculo" />}
       {tab === 'unit-costs'    && <UnitCostsTab />}
     </div>
   );
@@ -122,7 +124,7 @@ function EmptyRow({ cols }: { cols: number }) {
 
 // ─── Simple catalogs (neighborhoods, routes, circuits, id-types) ──────────────
 
-type SimpleType = 'neighborhoods' | 'routes' | 'circuits' | 'id-types';
+type SimpleType = 'neighborhoods' | 'routes' | 'circuits' | 'id-types' | 'calc-methods';
 
 const SIMPLE_CFG: Record<SimpleType, {
   queryKey: string;
@@ -158,6 +160,13 @@ const SIMPLE_CFG: Record<SimpleType, {
     create: catalogsService.createIdentificationType,
     update: catalogsService.updateIdentificationType,
     toggle: catalogsService.toggleIdentificationType,
+  },
+  'calc-methods': {
+    queryKey: 'calculation-methods',
+    get:    catalogsService.getCalculationMethods,
+    create: catalogsService.createCalculationMethod,
+    update: catalogsService.updateCalculationMethod,
+    toggle: catalogsService.toggleCalculationMethod,
   },
 };
 

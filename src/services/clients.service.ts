@@ -29,6 +29,7 @@ export interface ClientDetail extends ClientListItem {
   route_id?:        string;
   meter_id?:        string;
   id_type_id?:      string;
+  causal_id?:       string;
 }
 
 export interface ClientFilters {

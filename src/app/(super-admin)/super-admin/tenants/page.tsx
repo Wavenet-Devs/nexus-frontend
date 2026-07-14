@@ -45,7 +45,7 @@ function StatusDot({ status }: { status: string }) {
 const createSchema = z.object({
   slug:          z.string().min(3).max(50).regex(/^[a-z0-9-]+$/, 'Solo minúsculas, números y guiones'),
   name:          z.string().min(2, 'Mínimo 2 caracteres'),
-  plan:          z.enum(['starter', 'pro', 'enterprise']).default('starter'),
+  plan:          z.enum(['starter', 'pro', 'enterprise']),
   adminName:     z.string().min(2, 'Requerido'),
   adminEmail:    z.string().email('Email inválido'),
   adminPassword: z.string().min(8, 'Mínimo 8 caracteres'),

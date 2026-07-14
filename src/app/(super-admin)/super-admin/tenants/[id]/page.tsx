@@ -27,7 +27,7 @@ const updateSchema = z.object({
   logoUrl:        z.string().url('URL inválida').optional().or(z.literal('')),
   customDomain:   z.string().optional().or(z.literal('')),
   smtpHost:       z.string().optional().or(z.literal('')),
-  smtpPort:       z.number({ invalid_type_error: '' }).int().min(1).max(65535).optional(),
+  smtpPort:       z.number().int().min(1).max(65535).optional(),
   smtpUser:       z.string().email().optional().or(z.literal('')),
   smtpPassword:   z.string().optional().or(z.literal('')),
   smtpFromName:   z.string().optional().or(z.literal('')),
@@ -404,7 +404,7 @@ export default function TenantDetailPage() {
           onClose={() => setToggleOpen(false)}
           onConfirm={() => toggleMutation.mutate()}
           title={isActive ? 'Desactivar tenant' : 'Activar tenant'}
-          description={
+          message={
             isActive
               ? `Al desactivar "${tenant.name}" sus usuarios no podrán iniciar sesión ni acceder al sistema.`
               : `Al activar "${tenant.name}" sus usuarios podrán volver a acceder al sistema.`

@@ -80,6 +80,12 @@ export const catalogsService = {
   updateIdentificationType: (id: string, dto: any) => api.patch<CatalogItem>(`/catalogs/identification-types/${id}`, dto).then((r) => r.data),
   toggleIdentificationType: (id: string) => api.patch<CatalogItem>(`/catalogs/identification-types/${id}/toggle-status`).then((r) => r.data),
 
+  // ── Métodos de cálculo ────────────────────────────────────────────────────
+  getCalculationMethods:    () => api.get<CatalogItem[]>('/catalogs/calculation-methods').then((r) => r.data),
+  createCalculationMethod:  (dto: any) => api.post<CatalogItem>('/catalogs/calculation-methods', dto).then((r) => r.data),
+  updateCalculationMethod:  (id: string, dto: any) => api.patch<CatalogItem>(`/catalogs/calculation-methods/${id}`, dto).then((r) => r.data),
+  toggleCalculationMethod:  (id: string) => api.patch<CatalogItem>(`/catalogs/calculation-methods/${id}/toggle-status`).then((r) => r.data),
+
   // ── Costos de proveedor ───────────────────────────────────────────────────
   getUnitCosts:      () => api.get<UnitCost[]>('/catalogs/unit-costs').then((r) => r.data),
   getActiveUnitCost: () => api.get<UnitCost>('/catalogs/unit-costs/active').then((r) => r.data),

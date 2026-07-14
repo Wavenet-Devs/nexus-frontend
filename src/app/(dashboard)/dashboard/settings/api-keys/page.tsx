@@ -207,7 +207,7 @@ X-Api-Key: <tu-api-key>`}</pre>
           onClose={() => setRevokeTarget(null)}
           onConfirm={() => revokeMutation.mutate(revokeTarget)}
           title="Revocar API key"
-          description="Esta acción es irreversible. Cualquier sistema que use esta clave dejará de tener acceso inmediatamente."
+          message="Esta acción es irreversible. Cualquier sistema que use esta clave dejará de tener acceso inmediatamente."
           danger
         />
       )}
