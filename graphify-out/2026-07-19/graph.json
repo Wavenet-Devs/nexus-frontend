@@ -877,7 +877,7 @@
       "label": "TableSkeleton()",
       "file_type": "code",
       "source_file": "src/app/(dashboard)/dashboard/billing/page.tsx",
-      "source_location": "L245",
+      "source_location": "L274",
       "_origin": "ast",
       "id": "src_app_dashboard_dashboard_billing_page_tableskeleton",
       "community": 0,
@@ -6497,7 +6497,7 @@
       "relation": "contains",
       "confidence": "EXTRACTED",
       "source_file": "src/app/(dashboard)/dashboard/billing/page.tsx",
-      "source_location": "L245",
+      "source_location": "L274",
       "weight": 1.0,
       "source": "src_app_dashboard_dashboard_billing_page",
       "target": "src_app_dashboard_dashboard_billing_page_tableskeleton",
@@ -6761,7 +6761,7 @@
       "confidence": "EXTRACTED",
       "confidence_score": 1.0,
       "source_file": "src/app/(dashboard)/dashboard/billing/page.tsx",
-      "source_location": "L194",
+      "source_location": "L223",
       "weight": 1.0,
       "source": "src_app_dashboard_dashboard_billing_page_billingpage",
       "target": "src_lib_utils_formatcurrency"
@@ -6772,7 +6772,7 @@
       "confidence": "EXTRACTED",
       "confidence_score": 1.0,
       "source_file": "src/app/(dashboard)/dashboard/billing/page.tsx",
-      "source_location": "L193",
+      "source_location": "L222",
       "weight": 1.0,
       "source": "src_app_dashboard_dashboard_billing_page_billingpage",
       "target": "src_lib_utils_formatmonth"
@@ -17236,5 +17236,5 @@
     }
   ],
   "hyperedges": [],
-  "built_at_commit": "434d7846f85160f4dc2794d26318147ec043b11f"
+  "built_at_commit": "48b0a1d7cf8ea7f3e9c60971608be2fb6805b1fe"
 }

@@ -3,7 +3,7 @@
 import { useState } from 'react';
 import { useQuery } from '@tanstack/react-query';
 import { useRouter, useSearchParams } from 'next/navigation';
-import { FileText, Search, Filter, Printer } from 'lucide-react';
+import { FileText, Search, Filter } from 'lucide-react';
 import { billingService } from '@/services/billing.service';
 import { catalogsService } from '@/services/catalogs.service';
 import { useDebounce } from '@/hooks/use-debounce';
@@ -34,8 +34,8 @@ export default function BillingPage() {
   const [search,         setSearch]         = useState('');
   const [status,         setStatus]         = useState('');
   const [neighborhoodId, setNeighborhoodId] = useState('');
-  const [month,          setMonth]          = useState<number | ''>(CURRENT_MONTH);
-  const [year,           setYear]           = useState<number | ''>(CURRENT_YEAR);
+  const [month,          setMonth]          = useState<number | ''>('');
+  const [year,           setYear]           = useState<number | ''>('');
   const [showFilters,    setShowFilters]    = useState(false);
 
   const debouncedSearch = useDebounce(search, 400);
@@ -66,45 +66,16 @@ export default function BillingPage() {
 
   return (
     <div className="space-y-5">
-      {/* Banner de lote recién generado — impresión masiva */}
+      {/* Chip: viendo un lote específico (llegando desde Lecturas → Ver facturas) */}
       {readingId && (
-        <Card padding="md" className="border-primary-200 bg-primary-50/50">
-          <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3">
-            <div className="flex items-center gap-2">
-              <Printer className="h-5 w-5 text-primary-600 shrink-0" />
-              <div>
-                <p className="text-sm font-semibold text-primary-800">Facturas de este lote</p>
-                <p className="text-xs text-primary-600">Imprime todas o filtra por barrio para un PDF más liviano.</p>
-              </div>
-            </div>
-            <div className="flex flex-wrap items-center gap-2">
-              <select
-                value={neighborhoodId}
-                onChange={(e) => { setNeighborhoodId(e.target.value); setPage(1); }}
-                className="h-9 rounded-lg border border-neutral-300 bg-white px-3 text-sm focus:outline-none focus:ring-2 focus:ring-primary-500"
-              >
-                <option value="">Todos los barrios</option>
-                {neighborhoods?.map((n) => <option key={n.id} value={n.id}>{n.name}</option>)}
-              </select>
-              <Button
-                variant="outline"
-                size="sm"
-                disabled={!neighborhoodId}
-                onClick={() => window.open(billingService.getBatchPrintUrl(readingId, { neighborhoodId }), '_blank')}
-              >
-                <Printer className="h-3.5 w-3.5" />
-                Imprimir barrio
-              </Button>
-              <Button
-                size="sm"
-                onClick={() => window.open(billingService.getBatchPrintUrl(readingId), '_blank')}
-              >
-                <Printer className="h-3.5 w-3.5" />
-                Imprimir todas
-              </Button>
-            </div>
-          </div>
-        </Card>
+        <div className="flex items-center gap-2">
+          <span className="inline-flex items-center px-2.5 py-1 rounded-lg bg-primary-50 text-primary-700 text-xs font-medium">
+            Mostrando facturas de un lote
+          </span>
+          <button onClick={() => router.push('/dashboard/billing')} className="text-xs text-primary-600 hover:underline">
+            Ver todas
+          </button>
+        </div>
       )}
 
       {/* Toolbar */}
