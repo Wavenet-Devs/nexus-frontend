@@ -4,8 +4,8 @@ import { useState } from 'react';
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
 import { useParams, useRouter } from 'next/navigation';
 import {
-  ArrowLeft, Printer, FileText, CreditCard, ChevronDown, ChevronUp,
-  AlertCircle, CheckCircle2, Clock, Mail,
+  ArrowLeft, Printer, FileText, CreditCard,
+  AlertCircle, CheckCircle2, Clock, Mail, RefreshCw,
 } from 'lucide-react';
 import { billingService } from '@/services/billing.service';
 import { Card, CardHeader, CardTitle } from '@/components/ui/card';
@@ -60,6 +60,25 @@ export default function InvoiceDetailPage() {
     onSuccess:  () => { setEmailSent(true); setTimeout(() => setEmailSent(false), 4000); },
   });
 
+  // ── Recálculo / edición de la factura ──
+  const [showRecalc,   setShowRecalc]   = useState(false);
+  const [recalcReason, setRecalcReason] = useState('');
+
+  const { data: editHistory } = useQuery({
+    queryKey: ['invoice-history', id],
+    queryFn:  () => billingService.getHistory(id),
+  });
+
+  const recalcMutation = useMutation({
+    mutationFn: () => billingService.recalculate(id, recalcReason.trim()),
+    onSuccess: () => {
+      qc.invalidateQueries({ queryKey: ['invoice', id] });
+      qc.invalidateQueries({ queryKey: ['invoice-history', id] });
+      setShowRecalc(false);
+      setRecalcReason('');
+    },
+  });
+
   if (isLoading) return <PageSkeleton />;
   if (!inv) return null;
 
@@ -99,6 +118,10 @@ export default function InvoiceDetailPage() {
             <Printer className="h-3.5 w-3.5" />
             Imprimir / PDF
           </Button>
+          <Button variant="outline" size="sm" onClick={() => setShowRecalc(true)}>
+            <RefreshCw className="h-3.5 w-3.5" />
+            Recalcular
+          </Button>
           {inv.status !== 'paid' && (
             <Button size="sm" onClick={() => setShowCN(true)}>
               <CreditCard className="h-3.5 w-3.5" />
@@ -122,7 +145,14 @@ export default function InvoiceDetailPage() {
             )}
           </div>
           <div className="flex flex-col items-start sm:items-end gap-1.5">
-            <StatusBadge status={inv.status} />
+            <div className="flex items-center gap-2">
+              {inv.edited && (
+                <span className="inline-flex items-center px-2 py-0.5 rounded-full text-xs font-medium bg-amber-100 text-amber-700" title={`Ajustada · v${inv.version}`}>
+                  Ajustada
+                </span>
+              )}
+              <StatusBadge status={inv.status} />
+            </div>
             <span className="text-sm text-neutral-500">{formatMonth(inv.month, inv.year)}</span>
             {inv.payment_limit && (
               <span className="text-xs text-neutral-400">Vence: {new Date(inv.payment_limit).toLocaleDateString('es-CO')}</span>
@@ -241,6 +271,51 @@ export default function InvoiceDetailPage() {
           </div>
         </Card>
       )}
+
+      {/* Historial de ajustes de la factura */}
+      {!!editHistory?.length && (
+        <Card padding="md">
+          <CardHeader className="pb-3"><CardTitle>Historial de ajustes</CardTitle></CardHeader>
+          <div className="space-y-2">
+            {editHistory.map((h, i) => (
+              <div key={i} className="flex items-start justify-between p-3 rounded-lg bg-neutral-50 border border-neutral-100">
+                <div>
+                  <p className="text-sm text-neutral-800">{h.reason}</p>
+                  <p className="text-xs text-neutral-500 mt-0.5">{h.changed_by_name || 'Usuario'} · {formatDate(h.changed_at)}</p>
+                </div>
+                <span className="text-xs text-neutral-500 font-mono shrink-0 ml-3">
+                  Total anterior: {formatCurrency(Number(h.snapshot?.total ?? 0))}
+                </span>
+              </div>
+            ))}
+          </div>
+        </Card>
+      )}
+
+      {/* Recalcular dialog */}
+      <Dialog open={showRecalc} onClose={() => { setShowRecalc(false); setRecalcReason(''); }} title="Recalcular factura">
+        <form onSubmit={(e) => { e.preventDefault(); recalcMutation.mutate(); }} className="space-y-4">
+          <p className="text-sm text-neutral-600">
+            Recalcula la factura desde la lectura corregida (tarifas, subsidios y total). El saldo respeta los pagos ya aplicados. Queda registro en el historial.
+          </p>
+          <Input
+            label="Motivo del ajuste"
+            placeholder="Ej: corrección de lectura mal digitada"
+            value={recalcReason}
+            onChange={(e) => setRecalcReason(e.target.value)}
+          />
+          {recalcMutation.isError && (
+            <p className="text-sm text-red-600 flex items-center gap-1">
+              <AlertCircle className="h-4 w-4" />
+              {(recalcMutation.error as any)?.response?.data?.message ?? 'No se pudo recalcular'}
+            </p>
+          )}
+          <div className="flex justify-end gap-2 pt-1">
+            <Button type="button" variant="ghost" onClick={() => { setShowRecalc(false); setRecalcReason(''); }}>Cancelar</Button>
+            <Button type="submit" loading={recalcMutation.isPending} disabled={recalcReason.trim().length < 3}>Recalcular</Button>
+          </div>
+        </form>
+      </Dialog>
 
       {/* Credit note dialog */}
       <Dialog open={showCN} onClose={() => { setShowCN(false); reset(); }} title="Nueva nota de crédito">

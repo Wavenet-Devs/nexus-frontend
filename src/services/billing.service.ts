@@ -20,12 +20,20 @@ export interface InvoiceListItem {
 export interface InvoiceFilters {
   status?:         string;
   neighborhoodId?: string;
+  readingId?:      string;
   month?:          number;
   year?:           number;
   search?:         string;
   clientId?:       string;
   page?:           number;
   limit?:          number;
+}
+
+export interface InvoiceHistoryEntry {
+  snapshot:        Record<string, any>;
+  reason:          string;
+  changed_by_name: string;
+  changed_at:      string;
 }
 
 export interface TemplateModule {
@@ -81,5 +89,21 @@ export const billingService = {
     const token = typeof window !== 'undefined' ? localStorage.getItem('access_token') : '';
     const slug  = typeof window !== 'undefined' ? localStorage.getItem('tenant_slug') : '';
     return `${base}/billing/invoices/${invoiceId}/preview?token=${token}&slug=${slug}`;
+  },
+
+  recalculate: (invoiceId: string, reason: string) =>
+    api.post<any>(`/billing/invoices/${invoiceId}/recalculate`, { reason }).then((r) => r.data),
+
+  getHistory: (invoiceId: string) =>
+    api.get<InvoiceHistoryEntry[]>(`/billing/invoices/${invoiceId}/history`).then((r) => r.data),
+
+  getBatchPrintUrl: (readingId: string, opts: { neighborhoodId?: string; route?: string } = {}): string => {
+    const base  = process.env.NEXT_PUBLIC_API_URL ?? 'http://localhost:4000/api/v1';
+    const token = typeof window !== 'undefined' ? localStorage.getItem('access_token') : '';
+    const slug  = typeof window !== 'undefined' ? localStorage.getItem('tenant_slug') : '';
+    const params = new URLSearchParams({ token: token ?? '', slug: slug ?? '' });
+    if (opts.neighborhoodId) params.set('neighborhoodId', opts.neighborhoodId);
+    if (opts.route) params.set('route', opts.route);
+    return `${base}/billing/batch/${readingId}/print?${params.toString()}`;
   },
 };

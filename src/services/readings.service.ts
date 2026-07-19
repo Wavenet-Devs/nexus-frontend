@@ -38,6 +38,27 @@ export interface ReadingTariff {
   last_reading:   number;
   actual_reading: number;
   consumed:       number;
+  edited:         boolean;
+  version:        number;
+  edited_at:      string | null;
+}
+
+export interface TariffHistoryEntry {
+  old_last_reading:   number;
+  old_actual_reading: number;
+  old_consumed:       number;
+  new_last_reading:   number;
+  new_actual_reading: number;
+  new_consumed:       number;
+  reason:             string;
+  changed_by_name:    string;
+  changed_at:         string;
+}
+
+export interface UpdateTariffReadingDto {
+  lastReading?:   number;
+  actualReading?: number;
+  reason:         string;
 }
 
 export interface CreateReadingBatchDto {
@@ -94,4 +115,12 @@ export const readingsService = {
 
   getMissingClients: (id: string) =>
     api.get<any[]>(`/readings/${id}/missing`).then((r) => r.data),
+
+  updateTariffReading: (tariffId: string, dto: UpdateTariffReadingDto) =>
+    api.patch<{ tariff: ReadingTariff; hasInvoice: boolean; invoiceId: string | null }>(
+      `/readings/tariffs/${tariffId}`, dto,
+    ).then((r) => r.data),
+
+  getTariffHistory: (tariffId: string) =>
+    api.get<TariffHistoryEntry[]>(`/readings/tariffs/${tariffId}/history`).then((r) => r.data),
 };

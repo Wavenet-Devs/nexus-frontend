@@ -5,12 +5,14 @@ import { useParams, useRouter } from 'next/navigation';
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
 import {
   ArrowLeft, Upload, Zap, Users, AlertTriangle,
-  CheckCircle2, FileSpreadsheet, Search, Play, X,
+  CheckCircle2, FileSpreadsheet, Search, Play, X, Pencil,
 } from 'lucide-react';
-import { readingsService, type ImportResult } from '@/services/readings.service';
+import { readingsService, type ImportResult, type ReadingTariff } from '@/services/readings.service';
 import { billingService } from '@/services/billing.service';
-import { Card, CardHeader, CardTitle } from '@/components/ui/card';
+import { Card } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
+import { Input } from '@/components/ui/input';
+import { Dialog } from '@/components/ui/dialog';
 import { EmptyState } from '@/components/ui/empty-state';
 import { formatMonth } from '@/lib/utils';
 
@@ -56,9 +58,44 @@ export default function ReadingBatchPage() {
   const generateMutation = useMutation({
     mutationFn: () => billingService.generate(id),
     onSuccess: () => {
-      router.push('/dashboard/billing');
+      router.push(`/dashboard/billing?readingId=${id}`);
     },
   });
+
+  // ── Edición de una lectura ──
+  const [editTariff, setEditTariff] = useState<ReadingTariff | null>(null);
+  const [editForm,   setEditForm]   = useState({ lastReading: '', actualReading: '', reason: '' });
+  const [editError,  setEditError]  = useState('');
+  const [invoiceWarn, setInvoiceWarn] = useState<string | null>(null);
+
+  const { data: tariffHistory } = useQuery({
+    queryKey: ['tariff-history', editTariff?.id],
+    queryFn:  () => readingsService.getTariffHistory(editTariff!.id),
+    enabled:  !!editTariff,
+  });
+
+  const editTariffMutation = useMutation({
+    mutationFn: () => readingsService.updateTariffReading(editTariff!.id, {
+      lastReading:   editForm.lastReading   !== '' ? Number(editForm.lastReading)   : undefined,
+      actualReading: editForm.actualReading !== '' ? Number(editForm.actualReading) : undefined,
+      reason:        editForm.reason.trim(),
+    }),
+    onSuccess: (res) => {
+      qc.invalidateQueries({ queryKey: ['reading-tariffs', id] });
+      qc.invalidateQueries({ queryKey: ['reading-batch', id] });
+      setEditTariff(null);
+      if (res.hasInvoice) {
+        setInvoiceWarn('Esta lectura ya tenía factura generada. Ve a Facturación y recalcula esa factura para reflejar el cambio.');
+      }
+    },
+    onError: (e: any) => setEditError(e?.response?.data?.message ?? 'No se pudo guardar'),
+  });
+
+  function openEdit(t: ReadingTariff) {
+    setEditTariff(t);
+    setEditForm({ lastReading: String(t.last_reading), actualReading: String(t.actual_reading), reason: '' });
+    setEditError('');
+  }
 
   const handleFileDrop = (e: React.DragEvent) => {
     e.preventDefault();
@@ -169,6 +206,21 @@ export default function ReadingBatchPage() {
         </Card>
       )}
 
+      {/* Aviso: lectura editada con factura existente */}
+      {invoiceWarn && (
+        <Card padding="md" className="border-amber-200 bg-amber-50">
+          <div className="flex items-start justify-between gap-3">
+            <div className="flex items-start gap-2">
+              <AlertTriangle className="h-5 w-5 text-amber-500 shrink-0 mt-0.5" />
+              <p className="text-sm text-amber-800">{invoiceWarn}</p>
+            </div>
+            <button onClick={() => setInvoiceWarn(null)} className="text-amber-400 hover:text-amber-700">
+              <X className="h-4 w-4" />
+            </button>
+          </div>
+        </Card>
+      )}
+
       {/* XLSX Upload zone */}
       <div
         onDragOver={(e) => e.preventDefault()}
@@ -257,13 +309,23 @@ export default function ReadingBatchPage() {
                     <Th right>L. Anterior</Th>
                     <Th right>L. Actual</Th>
                     <Th right>Consumo kWh</Th>
+                    <Th right>Acción</Th>
                   </tr>
                 </thead>
                 <tbody>
                   {filteredTariffs.map((t) => (
                     <tr key={t.id} className="border-b border-neutral-50 hover:bg-neutral-50 transition-colors">
                       <td className="px-4 py-3 font-mono text-xs text-neutral-600">{t.contract}</td>
-                      <td className="px-4 py-3 font-medium text-neutral-900">{t.name}</td>
+                      <td className="px-4 py-3 font-medium text-neutral-900">
+                        <div className="flex items-center gap-2">
+                          {t.name}
+                          {t.edited && (
+                            <span className="inline-flex items-center px-1.5 py-0.5 rounded text-[10px] font-semibold bg-amber-100 text-amber-700" title={`Modificada · v${t.version}`}>
+                              Modificada
+                            </span>
+                          )}
+                        </div>
+                      </td>
                       <td className="px-4 py-3 text-neutral-500 text-xs">{t.route || '—'}</td>
                       <td className="px-4 py-3 text-neutral-500 text-xs">{t.stratum_name || '—'}</td>
                       <Td right mono>{Number(t.last_reading).toLocaleString('es-CO')}</Td>
@@ -273,6 +335,15 @@ export default function ReadingBatchPage() {
                           {Number(t.consumed).toLocaleString('es-CO')}
                         </span>
                       </Td>
+                      <td className="px-4 py-3 text-right">
+                        <button
+                          onClick={() => openEdit(t)}
+                          className="p-1.5 rounded-lg text-neutral-400 hover:text-primary-600 hover:bg-neutral-100 transition-colors"
+                          title="Corregir lectura"
+                        >
+                          <Pencil className="h-3.5 w-3.5" />
+                        </button>
+                      </td>
                     </tr>
                   ))}
                 </tbody>
@@ -321,6 +392,42 @@ export default function ReadingBatchPage() {
           )}
         </Card>
       )}
+      {/* Diálogo: corregir lectura */}
+      <Dialog open={!!editTariff} onClose={() => setEditTariff(null)} title={`Corregir lectura — ${editTariff?.name ?? ''}`} size="md">
+        {editError && <div className="mb-4 rounded-lg bg-danger-50 border border-red-200 px-4 py-2 text-sm text-danger-600">{editError}</div>}
+        <form onSubmit={(e) => { e.preventDefault(); setEditError(''); editTariffMutation.mutate(); }} className="space-y-4">
+          <div className="grid grid-cols-2 gap-3">
+            <Input label="Lectura anterior" type="number" step="0.01" min="0"
+              value={editForm.lastReading} onChange={(e) => setEditForm((f) => ({ ...f, lastReading: e.target.value }))} />
+            <Input label="Lectura actual" type="number" step="0.01" min="0"
+              value={editForm.actualReading} onChange={(e) => setEditForm((f) => ({ ...f, actualReading: e.target.value }))} />
+          </div>
+          <Input label="Motivo de la corrección" value={editForm.reason}
+            onChange={(e) => setEditForm((f) => ({ ...f, reason: e.target.value }))} hint="Queda en el historial" />
+          <div className="flex justify-end gap-2 pt-1">
+            <Button type="button" variant="ghost" onClick={() => setEditTariff(null)}>Cancelar</Button>
+            <Button type="submit" loading={editTariffMutation.isPending} disabled={!editForm.reason.trim()}>Guardar corrección</Button>
+          </div>
+        </form>
+
+        {!!tariffHistory?.length && (
+          <div className="mt-5 pt-4 border-t border-neutral-100">
+            <p className="text-xs font-semibold text-neutral-500 uppercase tracking-wide mb-2">Historial de cambios</p>
+            <div className="space-y-2 max-h-48 overflow-y-auto">
+              {tariffHistory.map((h, i) => (
+                <div key={i} className="text-xs text-neutral-600 rounded-lg bg-neutral-50 border border-neutral-100 p-2">
+                  <div className="flex justify-between">
+                    <span className="font-medium">{h.changed_by_name || 'Usuario'}</span>
+                    <span className="text-neutral-400">{new Date(h.changed_at).toLocaleString('es-CO')}</span>
+                  </div>
+                  <div>Consumo {Number(h.old_consumed).toLocaleString('es-CO')} → {Number(h.new_consumed).toLocaleString('es-CO')} kWh</div>
+                  <div className="text-neutral-400">Motivo: {h.reason}</div>
+                </div>
+              ))}
+            </div>
+          </div>
+        )}
+      </Dialog>
     </div>
   );
 }
