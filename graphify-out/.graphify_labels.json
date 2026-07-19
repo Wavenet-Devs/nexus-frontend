@@ -3,7 +3,6 @@
   "1": "formatCurrency",
   "2": "page.tsx",
   "3": "page.tsx",
-  "4": "utils.ts",
   "5": "dependencies",
   "6": "index.ts",
   "7": "compilerOptions",
@@ -22,9 +21,6 @@
   "20": "layout.tsx",
   "21": "page.tsx",
   "22": "page.tsx",
-  "23": "index.ts",
   "24": "payments.service.ts",
-  "25": "api.ts",
-  "26": "financing.service.ts",
   "27": "pqr.service.ts"
 }

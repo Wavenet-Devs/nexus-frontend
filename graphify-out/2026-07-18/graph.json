@@ -777,7 +777,7 @@
       "label": "ReadingBox()",
       "file_type": "code",
       "source_file": "src/app/(dashboard)/dashboard/billing/[id]/page.tsx",
-      "source_location": "L285",
+      "source_location": "L360",
       "_origin": "ast",
       "id": "src_app_dashboard_dashboard_billing_id_page_readingbox",
       "community": 1,
@@ -787,7 +787,7 @@
       "label": "InfoRow()",
       "file_type": "code",
       "source_file": "src/app/(dashboard)/dashboard/billing/[id]/page.tsx",
-      "source_location": "L296",
+      "source_location": "L371",
       "_origin": "ast",
       "id": "src_app_dashboard_dashboard_billing_id_page_inforow",
       "community": 1,
@@ -797,7 +797,7 @@
       "label": "CostRow()",
       "file_type": "code",
       "source_file": "src/app/(dashboard)/dashboard/billing/[id]/page.tsx",
-      "source_location": "L305",
+      "source_location": "L380",
       "_origin": "ast",
       "id": "src_app_dashboard_dashboard_billing_id_page_costrow",
       "community": 1,
@@ -807,7 +807,7 @@
       "label": "ConsumptionChart()",
       "file_type": "code",
       "source_file": "src/app/(dashboard)/dashboard/billing/[id]/page.tsx",
-      "source_location": "L318",
+      "source_location": "L393",
       "_origin": "ast",
       "id": "src_app_dashboard_dashboard_billing_id_page_consumptionchart",
       "community": 1,
@@ -817,7 +817,7 @@
       "label": "PageSkeleton()",
       "file_type": "code",
       "source_file": "src/app/(dashboard)/dashboard/billing/[id]/page.tsx",
-      "source_location": "L344",
+      "source_location": "L419",
       "_origin": "ast",
       "id": "src_app_dashboard_dashboard_billing_id_page_pageskeleton",
       "community": 1,
@@ -877,7 +877,7 @@
       "label": "TableSkeleton()",
       "file_type": "code",
       "source_file": "src/app/(dashboard)/dashboard/billing/page.tsx",
-      "source_location": "L231",
+      "source_location": "L274",
       "_origin": "ast",
       "id": "src_app_dashboard_dashboard_billing_page_tableskeleton",
       "community": 4,
@@ -890,7 +890,7 @@
       "source_location": "L1",
       "_origin": "ast",
       "id": "src_app_dashboard_dashboard_budget_id_page",
-      "community": 1,
+      "community": 0,
       "norm_label": "page.tsx"
     },
     {
@@ -940,7 +940,7 @@
       "source_location": "L1",
       "_origin": "ast",
       "id": "src_app_dashboard_dashboard_budget_components_rp_form",
-      "community": 1,
+      "community": 0,
       "norm_label": "rp-form.tsx"
     },
     {
@@ -950,7 +950,7 @@
       "source_location": "L12",
       "_origin": "ast",
       "id": "src_app_dashboard_dashboard_budget_components_rp_form_props",
-      "community": 1,
+      "community": 0,
       "norm_label": "props"
     },
     {
@@ -960,7 +960,7 @@
       "source_location": "L19",
       "_origin": "ast",
       "id": "src_app_dashboard_dashboard_budget_components_rp_form_itemrow",
-      "community": 1,
+      "community": 0,
       "norm_label": "itemrow"
     },
     {
@@ -970,7 +970,7 @@
       "source_location": "L21",
       "_origin": "ast",
       "id": "src_app_dashboard_dashboard_budget_components_rp_form_rpform",
-      "community": 1,
+      "community": 0,
       "norm_label": "rpform()"
     },
     {
@@ -1270,7 +1270,7 @@
       "source_location": "L1",
       "_origin": "ast",
       "id": "src_app_dashboard_dashboard_clients_id_edit_page",
-      "community": 0,
+      "community": 27,
       "norm_label": "page.tsx"
     },
     {
@@ -1280,7 +1280,7 @@
       "source_location": "L10",
       "_origin": "ast",
       "id": "src_app_dashboard_dashboard_clients_id_edit_page_editclientpage",
-      "community": 0,
+      "community": 27,
       "norm_label": "editclientpage()"
     },
     {
@@ -1290,7 +1290,7 @@
       "source_location": "L1",
       "_origin": "ast",
       "id": "src_app_dashboard_dashboard_clients_id_page",
-      "community": 1,
+      "community": 0,
       "norm_label": "page.tsx"
     },
     {
@@ -1300,7 +1300,7 @@
       "source_location": "L18",
       "_origin": "ast",
       "id": "src_app_dashboard_dashboard_clients_id_page_inforow",
-      "community": 1,
+      "community": 0,
       "norm_label": "inforow()"
     },
     {
@@ -1320,7 +1320,7 @@
       "source_location": "L190",
       "_origin": "ast",
       "id": "src_app_dashboard_dashboard_clients_id_page_detailskeleton",
-      "community": 1,
+      "community": 0,
       "norm_label": "detailskeleton()"
     },
     {
@@ -1330,7 +1330,7 @@
       "source_location": "L1",
       "_origin": "ast",
       "id": "src_app_dashboard_dashboard_clients_components_client_form",
-      "community": 9,
+      "community": 27,
       "norm_label": "client-form.tsx"
     },
     {
@@ -1340,7 +1340,7 @@
       "source_location": "L12",
       "_origin": "ast",
       "id": "src_app_dashboard_dashboard_clients_components_client_form_schema",
-      "community": 9,
+      "community": 27,
       "norm_label": "schema"
     },
     {
@@ -1350,7 +1350,7 @@
       "source_location": "L31",
       "_origin": "ast",
       "id": "src_app_dashboard_dashboard_clients_components_client_form_formdata",
-      "community": 9,
+      "community": 27,
       "norm_label": "formdata"
     },
     {
@@ -1360,7 +1360,7 @@
       "source_location": "L33",
       "_origin": "ast",
       "id": "src_app_dashboard_dashboard_clients_components_client_form_clientformprops",
-      "community": 9,
+      "community": 27,
       "norm_label": "clientformprops"
     },
     {
@@ -1370,7 +1370,7 @@
       "source_location": "L39",
       "_origin": "ast",
       "id": "src_app_dashboard_dashboard_clients_components_client_form_clientform",
-      "community": 9,
+      "community": 27,
       "norm_label": "clientform()"
     },
     {
@@ -1380,7 +1380,7 @@
       "source_location": "L1",
       "_origin": "ast",
       "id": "src_app_dashboard_dashboard_clients_import_page",
-      "community": 0,
+      "community": 27,
       "norm_label": "page.tsx"
     },
     {
@@ -1390,7 +1390,7 @@
       "source_location": "L11",
       "_origin": "ast",
       "id": "src_app_dashboard_dashboard_clients_import_page_columns",
-      "community": 0,
+      "community": 27,
       "norm_label": "columns"
     },
     {
@@ -1400,7 +1400,7 @@
       "source_location": "L22",
       "_origin": "ast",
       "id": "src_app_dashboard_dashboard_clients_import_page_downloadtemplate",
-      "community": 0,
+      "community": 27,
       "norm_label": "downloadtemplate()"
     },
     {
@@ -1410,7 +1410,7 @@
       "source_location": "L36",
       "_origin": "ast",
       "id": "src_app_dashboard_dashboard_clients_import_page_clientimportpage",
-      "community": 0,
+      "community": 27,
       "norm_label": "clientimportpage()"
     },
     {
@@ -1420,7 +1420,7 @@
       "source_location": "L1",
       "_origin": "ast",
       "id": "src_app_dashboard_dashboard_clients_new_page",
-      "community": 9,
+      "community": 27,
       "norm_label": "page.tsx"
     },
     {
@@ -1430,7 +1430,7 @@
       "source_location": "L9",
       "_origin": "ast",
       "id": "src_app_dashboard_dashboard_clients_new_page_newclientpage",
-      "community": 9,
+      "community": 27,
       "norm_label": "newclientpage()"
     },
     {
@@ -1740,7 +1740,7 @@
       "source_location": "L1",
       "_origin": "ast",
       "id": "src_app_dashboard_dashboard_payments_id_page",
-      "community": 6,
+      "community": 0,
       "norm_label": "page.tsx"
     },
     {
@@ -1750,7 +1750,7 @@
       "source_location": "L13",
       "_origin": "ast",
       "id": "src_app_dashboard_dashboard_payments_id_page_payment_types",
-      "community": 6,
+      "community": 0,
       "norm_label": "payment_types"
     },
     {
@@ -1760,7 +1760,7 @@
       "source_location": "L14",
       "_origin": "ast",
       "id": "src_app_dashboard_dashboard_payments_id_page_type_colors",
-      "community": 6,
+      "community": 0,
       "norm_label": "type_colors"
     },
     {
@@ -1770,7 +1770,7 @@
       "source_location": "L20",
       "_origin": "ast",
       "id": "src_app_dashboard_dashboard_payments_id_page_buildvouchertext",
-      "community": 6,
+      "community": 1,
       "norm_label": "buildvouchertext()"
     },
     {
@@ -1780,7 +1780,7 @@
       "source_location": "L53",
       "_origin": "ast",
       "id": "src_app_dashboard_dashboard_payments_id_page_paymentdetailpage",
-      "community": 6,
+      "community": 1,
       "norm_label": "paymentdetailpage()"
     },
     {
@@ -1790,7 +1790,7 @@
       "source_location": "L242",
       "_origin": "ast",
       "id": "src_app_dashboard_dashboard_payments_id_page_receiptrow",
-      "community": 6,
+      "community": 0,
       "norm_label": "receiptrow()"
     },
     {
@@ -1800,7 +1800,7 @@
       "source_location": "L251",
       "_origin": "ast",
       "id": "src_app_dashboard_dashboard_payments_id_page_pageskeleton",
-      "community": 6,
+      "community": 0,
       "norm_label": "pageskeleton()"
     },
     {
@@ -1810,7 +1810,7 @@
       "source_location": "L1",
       "_origin": "ast",
       "id": "src_app_dashboard_dashboard_payments_new_page",
-      "community": 4,
+      "community": 24,
       "norm_label": "page.tsx"
     },
     {
@@ -1820,7 +1820,7 @@
       "source_location": "L16",
       "_origin": "ast",
       "id": "src_app_dashboard_dashboard_payments_new_page_step",
-      "community": 4,
+      "community": 24,
       "norm_label": "step"
     },
     {
@@ -1830,7 +1830,7 @@
       "source_location": "L18",
       "_origin": "ast",
       "id": "src_app_dashboard_dashboard_payments_new_page_payment_types",
-      "community": 4,
+      "community": 24,
       "norm_label": "payment_types"
     },
     {
@@ -1840,7 +1840,7 @@
       "source_location": "L24",
       "_origin": "ast",
       "id": "src_app_dashboard_dashboard_payments_new_page_newpaymentpage",
-      "community": 4,
+      "community": 1,
       "norm_label": "newpaymentpage()"
     },
     {
@@ -2027,7 +2027,7 @@
       "label": "Tab",
       "file_type": "code",
       "source_file": "src/app/(dashboard)/dashboard/readings/[id]/page.tsx",
-      "source_location": "L17",
+      "source_location": "L19",
       "_origin": "ast",
       "id": "src_app_dashboard_dashboard_readings_id_page_tab",
       "community": 12,
@@ -2037,7 +2037,7 @@
       "label": "ReadingBatchPage()",
       "file_type": "code",
       "source_file": "src/app/(dashboard)/dashboard/readings/[id]/page.tsx",
-      "source_location": "L19",
+      "source_location": "L21",
       "_origin": "ast",
       "id": "src_app_dashboard_dashboard_readings_id_page_readingbatchpage",
       "community": 12,
@@ -2047,7 +2047,7 @@
       "label": "StatChip()",
       "file_type": "code",
       "source_file": "src/app/(dashboard)/dashboard/readings/[id]/page.tsx",
-      "source_location": "L330",
+      "source_location": "L437",
       "_origin": "ast",
       "id": "src_app_dashboard_dashboard_readings_id_page_statchip",
       "community": 12,
@@ -2057,7 +2057,7 @@
       "label": "Th()",
       "file_type": "code",
       "source_file": "src/app/(dashboard)/dashboard/readings/[id]/page.tsx",
-      "source_location": "L342",
+      "source_location": "L449",
       "_origin": "ast",
       "id": "src_app_dashboard_dashboard_readings_id_page_th",
       "community": 12,
@@ -2067,7 +2067,7 @@
       "label": "Td()",
       "file_type": "code",
       "source_file": "src/app/(dashboard)/dashboard/readings/[id]/page.tsx",
-      "source_location": "L350",
+      "source_location": "L457",
       "_origin": "ast",
       "id": "src_app_dashboard_dashboard_readings_id_page_td",
       "community": 12,
@@ -2077,7 +2077,7 @@
       "label": "TableSkeleton()",
       "file_type": "code",
       "source_file": "src/app/(dashboard)/dashboard/readings/[id]/page.tsx",
-      "source_location": "L358",
+      "source_location": "L465",
       "_origin": "ast",
       "id": "src_app_dashboard_dashboard_readings_id_page_tableskeleton",
       "community": 12,
@@ -2087,7 +2087,7 @@
       "label": "PageSkeleton()",
       "file_type": "code",
       "source_file": "src/app/(dashboard)/dashboard/readings/[id]/page.tsx",
-      "source_location": "L368",
+      "source_location": "L475",
       "_origin": "ast",
       "id": "src_app_dashboard_dashboard_readings_id_page_pageskeleton",
       "community": 12,
@@ -2170,7 +2170,7 @@
       "source_location": "L1",
       "_origin": "ast",
       "id": "src_app_dashboard_dashboard_readings_page",
-      "community": 4,
+      "community": 12,
       "norm_label": "page.tsx"
     },
     {
@@ -2180,7 +2180,7 @@
       "source_location": "L12",
       "_origin": "ast",
       "id": "src_app_dashboard_dashboard_readings_page_months",
-      "community": 4,
+      "community": 12,
       "norm_label": "months"
     },
     {
@@ -2190,7 +2190,7 @@
       "source_location": "L14",
       "_origin": "ast",
       "id": "src_app_dashboard_dashboard_readings_page_readingspage",
-      "community": 1,
+      "community": 12,
       "norm_label": "readingspage()"
     },
     {
@@ -2360,7 +2360,7 @@
       "source_location": "L1",
       "_origin": "ast",
       "id": "src_app_dashboard_dashboard_settings_api_keys_page",
-      "community": 0,
+      "community": 25,
       "norm_label": "page.tsx"
     },
     {
@@ -2370,7 +2370,7 @@
       "source_location": "L13",
       "_origin": "ast",
       "id": "src_app_dashboard_dashboard_settings_api_keys_page_newkeyreveal",
-      "community": 0,
+      "community": 25,
       "norm_label": "newkeyreveal()"
     },
     {
@@ -2380,7 +2380,7 @@
       "source_location": "L41",
       "_origin": "ast",
       "id": "src_app_dashboard_dashboard_settings_api_keys_page_apikeyspage",
-      "community": 0,
+      "community": 25,
       "norm_label": "apikeyspage()"
     },
     {
@@ -3190,7 +3190,7 @@
       "source_location": "L1",
       "_origin": "ast",
       "id": "src_components_ui_badge",
-      "community": 1,
+      "community": 4,
       "norm_label": "badge.tsx"
     },
     {
@@ -3200,7 +3200,7 @@
       "source_location": "L3",
       "_origin": "ast",
       "id": "src_components_ui_badge_badgeprops",
-      "community": 1,
+      "community": 4,
       "norm_label": "badgeprops"
     },
     {
@@ -3210,7 +3210,7 @@
       "source_location": "L9",
       "_origin": "ast",
       "id": "src_components_ui_badge_statusbadge",
-      "community": 1,
+      "community": 4,
       "norm_label": "statusbadge()"
     },
     {
@@ -3220,7 +3220,7 @@
       "source_location": "L23",
       "_origin": "ast",
       "id": "src_components_ui_badge_simplebadgeprops",
-      "community": 1,
+      "community": 4,
       "norm_label": "simplebadgeprops"
     },
     {
@@ -3230,7 +3230,7 @@
       "source_location": "L29",
       "_origin": "ast",
       "id": "src_components_ui_badge_badge",
-      "community": 1,
+      "community": 4,
       "norm_label": "badge()"
     },
     {
@@ -3320,7 +3320,7 @@
       "source_location": "L1",
       "_origin": "ast",
       "id": "src_components_ui_confirm_dialog",
-      "community": 0,
+      "community": 25,
       "norm_label": "confirm-dialog.tsx"
     },
     {
@@ -3330,7 +3330,7 @@
       "source_location": "L1",
       "_origin": "ast",
       "id": "src_components_ui_dialog",
-      "community": 0,
+      "community": 25,
       "norm_label": "dialog.tsx"
     },
     {
@@ -3340,7 +3340,7 @@
       "source_location": "L7",
       "_origin": "ast",
       "id": "src_components_ui_dialog_dialogprops",
-      "community": 0,
+      "community": 25,
       "norm_label": "dialogprops"
     },
     {
@@ -3360,7 +3360,7 @@
       "source_location": "L69",
       "_origin": "ast",
       "id": "src_components_ui_dialog_confirmdialogprops",
-      "community": 0,
+      "community": 25,
       "norm_label": "confirmdialogprops"
     },
     {
@@ -3370,7 +3370,7 @@
       "source_location": "L79",
       "_origin": "ast",
       "id": "src_components_ui_dialog_confirmdialog",
-      "community": 0,
+      "community": 25,
       "norm_label": "confirmdialog()"
     },
     {
@@ -3410,7 +3410,7 @@
       "source_location": "L1",
       "_origin": "ast",
       "id": "src_components_ui_input",
-      "community": 0,
+      "community": 4,
       "norm_label": "input.tsx"
     },
     {
@@ -3420,7 +3420,7 @@
       "source_location": "L4",
       "_origin": "ast",
       "id": "src_components_ui_input_inputprops",
-      "community": 0,
+      "community": 4,
       "norm_label": "inputprops"
     },
     {
@@ -3440,7 +3440,7 @@
       "source_location": "L37",
       "_origin": "ast",
       "id": "src_components_ui_input_selectprops",
-      "community": 0,
+      "community": 4,
       "norm_label": "selectprops"
     },
     {
@@ -3450,7 +3450,7 @@
       "source_location": "L42",
       "_origin": "ast",
       "id": "src_components_ui_input_select",
-      "community": 0,
+      "community": 4,
       "norm_label": "select()"
     },
     {
@@ -3560,7 +3560,7 @@
       "source_location": "L1",
       "_origin": "ast",
       "id": "src_lib_api",
-      "community": 25,
+      "community": 26,
       "norm_label": "api.ts"
     },
     {
@@ -3570,7 +3570,7 @@
       "source_location": "L5",
       "_origin": "ast",
       "id": "src_lib_api_api",
-      "community": 25,
+      "community": 26,
       "norm_label": "api"
     },
     {
@@ -3620,7 +3620,7 @@
       "source_location": "L1",
       "_origin": "ast",
       "id": "src_lib_utils",
-      "community": 1,
+      "community": 4,
       "norm_label": "utils.ts"
     },
     {
@@ -3630,7 +3630,7 @@
       "source_location": "L4",
       "_origin": "ast",
       "id": "src_lib_utils_cn",
-      "community": 0,
+      "community": 4,
       "norm_label": "cn()"
     },
     {
@@ -3680,7 +3680,7 @@
       "source_location": "L36",
       "_origin": "ast",
       "id": "src_lib_utils_getstatuscolor",
-      "community": 1,
+      "community": 4,
       "norm_label": "getstatuscolor()"
     },
     {
@@ -3690,7 +3690,7 @@
       "source_location": "L51",
       "_origin": "ast",
       "id": "src_lib_utils_getstatuslabel",
-      "community": 1,
+      "community": 4,
       "norm_label": "getstatuslabel()"
     },
     {
@@ -3764,10 +3764,20 @@
       "norm_label": "invoicefilters"
     },
     {
+      "label": "InvoiceHistoryEntry",
+      "file_type": "code",
+      "source_file": "src/services/billing.service.ts",
+      "source_location": "L32",
+      "_origin": "ast",
+      "id": "src_services_billing_service_invoicehistoryentry",
+      "community": 12,
+      "norm_label": "invoicehistoryentry"
+    },
+    {
       "label": "TemplateModule",
       "file_type": "code",
       "source_file": "src/services/billing.service.ts",
-      "source_location": "L31",
+      "source_location": "L39",
       "_origin": "ast",
       "id": "src_services_billing_service_templatemodule",
       "community": 12,
@@ -3777,7 +3787,7 @@
       "label": "InvoiceTemplate",
       "file_type": "code",
       "source_file": "src/services/billing.service.ts",
-      "source_location": "L38",
+      "source_location": "L46",
       "_origin": "ast",
       "id": "src_services_billing_service_invoicetemplate",
       "community": 12,
@@ -3787,7 +3797,7 @@
       "label": "billingService",
       "file_type": "code",
       "source_file": "src/services/billing.service.ts",
-      "source_location": "L51",
+      "source_location": "L59",
       "_origin": "ast",
       "id": "src_services_billing_service_billingservice",
       "community": 12,
@@ -3820,7 +3830,7 @@
       "source_location": "L17",
       "_origin": "ast",
       "id": "src_services_budget_service_budgetcdp",
-      "community": 1,
+      "community": 0,
       "norm_label": "budgetcdp"
     },
     {
@@ -3990,7 +4000,7 @@
       "source_location": "L102",
       "_origin": "ast",
       "id": "src_services_budget_service_budgetservice",
-      "community": 1,
+      "community": 0,
       "norm_label": "budgetservice"
     },
     {
@@ -4060,7 +4070,7 @@
       "source_location": "L40",
       "_origin": "ast",
       "id": "src_services_catalogs_service_catalogsservice",
-      "community": 9,
+      "community": 4,
       "norm_label": "catalogsservice"
     },
     {
@@ -4070,7 +4080,7 @@
       "source_location": "L1",
       "_origin": "ast",
       "id": "src_services_clients_service",
-      "community": 9,
+      "community": 27,
       "norm_label": "clients.service.ts"
     },
     {
@@ -4080,7 +4090,7 @@
       "source_location": "L4",
       "_origin": "ast",
       "id": "src_services_clients_service_clientlistitem",
-      "community": 9,
+      "community": 27,
       "norm_label": "clientlistitem"
     },
     {
@@ -4090,7 +4100,7 @@
       "source_location": "L16",
       "_origin": "ast",
       "id": "src_services_clients_service_clientdetail",
-      "community": 9,
+      "community": 27,
       "norm_label": "clientdetail"
     },
     {
@@ -4100,7 +4110,7 @@
       "source_location": "L35",
       "_origin": "ast",
       "id": "src_services_clients_service_clientfilters",
-      "community": 9,
+      "community": 27,
       "norm_label": "clientfilters"
     },
     {
@@ -4110,7 +4120,7 @@
       "source_location": "L44",
       "_origin": "ast",
       "id": "src_services_clients_service_createclientdto",
-      "community": 9,
+      "community": 27,
       "norm_label": "createclientdto"
     },
     {
@@ -4120,7 +4130,7 @@
       "source_location": "L62",
       "_origin": "ast",
       "id": "src_services_clients_service_clientsservice",
-      "community": 4,
+      "community": 27,
       "norm_label": "clientsservice"
     },
     {
@@ -4260,7 +4270,7 @@
       "source_location": "L59",
       "_origin": "ast",
       "id": "src_services_payments_service_paymentsservice",
-      "community": 6,
+      "community": 24,
       "norm_label": "paymentsservice"
     },
     {
@@ -4320,7 +4330,7 @@
       "source_location": "L1",
       "_origin": "ast",
       "id": "src_services_pqr_service",
-      "community": 27,
+      "community": 26,
       "norm_label": "pqr.service.ts"
     },
     {
@@ -4330,7 +4340,7 @@
       "source_location": "L4",
       "_origin": "ast",
       "id": "src_services_pqr_service_pqrresponse",
-      "community": 27,
+      "community": 26,
       "norm_label": "pqrresponse"
     },
     {
@@ -4340,7 +4350,7 @@
       "source_location": "L8",
       "_origin": "ast",
       "id": "src_services_pqr_service_pqr",
-      "community": 27,
+      "community": 26,
       "norm_label": "pqr"
     },
     {
@@ -4350,7 +4360,7 @@
       "source_location": "L22",
       "_origin": "ast",
       "id": "src_services_pqr_service_createpqrdto",
-      "community": 27,
+      "community": 26,
       "norm_label": "createpqrdto"
     },
     {
@@ -4360,7 +4370,7 @@
       "source_location": "L23",
       "_origin": "ast",
       "id": "src_services_pqr_service_respondpqrdto",
-      "community": 27,
+      "community": 26,
       "norm_label": "respondpqrdto"
     },
     {
@@ -4370,7 +4380,7 @@
       "source_location": "L24",
       "_origin": "ast",
       "id": "src_services_pqr_service_pqrfilters",
-      "community": 27,
+      "community": 26,
       "norm_label": "pqrfilters"
     },
     {
@@ -4414,10 +4424,30 @@
       "norm_label": "readingtariff"
     },
     {
+      "label": "TariffHistoryEntry",
+      "file_type": "code",
+      "source_file": "src/services/readings.service.ts",
+      "source_location": "L46",
+      "_origin": "ast",
+      "id": "src_services_readings_service_tariffhistoryentry",
+      "community": 12,
+      "norm_label": "tariffhistoryentry"
+    },
+    {
+      "label": "UpdateTariffReadingDto",
+      "file_type": "code",
+      "source_file": "src/services/readings.service.ts",
+      "source_location": "L58",
+      "_origin": "ast",
+      "id": "src_services_readings_service_updatetariffreadingdto",
+      "community": 12,
+      "norm_label": "updatetariffreadingdto"
+    },
+    {
       "label": "CreateReadingBatchDto",
       "file_type": "code",
       "source_file": "src/services/readings.service.ts",
-      "source_location": "L43",
+      "source_location": "L64",
       "_origin": "ast",
       "id": "src_services_readings_service_createreadingbatchdto",
       "community": 12,
@@ -4427,7 +4457,7 @@
       "label": "ImportResult",
       "file_type": "code",
       "source_file": "src/services/readings.service.ts",
-      "source_location": "L64",
+      "source_location": "L85",
       "_origin": "ast",
       "id": "src_services_readings_service_importresult",
       "community": 12,
@@ -4437,7 +4467,7 @@
       "label": "readingsService",
       "file_type": "code",
       "source_file": "src/services/readings.service.ts",
-      "source_location": "L71",
+      "source_location": "L92",
       "_origin": "ast",
       "id": "src_services_readings_service_readingsservice",
       "community": 12,
@@ -6115,7 +6145,7 @@
       "relation": "contains",
       "confidence": "EXTRACTED",
       "source_file": "src/app/(dashboard)/dashboard/billing/[id]/page.tsx",
-      "source_location": "L318",
+      "source_location": "L393",
       "weight": 1.0,
       "source": "src_app_dashboard_dashboard_billing_id_page",
       "target": "src_app_dashboard_dashboard_billing_id_page_consumptionchart",
@@ -6125,7 +6155,7 @@
       "relation": "contains",
       "confidence": "EXTRACTED",
       "source_file": "src/app/(dashboard)/dashboard/billing/[id]/page.tsx",
-      "source_location": "L305",
+      "source_location": "L380",
       "weight": 1.0,
       "source": "src_app_dashboard_dashboard_billing_id_page",
       "target": "src_app_dashboard_dashboard_billing_id_page_costrow",
@@ -6155,7 +6185,7 @@
       "relation": "contains",
       "confidence": "EXTRACTED",
       "source_file": "src/app/(dashboard)/dashboard/billing/[id]/page.tsx",
-      "source_location": "L296",
+      "source_location": "L371",
       "weight": 1.0,
       "source": "src_app_dashboard_dashboard_billing_id_page",
       "target": "src_app_dashboard_dashboard_billing_id_page_inforow",
@@ -6175,7 +6205,7 @@
       "relation": "contains",
       "confidence": "EXTRACTED",
       "source_file": "src/app/(dashboard)/dashboard/billing/[id]/page.tsx",
-      "source_location": "L344",
+      "source_location": "L419",
       "weight": 1.0,
       "source": "src_app_dashboard_dashboard_billing_id_page",
       "target": "src_app_dashboard_dashboard_billing_id_page_pageskeleton",
@@ -6185,7 +6215,7 @@
       "relation": "contains",
       "confidence": "EXTRACTED",
       "source_file": "src/app/(dashboard)/dashboard/billing/[id]/page.tsx",
-      "source_location": "L285",
+      "source_location": "L360",
       "weight": 1.0,
       "source": "src_app_dashboard_dashboard_billing_id_page",
       "target": "src_app_dashboard_dashboard_billing_id_page_readingbox",
@@ -6395,7 +6425,7 @@
       "confidence": "EXTRACTED",
       "confidence_score": 1.0,
       "source_file": "src/app/(dashboard)/dashboard/billing/[id]/page.tsx",
-      "source_location": "L136",
+      "source_location": "L166",
       "weight": 1.0,
       "source": "src_app_dashboard_dashboard_billing_id_page_invoicedetailpage",
       "target": "src_lib_utils_formatcurrency"
@@ -6406,7 +6436,7 @@
       "confidence": "EXTRACTED",
       "confidence_score": 1.0,
       "source_file": "src/app/(dashboard)/dashboard/billing/[id]/page.tsx",
-      "source_location": "L215",
+      "source_location": "L245",
       "weight": 1.0,
       "source": "src_app_dashboard_dashboard_billing_id_page_invoicedetailpage",
       "target": "src_lib_utils_formatdate"
@@ -6417,7 +6447,7 @@
       "confidence": "EXTRACTED",
       "confidence_score": 1.0,
       "source_file": "src/app/(dashboard)/dashboard/billing/[id]/page.tsx",
-      "source_location": "L126",
+      "source_location": "L156",
       "weight": 1.0,
       "source": "src_app_dashboard_dashboard_billing_id_page_invoicedetailpage",
       "target": "src_lib_utils_formatmonth"
@@ -6428,7 +6458,7 @@
       "confidence": "EXTRACTED",
       "confidence_score": 1.0,
       "source_file": "src/app/(dashboard)/dashboard/billing/[id]/page.tsx",
-      "source_location": "L312",
+      "source_location": "L387",
       "weight": 1.0,
       "source": "src_app_dashboard_dashboard_billing_id_page_costrow",
       "target": "src_lib_utils_formatcurrency"
@@ -6467,7 +6497,7 @@
       "relation": "contains",
       "confidence": "EXTRACTED",
       "source_file": "src/app/(dashboard)/dashboard/billing/page.tsx",
-      "source_location": "L231",
+      "source_location": "L274",
       "weight": 1.0,
       "source": "src_app_dashboard_dashboard_billing_page",
       "target": "src_app_dashboard_dashboard_billing_page_tableskeleton",
@@ -6731,7 +6761,7 @@
       "confidence": "EXTRACTED",
       "confidence_score": 1.0,
       "source_file": "src/app/(dashboard)/dashboard/billing/page.tsx",
-      "source_location": "L180",
+      "source_location": "L223",
       "weight": 1.0,
       "source": "src_app_dashboard_dashboard_billing_page_billingpage",
       "target": "src_lib_utils_formatcurrency"
@@ -6742,7 +6772,7 @@
       "confidence": "EXTRACTED",
       "confidence_score": 1.0,
       "source_file": "src/app/(dashboard)/dashboard/billing/page.tsx",
-      "source_location": "L179",
+      "source_location": "L222",
       "weight": 1.0,
       "source": "src_app_dashboard_dashboard_billing_page_billingpage",
       "target": "src_lib_utils_formatmonth"
@@ -11357,7 +11387,7 @@
       "relation": "contains",
       "confidence": "EXTRACTED",
       "source_file": "src/app/(dashboard)/dashboard/readings/[id]/page.tsx",
-      "source_location": "L368",
+      "source_location": "L475",
       "weight": 1.0,
       "source": "src_app_dashboard_dashboard_readings_id_page",
       "target": "src_app_dashboard_dashboard_readings_id_page_pageskeleton",
@@ -11367,7 +11397,7 @@
       "relation": "contains",
       "confidence": "EXTRACTED",
       "source_file": "src/app/(dashboard)/dashboard/readings/[id]/page.tsx",
-      "source_location": "L19",
+      "source_location": "L21",
       "weight": 1.0,
       "source": "src_app_dashboard_dashboard_readings_id_page",
       "target": "src_app_dashboard_dashboard_readings_id_page_readingbatchpage",
@@ -11377,7 +11407,7 @@
       "relation": "contains",
       "confidence": "EXTRACTED",
       "source_file": "src/app/(dashboard)/dashboard/readings/[id]/page.tsx",
-      "source_location": "L330",
+      "source_location": "L437",
       "weight": 1.0,
       "source": "src_app_dashboard_dashboard_readings_id_page",
       "target": "src_app_dashboard_dashboard_readings_id_page_statchip",
@@ -11387,7 +11417,7 @@
       "relation": "contains",
       "confidence": "EXTRACTED",
       "source_file": "src/app/(dashboard)/dashboard/readings/[id]/page.tsx",
-      "source_location": "L17",
+      "source_location": "L19",
       "weight": 1.0,
       "source": "src_app_dashboard_dashboard_readings_id_page",
       "target": "src_app_dashboard_dashboard_readings_id_page_tab",
@@ -11397,7 +11427,7 @@
       "relation": "contains",
       "confidence": "EXTRACTED",
       "source_file": "src/app/(dashboard)/dashboard/readings/[id]/page.tsx",
-      "source_location": "L358",
+      "source_location": "L465",
       "weight": 1.0,
       "source": "src_app_dashboard_dashboard_readings_id_page",
       "target": "src_app_dashboard_dashboard_readings_id_page_tableskeleton",
@@ -11407,7 +11437,7 @@
       "relation": "contains",
       "confidence": "EXTRACTED",
       "source_file": "src/app/(dashboard)/dashboard/readings/[id]/page.tsx",
-      "source_location": "L350",
+      "source_location": "L457",
       "weight": 1.0,
       "source": "src_app_dashboard_dashboard_readings_id_page",
       "target": "src_app_dashboard_dashboard_readings_id_page_td",
@@ -11417,7 +11447,7 @@
       "relation": "contains",
       "confidence": "EXTRACTED",
       "source_file": "src/app/(dashboard)/dashboard/readings/[id]/page.tsx",
-      "source_location": "L342",
+      "source_location": "L449",
       "weight": 1.0,
       "source": "src_app_dashboard_dashboard_readings_id_page",
       "target": "src_app_dashboard_dashboard_readings_id_page_th",
@@ -11468,14 +11498,14 @@
       "confidence_score": 1.0
     },
     {
-      "relation": "imports",
+      "relation": "imports_from",
       "context": "import",
       "confidence": "EXTRACTED",
       "source_file": "src/app/(dashboard)/dashboard/readings/[id]/page.tsx",
-      "source_location": "L12",
+      "source_location": "L15",
       "weight": 1.0,
       "source": "src_app_dashboard_dashboard_readings_id_page",
-      "target": "src_components_ui_card_cardheader",
+      "target": "src_components_ui_dialog",
       "confidence_score": 1.0
     },
     {
@@ -11483,10 +11513,10 @@
       "context": "import",
       "confidence": "EXTRACTED",
       "source_file": "src/app/(dashboard)/dashboard/readings/[id]/page.tsx",
-      "source_location": "L12",
+      "source_location": "L15",
       "weight": 1.0,
       "source": "src_app_dashboard_dashboard_readings_id_page",
-      "target": "src_components_ui_card_cardtitle",
+      "target": "src_components_ui_dialog_dialog",
       "confidence_score": 1.0
     },
     {
@@ -11494,7 +11524,7 @@
       "context": "import",
       "confidence": "EXTRACTED",
       "source_file": "src/app/(dashboard)/dashboard/readings/[id]/page.tsx",
-      "source_location": "L14",
+      "source_location": "L16",
       "weight": 1.0,
       "source": "src_app_dashboard_dashboard_readings_id_page",
       "target": "src_components_ui_empty_state",
@@ -11505,7 +11535,7 @@
       "context": "import",
       "confidence": "EXTRACTED",
       "source_file": "src/app/(dashboard)/dashboard/readings/[id]/page.tsx",
-      "source_location": "L14",
+      "source_location": "L16",
       "weight": 1.0,
       "source": "src_app_dashboard_dashboard_readings_id_page",
       "target": "src_components_ui_empty_state_emptystate",
@@ -11516,7 +11546,29 @@
       "context": "import",
       "confidence": "EXTRACTED",
       "source_file": "src/app/(dashboard)/dashboard/readings/[id]/page.tsx",
-      "source_location": "L15",
+      "source_location": "L14",
+      "weight": 1.0,
+      "source": "src_app_dashboard_dashboard_readings_id_page",
+      "target": "src_components_ui_input",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "imports",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "src/app/(dashboard)/dashboard/readings/[id]/page.tsx",
+      "source_location": "L14",
+      "weight": 1.0,
+      "source": "src_app_dashboard_dashboard_readings_id_page",
+      "target": "src_components_ui_input_input",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "imports_from",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "src/app/(dashboard)/dashboard/readings/[id]/page.tsx",
+      "source_location": "L17",
       "weight": 1.0,
       "source": "src_app_dashboard_dashboard_readings_id_page",
       "target": "src_lib_utils",
@@ -11527,7 +11579,7 @@
       "context": "import",
       "confidence": "EXTRACTED",
       "source_file": "src/app/(dashboard)/dashboard/readings/[id]/page.tsx",
-      "source_location": "L15",
+      "source_location": "L17",
       "weight": 1.0,
       "source": "src_app_dashboard_dashboard_readings_id_page",
       "target": "src_lib_utils_formatmonth",
@@ -11589,12 +11641,23 @@
       "confidence_score": 1.0
     },
     {
+      "relation": "imports",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "src/app/(dashboard)/dashboard/readings/[id]/page.tsx",
+      "source_location": "L10",
+      "weight": 1.0,
+      "source": "src_app_dashboard_dashboard_readings_id_page",
+      "target": "src_services_readings_service_readingtariff",
+      "confidence_score": 1.0
+    },
+    {
       "relation": "calls",
       "context": "call",
       "confidence": "EXTRACTED",
       "confidence_score": 1.0,
       "source_file": "src/app/(dashboard)/dashboard/readings/[id]/page.tsx",
-      "source_location": "L116",
+      "source_location": "L153",
       "weight": 1.0,
       "source": "src_app_dashboard_dashboard_readings_id_page_readingbatchpage",
       "target": "src_lib_utils_formatmonth"
@@ -15500,7 +15563,7 @@
       "relation": "contains",
       "confidence": "EXTRACTED",
       "source_file": "src/services/billing.service.ts",
-      "source_location": "L51",
+      "source_location": "L59",
       "weight": 1.0,
       "source": "src_services_billing_service",
       "target": "src_services_billing_service_billingservice",
@@ -15520,6 +15583,16 @@
       "relation": "contains",
       "confidence": "EXTRACTED",
       "source_file": "src/services/billing.service.ts",
+      "source_location": "L32",
+      "weight": 1.0,
+      "source": "src_services_billing_service",
+      "target": "src_services_billing_service_invoicehistoryentry",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "src/services/billing.service.ts",
       "source_location": "L4",
       "weight": 1.0,
       "source": "src_services_billing_service",
@@ -15530,7 +15603,7 @@
       "relation": "contains",
       "confidence": "EXTRACTED",
       "source_file": "src/services/billing.service.ts",
-      "source_location": "L38",
+      "source_location": "L46",
       "weight": 1.0,
       "source": "src_services_billing_service",
       "target": "src_services_billing_service_invoicetemplate",
@@ -15540,7 +15613,7 @@
       "relation": "contains",
       "confidence": "EXTRACTED",
       "source_file": "src/services/billing.service.ts",
-      "source_location": "L31",
+      "source_location": "L39",
       "weight": 1.0,
       "source": "src_services_billing_service",
       "target": "src_services_billing_service_templatemodule",
@@ -16224,7 +16297,7 @@
       "relation": "contains",
       "confidence": "EXTRACTED",
       "source_file": "src/services/readings.service.ts",
-      "source_location": "L43",
+      "source_location": "L64",
       "weight": 1.0,
       "source": "src_services_readings_service",
       "target": "src_services_readings_service_createreadingbatchdto",
@@ -16234,7 +16307,7 @@
       "relation": "contains",
       "confidence": "EXTRACTED",
       "source_file": "src/services/readings.service.ts",
-      "source_location": "L64",
+      "source_location": "L85",
       "weight": 1.0,
       "source": "src_services_readings_service",
       "target": "src_services_readings_service_importresult",
@@ -16254,7 +16327,7 @@
       "relation": "contains",
       "confidence": "EXTRACTED",
       "source_file": "src/services/readings.service.ts",
-      "source_location": "L71",
+      "source_location": "L92",
       "weight": 1.0,
       "source": "src_services_readings_service",
       "target": "src_services_readings_service_readingsservice",
@@ -16268,6 +16341,26 @@
       "weight": 1.0,
       "source": "src_services_readings_service",
       "target": "src_services_readings_service_readingtariff",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "src/services/readings.service.ts",
+      "source_location": "L46",
+      "weight": 1.0,
+      "source": "src_services_readings_service",
+      "target": "src_services_readings_service_tariffhistoryentry",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "src/services/readings.service.ts",
+      "source_location": "L58",
+      "weight": 1.0,
+      "source": "src_services_readings_service",
+      "target": "src_services_readings_service_updatetariffreadingdto",
       "confidence_score": 1.0
     },
     {
@@ -17121,5 +17214,5 @@
     }
   ],
   "hyperedges": [],
-  "built_at_commit": "6e57733b7397cff53ccceeb3213c691ddccbb102"
+  "built_at_commit": "a09de7cf02576399798c830b592f45de2332850a"
 }

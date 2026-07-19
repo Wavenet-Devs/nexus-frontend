@@ -5,10 +5,11 @@ import { useParams, useRouter } from 'next/navigation';
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
 import {
   ArrowLeft, Upload, Zap, Users, AlertTriangle,
-  CheckCircle2, FileSpreadsheet, Search, Play, X, Pencil,
+  CheckCircle2, FileSpreadsheet, Search, Play, X, Pencil, Printer,
 } from 'lucide-react';
 import { readingsService, type ImportResult, type ReadingTariff } from '@/services/readings.service';
 import { billingService } from '@/services/billing.service';
+import { catalogsService } from '@/services/catalogs.service';
 import { Card } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
@@ -27,6 +28,12 @@ export default function ReadingBatchPage() {
   const [tab,          setTab]          = useState<Tab>('tariffs');
   const [search,       setSearch]       = useState('');
   const [importResult, setImportResult] = useState<ImportResult | null>(null);
+  const [printNeighborhoodId, setPrintNeighborhoodId] = useState('');
+
+  const { data: neighborhoods } = useQuery({
+    queryKey: ['neighborhoods'],
+    queryFn:  catalogsService.getNeighborhoods,
+  });
 
   const { data: batch, isLoading } = useQuery({
     queryKey: ['reading-batch', id],
@@ -170,6 +177,45 @@ export default function ReadingBatchPage() {
           <StatChip icon={Zap} label="Consumo total" value={`${totalConsumed.toLocaleString('es-CO')} kWh`} />
           <StatChip icon={AlertTriangle} label="Lectura cero" value={zeroReadings.toLocaleString('es-CO')} warn={zeroReadings > 0} />
           <StatChip icon={FileSpreadsheet} label="CU" value={`$${Number(batch.cu).toLocaleString('es-CO', { minimumFractionDigits: 2 })}`} />
+        </div>
+      </Card>
+
+      {/* Facturas del lote — ver / imprimir / descargar PDF */}
+      <Card padding="md">
+        <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3">
+          <div className="flex items-center gap-2">
+            <Printer className="h-5 w-5 text-primary-600 shrink-0" />
+            <div>
+              <p className="text-sm font-semibold text-neutral-800">Facturas de este lote</p>
+              <p className="text-xs text-neutral-500">Imprime o descarga en PDF todas las facturas del lote, o filtra por barrio.</p>
+            </div>
+          </div>
+          <div className="flex flex-wrap items-center gap-2">
+            <Button variant="outline" size="sm" onClick={() => router.push(`/dashboard/billing?readingId=${id}`)}>
+              Ver facturas
+            </Button>
+            <select
+              value={printNeighborhoodId}
+              onChange={(e) => setPrintNeighborhoodId(e.target.value)}
+              className="h-9 rounded-lg border border-neutral-300 bg-white px-3 text-sm focus:outline-none focus:ring-2 focus:ring-primary-500"
+            >
+              <option value="">Todos los barrios</option>
+              {neighborhoods?.map((n) => <option key={n.id} value={n.id}>{n.name}</option>)}
+            </select>
+            <Button
+              variant="outline" size="sm"
+              disabled={!printNeighborhoodId}
+              onClick={() => window.open(billingService.getBatchPrintUrl(id, { neighborhoodId: printNeighborhoodId }), '_blank')}
+            >
+              <Printer className="h-3.5 w-3.5" /> Imprimir barrio
+            </Button>
+            <Button
+              size="sm"
+              onClick={() => window.open(billingService.getBatchPrintUrl(id), '_blank')}
+            >
+              <Printer className="h-3.5 w-3.5" /> Imprimir todas
+            </Button>
+          </div>
         </div>
       </Card>
 
