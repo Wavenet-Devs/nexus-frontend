@@ -5,11 +5,12 @@ import { useParams, useRouter } from 'next/navigation';
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
 import {
   ArrowLeft, Upload, Zap, Users, AlertTriangle,
-  CheckCircle2, FileSpreadsheet, Search, Play, X, Pencil, Printer,
+  CheckCircle2, FileSpreadsheet, Search, Play, X, Pencil, Printer, Calculator,
 } from 'lucide-react';
 import { readingsService, type ImportResult, type ReadingTariff } from '@/services/readings.service';
-import { billingService } from '@/services/billing.service';
+import { billingService, type BatchRecalcResult } from '@/services/billing.service';
 import { catalogsService } from '@/services/catalogs.service';
+import { formatCurrency } from '@/lib/utils';
 import { Card } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
@@ -20,6 +21,7 @@ import { formatMonth } from '@/lib/utils';
 type Tab = 'tariffs' | 'missing';
 
 export default function ReadingBatchPage() {
+  const [recalcOpen, setRecalcOpen] = useState(false);
   const { id }   = useParams<{ id: string }>();
   const router   = useRouter();
   const qc       = useQueryClient();
@@ -143,14 +145,20 @@ export default function ReadingBatchPage() {
           <ArrowLeft className="h-4 w-4" />
           Volver a lecturas
         </button>
-        <Button
-          onClick={() => generateMutation.mutate()}
-          loading={generateMutation.isPending}
-          disabled={totalClients === 0}
-        >
-          <Play className="h-3.5 w-3.5" />
-          Generar facturas
-        </Button>
+        <div className="flex items-center gap-2">
+          <Button variant="outline" onClick={() => setRecalcOpen(true)}>
+            <Calculator className="h-3.5 w-3.5" />
+            Recalcular período
+          </Button>
+          <Button
+            onClick={() => generateMutation.mutate()}
+            loading={generateMutation.isPending}
+            disabled={totalClients === 0}
+          >
+            <Play className="h-3.5 w-3.5" />
+            Generar facturas
+          </Button>
+        </div>
       </div>
 
       {/* Header */}
@@ -474,6 +482,12 @@ export default function ReadingBatchPage() {
           </div>
         )}
       </Dialog>
+
+      <RecalcularPeriodoDialog
+        open={recalcOpen}
+        onClose={() => setRecalcOpen(false)}
+        readingId={id as string}
+      />
     </div>
   );
 }
@@ -525,5 +539,148 @@ function PageSkeleton() {
       <div className="h-36 bg-neutral-100 rounded-xl" />
       <div className="h-20 bg-neutral-100 rounded-xl" />
     </div>
+  );
+}
+
+/**
+ * Recálculo masivo del período, en dos pasos: primero muestra qué cambiaría y
+ * solo escribe cuando el operador confirma. Sobre mil y pico de facturas, ver
+ * antes de aplicar es la diferencia entre una corrección y un susto.
+ */
+function RecalcularPeriodoDialog({
+  open, onClose, readingId,
+}: {
+  open: boolean;
+  onClose: () => void;
+  readingId: string;
+}) {
+  const qc = useQueryClient();
+  const [reason, setReason] = useState('');
+  const [preview, setPreview] = useState<BatchRecalcResult | null>(null);
+
+  const cerrar = () => { setReason(''); setPreview(null); onClose(); };
+
+  const revisar = useMutation({
+    mutationFn: () => billingService.recalculateBatch(readingId, reason, true),
+    onSuccess:  (r) => setPreview(r),
+  });
+
+  const aplicar = useMutation({
+    mutationFn: () => billingService.recalculateBatch(readingId, reason, false),
+    onSuccess: () => {
+      void qc.invalidateQueries({ queryKey: ['reading', readingId] });
+      void qc.invalidateQueries({ queryKey: ['invoices'] });
+      cerrar();
+    },
+  });
+
+  const error = revisar.error ?? aplicar.error;
+
+  return (
+    <Dialog open={open} onClose={cerrar} title="Recalcular el período" size="lg">
+      <div className="space-y-4">
+        <p className="text-sm text-neutral-600">
+          Vuelve a calcular las facturas de este lote con las tarifas y el costo unitario
+          actuales. Solo toca las que están impagas y <strong>sin ningún abono</strong>: si el
+          cliente ya pagó algo, la factura se salta para no descuadrar ese pago.
+        </p>
+
+        <Input
+          label="Motivo del recálculo"
+          placeholder="Se corrigió el costo unitario del proveedor"
+          hint="Queda en el historial de cada factura recalculada"
+          value={reason}
+          onChange={(e) => { setReason(e.target.value); setPreview(null); }}
+        />
+
+        {preview && (
+          <div className="space-y-3">
+            <div className="grid grid-cols-3 gap-3">
+              <div className="bg-neutral-50 rounded-lg p-3">
+                <p className="text-xs text-neutral-500">Cambiarían</p>
+                <p className="text-lg font-semibold text-neutral-900">{preview.changed}</p>
+              </div>
+              <div className="bg-neutral-50 rounded-lg p-3">
+                <p className="text-xs text-neutral-500">Sin cambio</p>
+                <p className="text-lg font-semibold text-neutral-900">{preview.unchanged}</p>
+              </div>
+              <div className="bg-amber-50 rounded-lg p-3">
+                <p className="text-xs text-amber-700">Saltadas por tener pagos</p>
+                <p className="text-lg font-semibold text-amber-700">{preview.skipped}</p>
+              </div>
+            </div>
+
+            {preview.changed > 0 ? (
+              <>
+                <p className="text-sm text-neutral-600">
+                  El total del lote pasaría de{' '}
+                  <strong>{formatCurrency(preview.totalBefore)}</strong> a{' '}
+                  <strong>{formatCurrency(preview.totalAfter)}</strong>.
+                </p>
+                <div className="border border-neutral-200 rounded-lg max-h-64 overflow-y-auto">
+                  <table className="w-full text-sm">
+                    <thead className="bg-neutral-50 sticky top-0">
+                      <tr>
+                        <th className="text-left px-3 py-2 text-xs font-medium text-neutral-500">Contrato</th>
+                        <th className="text-left px-3 py-2 text-xs font-medium text-neutral-500">Cliente</th>
+                        <th className="text-right px-3 py-2 text-xs font-medium text-neutral-500">Antes</th>
+                        <th className="text-right px-3 py-2 text-xs font-medium text-neutral-500">Después</th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                      {preview.changes.map((c) => (
+                        <tr key={c.invoiceId} className="border-t border-neutral-100">
+                          <td className="px-3 py-1.5 font-mono text-xs">{c.contract}</td>
+                          <td className="px-3 py-1.5 truncate max-w-[180px]">{c.clientName}</td>
+                          <td className="px-3 py-1.5 text-right text-neutral-500">{formatCurrency(c.oldTotal)}</td>
+                          <td className={`px-3 py-1.5 text-right font-medium ${c.difference > 0 ? 'text-danger-600' : 'text-primary-600'}`}>
+                            {formatCurrency(c.newTotal)}
+                          </td>
+                        </tr>
+                      ))}
+                    </tbody>
+                  </table>
+                </div>
+              </>
+            ) : (
+              <p className="text-sm text-neutral-500">
+                Ninguna factura cambiaría de valor: el lote ya está al día.
+              </p>
+            )}
+          </div>
+        )}
+
+        {error && (
+          <p className="text-xs text-danger-600">
+            {(() => {
+              const msg = (error as { response?: { data?: { message?: string | string[] } } })
+                ?.response?.data?.message;
+              return Array.isArray(msg) ? msg.join(', ') : msg ?? 'No se pudo recalcular';
+            })()}
+          </p>
+        )}
+
+        <div className="flex justify-end gap-2">
+          <Button variant="outline" onClick={cerrar}>Cancelar</Button>
+          {!preview ? (
+            <Button
+              loading={revisar.isPending}
+              disabled={reason.trim().length < 5}
+              onClick={() => revisar.mutate()}
+            >
+              Revisar cambios
+            </Button>
+          ) : (
+            <Button
+              loading={aplicar.isPending}
+              disabled={preview.changed === 0}
+              onClick={() => aplicar.mutate()}
+            >
+              Aplicar a {preview.changed} factura{preview.changed === 1 ? '' : 's'}
+            </Button>
+          )}
+        </div>
+      </div>
+    </Dialog>
   );
 }

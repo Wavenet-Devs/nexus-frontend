@@ -24,6 +24,16 @@ export interface RespondPqrDto { message: string; author?: string; }
 export interface PqrFilters { status?: string; search?: string; page?: number; limit?: number; }
 
 export const pqrService = {
+  /** URL del documento imprimible; el token va por query porque es navegación directa. */
+  getPrintUrl: (id: string, withResponses: boolean): string => {
+    const base  = process.env.NEXT_PUBLIC_API_URL ?? 'http://localhost:4000/api/v1';
+    const token = typeof window !== 'undefined' ? localStorage.getItem('access_token') : '';
+    const slug  = typeof window !== 'undefined' ? localStorage.getItem('tenant_slug') : '';
+    const params = new URLSearchParams({ token: token ?? '', slug: slug ?? '' });
+    if (withResponses) params.set('responses', 'true');
+    return `${base}/pqr/${id}/print?${params.toString()}`;
+  },
+
   findAll: (filters: PqrFilters = {}) =>
     api.get<PaginatedResponse<Pqr>>('/pqr', { params: filters }).then((r) => r.data),
   findOne: (id: string) =>

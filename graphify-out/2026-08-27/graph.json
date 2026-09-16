@@ -740,7 +740,7 @@
       "source_location": "L1",
       "_origin": "ast",
       "id": "src_app_dashboard_dashboard_billing_id_page",
-      "community": 25,
+      "community": 23,
       "norm_label": "page.tsx"
     },
     {
@@ -750,7 +750,7 @@
       "source_location": "L21",
       "_origin": "ast",
       "id": "src_app_dashboard_dashboard_billing_id_page_creditnoteschema",
-      "community": 25,
+      "community": 23,
       "norm_label": "creditnoteschema"
     },
     {
@@ -760,7 +760,7 @@
       "source_location": "L25",
       "_origin": "ast",
       "id": "src_app_dashboard_dashboard_billing_id_page_creditnoteform",
-      "community": 25,
+      "community": 23,
       "norm_label": "creditnoteform"
     },
     {
@@ -770,7 +770,7 @@
       "source_location": "L27",
       "_origin": "ast",
       "id": "src_app_dashboard_dashboard_billing_id_page_invoicedetailpage",
-      "community": 25,
+      "community": 23,
       "norm_label": "invoicedetailpage()"
     },
     {
@@ -780,7 +780,7 @@
       "source_location": "L360",
       "_origin": "ast",
       "id": "src_app_dashboard_dashboard_billing_id_page_readingbox",
-      "community": 25,
+      "community": 23,
       "norm_label": "readingbox()"
     },
     {
@@ -790,7 +790,7 @@
       "source_location": "L371",
       "_origin": "ast",
       "id": "src_app_dashboard_dashboard_billing_id_page_inforow",
-      "community": 25,
+      "community": 23,
       "norm_label": "inforow()"
     },
     {
@@ -800,7 +800,7 @@
       "source_location": "L380",
       "_origin": "ast",
       "id": "src_app_dashboard_dashboard_billing_id_page_costrow",
-      "community": 25,
+      "community": 23,
       "norm_label": "costrow()"
     },
     {
@@ -810,7 +810,7 @@
       "source_location": "L393",
       "_origin": "ast",
       "id": "src_app_dashboard_dashboard_billing_id_page_consumptionchart",
-      "community": 25,
+      "community": 23,
       "norm_label": "consumptionchart()"
     },
     {
@@ -820,7 +820,7 @@
       "source_location": "L419",
       "_origin": "ast",
       "id": "src_app_dashboard_dashboard_billing_id_page_pageskeleton",
-      "community": 25,
+      "community": 23,
       "norm_label": "pageskeleton()"
     },
     {
@@ -830,7 +830,7 @@
       "source_location": "L1",
       "_origin": "ast",
       "id": "src_app_dashboard_dashboard_billing_page",
-      "community": 25,
+      "community": 26,
       "norm_label": "page.tsx"
     },
     {
@@ -840,7 +840,7 @@
       "source_location": "L19",
       "_origin": "ast",
       "id": "src_app_dashboard_dashboard_billing_page_current_year",
-      "community": 25,
+      "community": 26,
       "norm_label": "current_year"
     },
     {
@@ -850,7 +850,7 @@
       "source_location": "L21",
       "_origin": "ast",
       "id": "src_app_dashboard_dashboard_billing_page_years",
-      "community": 25,
+      "community": 26,
       "norm_label": "years"
     },
     {
@@ -860,7 +860,7 @@
       "source_location": "L22",
       "_origin": "ast",
       "id": "src_app_dashboard_dashboard_billing_page_months",
-      "community": 25,
+      "community": 26,
       "norm_label": "months"
     },
     {
@@ -870,7 +870,7 @@
       "source_location": "L29",
       "_origin": "ast",
       "id": "src_app_dashboard_dashboard_billing_page_billingpage",
-      "community": 25,
+      "community": 26,
       "norm_label": "billingpage()"
     },
     {
@@ -880,7 +880,7 @@
       "source_location": "L245",
       "_origin": "ast",
       "id": "src_app_dashboard_dashboard_billing_page_tableskeleton",
-      "community": 25,
+      "community": 26,
       "norm_label": "tableskeleton()"
     },
     {
@@ -900,7 +900,7 @@
       "source_location": "L15",
       "_origin": "ast",
       "id": "src_app_dashboard_dashboard_budget_id_page_budgetdetailpage",
-      "community": 25,
+      "community": 23,
       "norm_label": "budgetdetailpage()"
     },
     {
@@ -940,7 +940,7 @@
       "source_location": "L1",
       "_origin": "ast",
       "id": "src_app_dashboard_dashboard_budget_components_rp_form",
-      "community": 1,
+      "community": 24,
       "norm_label": "rp-form.tsx"
     },
     {
@@ -960,7 +960,7 @@
       "source_location": "L19",
       "_origin": "ast",
       "id": "src_app_dashboard_dashboard_budget_components_rp_form_itemrow",
-      "community": 1,
+      "community": 24,
       "norm_label": "itemrow"
     },
     {
@@ -970,7 +970,7 @@
       "source_location": "L21",
       "_origin": "ast",
       "id": "src_app_dashboard_dashboard_budget_components_rp_form_rpform",
-      "community": 1,
+      "community": 24,
       "norm_label": "rpform()"
     },
     {
@@ -1270,7 +1270,7 @@
       "source_location": "L1",
       "_origin": "ast",
       "id": "src_app_dashboard_dashboard_clients_id_edit_page",
-      "community": 24,
+      "community": 27,
       "norm_label": "page.tsx"
     },
     {
@@ -1280,7 +1280,7 @@
       "source_location": "L10",
       "_origin": "ast",
       "id": "src_app_dashboard_dashboard_clients_id_edit_page_editclientpage",
-      "community": 24,
+      "community": 27,
       "norm_label": "editclientpage()"
     },
     {
@@ -1290,7 +1290,7 @@
       "source_location": "L1",
       "_origin": "ast",
       "id": "src_app_dashboard_dashboard_clients_id_page",
-      "community": 24,
+      "community": 23,
       "norm_label": "page.tsx"
     },
     {
@@ -1300,7 +1300,7 @@
       "source_location": "L18",
       "_origin": "ast",
       "id": "src_app_dashboard_dashboard_clients_id_page_inforow",
-      "community": 24,
+      "community": 23,
       "norm_label": "inforow()"
     },
     {
@@ -1310,7 +1310,7 @@
       "source_location": "L28",
       "_origin": "ast",
       "id": "src_app_dashboard_dashboard_clients_id_page_clientdetailpage",
-      "community": 25,
+      "community": 23,
       "norm_label": "clientdetailpage()"
     },
     {
@@ -1320,7 +1320,7 @@
       "source_location": "L190",
       "_origin": "ast",
       "id": "src_app_dashboard_dashboard_clients_id_page_detailskeleton",
-      "community": 24,
+      "community": 23,
       "norm_label": "detailskeleton()"
     },
     {
@@ -1330,7 +1330,7 @@
       "source_location": "L1",
       "_origin": "ast",
       "id": "src_app_dashboard_dashboard_clients_components_client_form",
-      "community": 24,
+      "community": 27,
       "norm_label": "client-form.tsx"
     },
     {
@@ -1340,7 +1340,7 @@
       "source_location": "L14",
       "_origin": "ast",
       "id": "src_app_dashboard_dashboard_clients_components_client_form_schema",
-      "community": 24,
+      "community": 27,
       "norm_label": "schema"
     },
     {
@@ -1350,7 +1350,7 @@
       "source_location": "L34",
       "_origin": "ast",
       "id": "src_app_dashboard_dashboard_clients_components_client_form_formdata",
-      "community": 24,
+      "community": 27,
       "norm_label": "formdata"
     },
     {
@@ -1360,7 +1360,7 @@
       "source_location": "L36",
       "_origin": "ast",
       "id": "src_app_dashboard_dashboard_clients_components_client_form_clientformprops",
-      "community": 24,
+      "community": 27,
       "norm_label": "clientformprops"
     },
     {
@@ -1370,7 +1370,7 @@
       "source_location": "L42",
       "_origin": "ast",
       "id": "src_app_dashboard_dashboard_clients_components_client_form_clientform",
-      "community": 24,
+      "community": 27,
       "norm_label": "clientform()"
     },
     {
@@ -1380,7 +1380,7 @@
       "source_location": "L232",
       "_origin": "ast",
       "id": "src_app_dashboard_dashboard_clients_components_client_form_idcardhint",
-      "community": 24,
+      "community": 27,
       "norm_label": "idcardhint()"
     },
     {
@@ -1440,7 +1440,7 @@
       "source_location": "L1",
       "_origin": "ast",
       "id": "src_app_dashboard_dashboard_clients_import_page",
-      "community": 24,
+      "community": 27,
       "norm_label": "page.tsx"
     },
     {
@@ -1450,7 +1450,7 @@
       "source_location": "L11",
       "_origin": "ast",
       "id": "src_app_dashboard_dashboard_clients_import_page_columns",
-      "community": 24,
+      "community": 27,
       "norm_label": "columns"
     },
     {
@@ -1460,7 +1460,7 @@
       "source_location": "L22",
       "_origin": "ast",
       "id": "src_app_dashboard_dashboard_clients_import_page_downloadtemplate",
-      "community": 24,
+      "community": 27,
       "norm_label": "downloadtemplate()"
     },
     {
@@ -1470,7 +1470,7 @@
       "source_location": "L36",
       "_origin": "ast",
       "id": "src_app_dashboard_dashboard_clients_import_page_clientimportpage",
-      "community": 24,
+      "community": 27,
       "norm_label": "clientimportpage()"
     },
     {
@@ -1480,7 +1480,7 @@
       "source_location": "L1",
       "_origin": "ast",
       "id": "src_app_dashboard_dashboard_clients_new_page",
-      "community": 24,
+      "community": 27,
       "norm_label": "page.tsx"
     },
     {
@@ -1490,7 +1490,7 @@
       "source_location": "L9",
       "_origin": "ast",
       "id": "src_app_dashboard_dashboard_clients_new_page_newclientpage",
-      "community": 24,
+      "community": 27,
       "norm_label": "newclientpage()"
     },
     {
@@ -1550,7 +1550,7 @@
       "source_location": "L23",
       "_origin": "ast",
       "id": "src_app_dashboard_dashboard_financing_id_page_financingdetailpage",
-      "community": 24,
+      "community": 23,
       "norm_label": "financingdetailpage()"
     },
     {
@@ -1800,88 +1800,68 @@
       "source_location": "L1",
       "_origin": "ast",
       "id": "src_app_dashboard_dashboard_payments_id_page",
-      "community": 25,
+      "community": 6,
       "norm_label": "page.tsx"
     },
     {
       "label": "PAYMENT_TYPES",
       "file_type": "code",
       "source_file": "src/app/(dashboard)/dashboard/payments/[id]/page.tsx",
-      "source_location": "L16",
+      "source_location": "L13",
       "_origin": "ast",
       "id": "src_app_dashboard_dashboard_payments_id_page_payment_types",
-      "community": 25,
+      "community": 6,
       "norm_label": "payment_types"
     },
     {
       "label": "TYPE_COLORS",
       "file_type": "code",
       "source_file": "src/app/(dashboard)/dashboard/payments/[id]/page.tsx",
-      "source_location": "L17",
+      "source_location": "L14",
       "_origin": "ast",
       "id": "src_app_dashboard_dashboard_payments_id_page_type_colors",
-      "community": 25,
+      "community": 6,
       "norm_label": "type_colors"
-    },
-    {
-      "label": "centrar()",
-      "file_type": "code",
-      "source_file": "src/app/(dashboard)/dashboard/payments/[id]/page.tsx",
-      "source_location": "L24",
-      "_origin": "ast",
-      "id": "src_app_dashboard_dashboard_payments_id_page_centrar",
-      "community": 25,
-      "norm_label": "centrar()"
     },
     {
       "label": "buildVoucherText()",
       "file_type": "code",
       "source_file": "src/app/(dashboard)/dashboard/payments/[id]/page.tsx",
-      "source_location": "L30",
+      "source_location": "L20",
       "_origin": "ast",
       "id": "src_app_dashboard_dashboard_payments_id_page_buildvouchertext",
-      "community": 25,
+      "community": 6,
       "norm_label": "buildvouchertext()"
     },
     {
       "label": "PaymentDetailPage()",
       "file_type": "code",
       "source_file": "src/app/(dashboard)/dashboard/payments/[id]/page.tsx",
-      "source_location": "L76",
+      "source_location": "L53",
       "_origin": "ast",
       "id": "src_app_dashboard_dashboard_payments_id_page_paymentdetailpage",
-      "community": 25,
+      "community": 6,
       "norm_label": "paymentdetailpage()"
     },
     {
       "label": "ReceiptRow()",
       "file_type": "code",
       "source_file": "src/app/(dashboard)/dashboard/payments/[id]/page.tsx",
-      "source_location": "L295",
+      "source_location": "L242",
       "_origin": "ast",
       "id": "src_app_dashboard_dashboard_payments_id_page_receiptrow",
-      "community": 25,
+      "community": 6,
       "norm_label": "receiptrow()"
     },
     {
       "label": "PageSkeleton()",
       "file_type": "code",
       "source_file": "src/app/(dashboard)/dashboard/payments/[id]/page.tsx",
-      "source_location": "L304",
+      "source_location": "L251",
       "_origin": "ast",
       "id": "src_app_dashboard_dashboard_payments_id_page_pageskeleton",
-      "community": 25,
+      "community": 6,
       "norm_label": "pageskeleton()"
-    },
-    {
-      "label": "CorregirPagoDialog()",
-      "file_type": "code",
-      "source_file": "src/app/(dashboard)/dashboard/payments/[id]/page.tsx",
-      "source_location": "L318",
-      "_origin": "ast",
-      "id": "src_app_dashboard_dashboard_payments_id_page_corregirpagodialog",
-      "community": 25,
-      "norm_label": "corregirpagodialog()"
     },
     {
       "label": "page.tsx",
@@ -1920,7 +1900,7 @@
       "source_location": "L24",
       "_origin": "ast",
       "id": "src_app_dashboard_dashboard_payments_new_page_newpaymentpage",
-      "community": 25,
+      "community": 0,
       "norm_label": "newpaymentpage()"
     },
     {
@@ -1930,7 +1910,7 @@
       "source_location": "L1",
       "_origin": "ast",
       "id": "src_app_dashboard_dashboard_payments_page",
-      "community": 4,
+      "community": 0,
       "norm_label": "page.tsx"
     },
     {
@@ -1940,7 +1920,7 @@
       "source_location": "L16",
       "_origin": "ast",
       "id": "src_app_dashboard_dashboard_payments_page_current_year",
-      "community": 4,
+      "community": 0,
       "norm_label": "current_year"
     },
     {
@@ -1950,7 +1930,7 @@
       "source_location": "L18",
       "_origin": "ast",
       "id": "src_app_dashboard_dashboard_payments_page_months",
-      "community": 4,
+      "community": 0,
       "norm_label": "months"
     },
     {
@@ -1960,7 +1940,7 @@
       "source_location": "L24",
       "_origin": "ast",
       "id": "src_app_dashboard_dashboard_payments_page_payment_types",
-      "community": 4,
+      "community": 0,
       "norm_label": "payment_types"
     },
     {
@@ -1970,7 +1950,7 @@
       "source_location": "L25",
       "_origin": "ast",
       "id": "src_app_dashboard_dashboard_payments_page_type_colors",
-      "community": 4,
+      "community": 0,
       "norm_label": "type_colors"
     },
     {
@@ -1990,7 +1970,7 @@
       "source_location": "L211",
       "_origin": "ast",
       "id": "src_app_dashboard_dashboard_payments_page_th",
-      "community": 4,
+      "community": 0,
       "norm_label": "th()"
     },
     {
@@ -2000,7 +1980,7 @@
       "source_location": "L219",
       "_origin": "ast",
       "id": "src_app_dashboard_dashboard_payments_page_tableskeleton",
-      "community": 4,
+      "community": 0,
       "norm_label": "tableskeleton()"
     },
     {
@@ -2010,7 +1990,7 @@
       "source_location": "L1",
       "_origin": "ast",
       "id": "src_app_dashboard_dashboard_pqr_id_page",
-      "community": 24,
+      "community": 1,
       "norm_label": "page.tsx"
     },
     {
@@ -2020,7 +2000,7 @@
       "source_location": "L12",
       "_origin": "ast",
       "id": "src_app_dashboard_dashboard_pqr_id_page_status_styles",
-      "community": 24,
+      "community": 1,
       "norm_label": "status_styles"
     },
     {
@@ -2030,7 +2010,7 @@
       "source_location": "L17",
       "_origin": "ast",
       "id": "src_app_dashboard_dashboard_pqr_id_page_status_labels",
-      "community": 24,
+      "community": 1,
       "norm_label": "status_labels"
     },
     {
@@ -2040,7 +2020,7 @@
       "source_location": "L21",
       "_origin": "ast",
       "id": "src_app_dashboard_dashboard_pqr_id_page_pqrdetailpage",
-      "community": 25,
+      "community": 1,
       "norm_label": "pqrdetailpage()"
     },
     {
@@ -2250,7 +2230,7 @@
       "source_location": "L1",
       "_origin": "ast",
       "id": "src_app_dashboard_dashboard_readings_page",
-      "community": 12,
+      "community": 26,
       "norm_label": "page.tsx"
     },
     {
@@ -2260,7 +2240,7 @@
       "source_location": "L12",
       "_origin": "ast",
       "id": "src_app_dashboard_dashboard_readings_page_months",
-      "community": 12,
+      "community": 26,
       "norm_label": "months"
     },
     {
@@ -2270,7 +2250,7 @@
       "source_location": "L14",
       "_origin": "ast",
       "id": "src_app_dashboard_dashboard_readings_page_readingspage",
-      "community": 12,
+      "community": 26,
       "norm_label": "readingspage()"
     },
     {
@@ -2550,7 +2530,7 @@
       "source_location": "L1",
       "_origin": "ast",
       "id": "src_app_dashboard_dashboard_settings_invoice_banner_page",
-      "community": 24,
+      "community": 10,
       "norm_label": "page.tsx"
     },
     {
@@ -2560,7 +2540,7 @@
       "source_location": "L14",
       "_origin": "ast",
       "id": "src_app_dashboard_dashboard_settings_invoice_banner_page_meses",
-      "community": 24,
+      "community": 10,
       "norm_label": "meses"
     },
     {
@@ -2570,7 +2550,7 @@
       "source_location": "L19",
       "_origin": "ast",
       "id": "src_app_dashboard_dashboard_settings_invoice_banner_page_invoicebannerpage",
-      "community": 24,
+      "community": 10,
       "norm_label": "invoicebannerpage()"
     },
     {
@@ -2580,7 +2560,7 @@
       "source_location": "L118",
       "_origin": "ast",
       "id": "src_app_dashboard_dashboard_settings_invoice_banner_page_bannercard",
-      "community": 24,
+      "community": 10,
       "norm_label": "bannercard()"
     },
     {
@@ -2590,7 +2570,7 @@
       "source_location": "L170",
       "_origin": "ast",
       "id": "src_app_dashboard_dashboard_settings_invoice_banner_page_uploaddialog",
-      "community": 24,
+      "community": 10,
       "norm_label": "uploaddialog()"
     },
     {
@@ -2600,7 +2580,7 @@
       "source_location": "L300",
       "_origin": "ast",
       "id": "src_app_dashboard_dashboard_settings_invoice_banner_page_errormessage",
-      "community": 24,
+      "community": 10,
       "norm_label": "errormessage()"
     },
     {
@@ -3420,7 +3400,7 @@
       "source_location": "L1",
       "_origin": "ast",
       "id": "src_components_ui_badge",
-      "community": 25,
+      "community": 28,
       "norm_label": "badge.tsx"
     },
     {
@@ -3430,7 +3410,7 @@
       "source_location": "L3",
       "_origin": "ast",
       "id": "src_components_ui_badge_badgeprops",
-      "community": 25,
+      "community": 28,
       "norm_label": "badgeprops"
     },
     {
@@ -3440,7 +3420,7 @@
       "source_location": "L9",
       "_origin": "ast",
       "id": "src_components_ui_badge_statusbadge",
-      "community": 25,
+      "community": 28,
       "norm_label": "statusbadge()"
     },
     {
@@ -3450,7 +3430,7 @@
       "source_location": "L23",
       "_origin": "ast",
       "id": "src_components_ui_badge_simplebadgeprops",
-      "community": 25,
+      "community": 28,
       "norm_label": "simplebadgeprops"
     },
     {
@@ -3610,7 +3590,7 @@
       "source_location": "L1",
       "_origin": "ast",
       "id": "src_components_ui_empty_state",
-      "community": 24,
+      "community": 26,
       "norm_label": "empty-state.tsx"
     },
     {
@@ -3620,7 +3600,7 @@
       "source_location": "L4",
       "_origin": "ast",
       "id": "src_components_ui_empty_state_emptystateprops",
-      "community": 24,
+      "community": 26,
       "norm_label": "emptystateprops"
     },
     {
@@ -3630,7 +3610,7 @@
       "source_location": "L12",
       "_origin": "ast",
       "id": "src_components_ui_empty_state_emptystate",
-      "community": 24,
+      "community": 26,
       "norm_label": "emptystate()"
     },
     {
@@ -3790,7 +3770,7 @@
       "source_location": "L1",
       "_origin": "ast",
       "id": "src_lib_api",
-      "community": 0,
+      "community": 1,
       "norm_label": "api.ts"
     },
     {
@@ -3800,7 +3780,7 @@
       "source_location": "L5",
       "_origin": "ast",
       "id": "src_lib_api_api",
-      "community": 0,
+      "community": 1,
       "norm_label": "api"
     },
     {
@@ -3850,7 +3830,7 @@
       "source_location": "L1",
       "_origin": "ast",
       "id": "src_lib_utils",
-      "community": 25,
+      "community": 28,
       "norm_label": "utils.ts"
     },
     {
@@ -3870,7 +3850,7 @@
       "source_location": "L8",
       "_origin": "ast",
       "id": "src_lib_utils_formatcurrency",
-      "community": 25,
+      "community": 23,
       "norm_label": "formatcurrency()"
     },
     {
@@ -3890,7 +3870,7 @@
       "source_location": "L23",
       "_origin": "ast",
       "id": "src_lib_utils_formatdate",
-      "community": 25,
+      "community": 23,
       "norm_label": "formatdate()"
     },
     {
@@ -3910,7 +3890,7 @@
       "source_location": "L36",
       "_origin": "ast",
       "id": "src_lib_utils_getstatuscolor",
-      "community": 25,
+      "community": 28,
       "norm_label": "getstatuscolor()"
     },
     {
@@ -3920,7 +3900,7 @@
       "source_location": "L51",
       "_origin": "ast",
       "id": "src_lib_utils_getstatuslabel",
-      "community": 25,
+      "community": 28,
       "norm_label": "getstatuslabel()"
     },
     {
@@ -3930,7 +3910,7 @@
       "source_location": "L1",
       "_origin": "ast",
       "id": "src_services_api_keys_service",
-      "community": 0,
+      "community": 1,
       "norm_label": "api-keys.service.ts"
     },
     {
@@ -3940,7 +3920,7 @@
       "source_location": "L3",
       "_origin": "ast",
       "id": "src_services_api_keys_service_apikey",
-      "community": 0,
+      "community": 1,
       "norm_label": "apikey"
     },
     {
@@ -3950,7 +3930,7 @@
       "source_location": "L11",
       "_origin": "ast",
       "id": "src_services_api_keys_service_createdapikey",
-      "community": 0,
+      "community": 1,
       "norm_label": "createdapikey"
     },
     {
@@ -3960,7 +3940,7 @@
       "source_location": "L15",
       "_origin": "ast",
       "id": "src_services_api_keys_service_apikeysservice",
-      "community": 0,
+      "community": 1,
       "norm_label": "apikeysservice"
     },
     {
@@ -4340,7 +4320,7 @@
       "source_location": "L1",
       "_origin": "ast",
       "id": "src_services_clients_service",
-      "community": 24,
+      "community": 27,
       "norm_label": "clients.service.ts"
     },
     {
@@ -4350,7 +4330,7 @@
       "source_location": "L4",
       "_origin": "ast",
       "id": "src_services_clients_service_clientgroup",
-      "community": 24,
+      "community": 27,
       "norm_label": "clientgroup"
     },
     {
@@ -4360,7 +4340,7 @@
       "source_location": "L19",
       "_origin": "ast",
       "id": "src_services_clients_service_clientgroupmember",
-      "community": 24,
+      "community": 27,
       "norm_label": "clientgroupmember"
     },
     {
@@ -4370,7 +4350,7 @@
       "source_location": "L30",
       "_origin": "ast",
       "id": "src_services_clients_service_clientgroupdetail",
-      "community": 24,
+      "community": 27,
       "norm_label": "clientgroupdetail"
     },
     {
@@ -4380,7 +4360,7 @@
       "source_location": "L35",
       "_origin": "ast",
       "id": "src_services_clients_service_idcardlookup",
-      "community": 24,
+      "community": 27,
       "norm_label": "idcardlookup"
     },
     {
@@ -4390,7 +4370,7 @@
       "source_location": "L43",
       "_origin": "ast",
       "id": "src_services_clients_service_clientlistitem",
-      "community": 24,
+      "community": 27,
       "norm_label": "clientlistitem"
     },
     {
@@ -4400,7 +4380,7 @@
       "source_location": "L57",
       "_origin": "ast",
       "id": "src_services_clients_service_clientdetail",
-      "community": 24,
+      "community": 27,
       "norm_label": "clientdetail"
     },
     {
@@ -4410,7 +4390,7 @@
       "source_location": "L78",
       "_origin": "ast",
       "id": "src_services_clients_service_clientfilters",
-      "community": 24,
+      "community": 27,
       "norm_label": "clientfilters"
     },
     {
@@ -4420,7 +4400,7 @@
       "source_location": "L87",
       "_origin": "ast",
       "id": "src_services_clients_service_createclientdto",
-      "community": 24,
+      "community": 27,
       "norm_label": "createclientdto"
     },
     {
@@ -4430,7 +4410,7 @@
       "source_location": "L106",
       "_origin": "ast",
       "id": "src_services_clients_service_clientsservice",
-      "community": 24,
+      "community": 27,
       "norm_label": "clientsservice"
     },
     {
@@ -4440,7 +4420,7 @@
       "source_location": "L1",
       "_origin": "ast",
       "id": "src_services_financing_service",
-      "community": 0,
+      "community": 1,
       "norm_label": "financing.service.ts"
     },
     {
@@ -4450,7 +4430,7 @@
       "source_location": "L4",
       "_origin": "ast",
       "id": "src_services_financing_service_financingplan",
-      "community": 0,
+      "community": 1,
       "norm_label": "financingplan"
     },
     {
@@ -4460,7 +4440,7 @@
       "source_location": "L25",
       "_origin": "ast",
       "id": "src_services_financing_service_createfinancingdto",
-      "community": 0,
+      "community": 1,
       "norm_label": "createfinancingdto"
     },
     {
@@ -4470,7 +4450,7 @@
       "source_location": "L33",
       "_origin": "ast",
       "id": "src_services_financing_service_payquotadto",
-      "community": 0,
+      "community": 1,
       "norm_label": "payquotadto"
     },
     {
@@ -4480,7 +4460,7 @@
       "source_location": "L38",
       "_origin": "ast",
       "id": "src_services_financing_service_financingfilters",
-      "community": 0,
+      "community": 1,
       "norm_label": "financingfilters"
     },
     {
@@ -4490,7 +4470,7 @@
       "source_location": "L46",
       "_origin": "ast",
       "id": "src_services_financing_service_financingservice",
-      "community": 4,
+      "community": 1,
       "norm_label": "financingservice"
     },
     {
@@ -4564,30 +4544,10 @@
       "norm_label": "paymentfilters"
     },
     {
-      "label": "UpdatePaymentDto",
-      "file_type": "code",
-      "source_file": "src/services/payments.service.ts",
-      "source_location": "L59",
-      "_origin": "ast",
-      "id": "src_services_payments_service_updatepaymentdto",
-      "community": 0,
-      "norm_label": "updatepaymentdto"
-    },
-    {
-      "label": "PaymentHistoryEntry",
-      "file_type": "code",
-      "source_file": "src/services/payments.service.ts",
-      "source_location": "L67",
-      "_origin": "ast",
-      "id": "src_services_payments_service_paymenthistoryentry",
-      "community": 0,
-      "norm_label": "paymenthistoryentry"
-    },
-    {
       "label": "paymentsService",
       "file_type": "code",
       "source_file": "src/services/payments.service.ts",
-      "source_location": "L76",
+      "source_location": "L59",
       "_origin": "ast",
       "id": "src_services_payments_service_paymentsservice",
       "community": 0,
@@ -4650,7 +4610,7 @@
       "source_location": "L1",
       "_origin": "ast",
       "id": "src_services_pqr_service",
-      "community": 0,
+      "community": 1,
       "norm_label": "pqr.service.ts"
     },
     {
@@ -4660,7 +4620,7 @@
       "source_location": "L4",
       "_origin": "ast",
       "id": "src_services_pqr_service_pqrresponse",
-      "community": 0,
+      "community": 1,
       "norm_label": "pqrresponse"
     },
     {
@@ -4670,7 +4630,7 @@
       "source_location": "L8",
       "_origin": "ast",
       "id": "src_services_pqr_service_pqr",
-      "community": 0,
+      "community": 1,
       "norm_label": "pqr"
     },
     {
@@ -4680,7 +4640,7 @@
       "source_location": "L22",
       "_origin": "ast",
       "id": "src_services_pqr_service_createpqrdto",
-      "community": 0,
+      "community": 1,
       "norm_label": "createpqrdto"
     },
     {
@@ -4690,7 +4650,7 @@
       "source_location": "L23",
       "_origin": "ast",
       "id": "src_services_pqr_service_respondpqrdto",
-      "community": 0,
+      "community": 1,
       "norm_label": "respondpqrdto"
     },
     {
@@ -4700,7 +4660,7 @@
       "source_location": "L24",
       "_origin": "ast",
       "id": "src_services_pqr_service_pqrfilters",
-      "community": 0,
+      "community": 1,
       "norm_label": "pqrfilters"
     },
     {
@@ -4710,7 +4670,7 @@
       "source_location": "L26",
       "_origin": "ast",
       "id": "src_services_pqr_service_pqrservice",
-      "community": 0,
+      "community": 1,
       "norm_label": "pqrservice"
     },
     {
@@ -5210,7 +5170,7 @@
       "source_location": "L110",
       "_origin": "ast",
       "id": "src_types_index_paginatedresponse",
-      "community": 0,
+      "community": 1,
       "norm_label": "paginatedresponse"
     },
     {
@@ -10746,7 +10706,7 @@
       "relation": "contains",
       "confidence": "EXTRACTED",
       "source_file": "src/app/(dashboard)/dashboard/payments/[id]/page.tsx",
-      "source_location": "L30",
+      "source_location": "L20",
       "weight": 1.0,
       "source": "src_app_dashboard_dashboard_payments_id_page",
       "target": "src_app_dashboard_dashboard_payments_id_page_buildvouchertext",
@@ -10756,27 +10716,7 @@
       "relation": "contains",
       "confidence": "EXTRACTED",
       "source_file": "src/app/(dashboard)/dashboard/payments/[id]/page.tsx",
-      "source_location": "L24",
-      "weight": 1.0,
-      "source": "src_app_dashboard_dashboard_payments_id_page",
-      "target": "src_app_dashboard_dashboard_payments_id_page_centrar",
-      "confidence_score": 1.0
-    },
-    {
-      "relation": "contains",
-      "confidence": "EXTRACTED",
-      "source_file": "src/app/(dashboard)/dashboard/payments/[id]/page.tsx",
-      "source_location": "L318",
-      "weight": 1.0,
-      "source": "src_app_dashboard_dashboard_payments_id_page",
-      "target": "src_app_dashboard_dashboard_payments_id_page_corregirpagodialog",
-      "confidence_score": 1.0
-    },
-    {
-      "relation": "contains",
-      "confidence": "EXTRACTED",
-      "source_file": "src/app/(dashboard)/dashboard/payments/[id]/page.tsx",
-      "source_location": "L304",
+      "source_location": "L251",
       "weight": 1.0,
       "source": "src_app_dashboard_dashboard_payments_id_page",
       "target": "src_app_dashboard_dashboard_payments_id_page_pageskeleton",
@@ -10786,7 +10726,7 @@
       "relation": "contains",
       "confidence": "EXTRACTED",
       "source_file": "src/app/(dashboard)/dashboard/payments/[id]/page.tsx",
-      "source_location": "L16",
+      "source_location": "L13",
       "weight": 1.0,
       "source": "src_app_dashboard_dashboard_payments_id_page",
       "target": "src_app_dashboard_dashboard_payments_id_page_payment_types",
@@ -10796,7 +10736,7 @@
       "relation": "contains",
       "confidence": "EXTRACTED",
       "source_file": "src/app/(dashboard)/dashboard/payments/[id]/page.tsx",
-      "source_location": "L76",
+      "source_location": "L53",
       "weight": 1.0,
       "source": "src_app_dashboard_dashboard_payments_id_page",
       "target": "src_app_dashboard_dashboard_payments_id_page_paymentdetailpage",
@@ -10806,7 +10746,7 @@
       "relation": "contains",
       "confidence": "EXTRACTED",
       "source_file": "src/app/(dashboard)/dashboard/payments/[id]/page.tsx",
-      "source_location": "L295",
+      "source_location": "L242",
       "weight": 1.0,
       "source": "src_app_dashboard_dashboard_payments_id_page",
       "target": "src_app_dashboard_dashboard_payments_id_page_receiptrow",
@@ -10816,7 +10756,7 @@
       "relation": "contains",
       "confidence": "EXTRACTED",
       "source_file": "src/app/(dashboard)/dashboard/payments/[id]/page.tsx",
-      "source_location": "L17",
+      "source_location": "L14",
       "weight": 1.0,
       "source": "src_app_dashboard_dashboard_payments_id_page",
       "target": "src_app_dashboard_dashboard_payments_id_page_type_colors",
@@ -10827,7 +10767,7 @@
       "context": "import",
       "confidence": "EXTRACTED",
       "source_file": "src/app/(dashboard)/dashboard/payments/[id]/page.tsx",
-      "source_location": "L10",
+      "source_location": "L9",
       "weight": 1.0,
       "source": "src_app_dashboard_dashboard_payments_id_page",
       "target": "src_components_ui_button",
@@ -10838,7 +10778,7 @@
       "context": "import",
       "confidence": "EXTRACTED",
       "source_file": "src/app/(dashboard)/dashboard/payments/[id]/page.tsx",
-      "source_location": "L10",
+      "source_location": "L9",
       "weight": 1.0,
       "source": "src_app_dashboard_dashboard_payments_id_page",
       "target": "src_components_ui_button_button",
@@ -10849,7 +10789,7 @@
       "context": "import",
       "confidence": "EXTRACTED",
       "source_file": "src/app/(dashboard)/dashboard/payments/[id]/page.tsx",
-      "source_location": "L9",
+      "source_location": "L8",
       "weight": 1.0,
       "source": "src_app_dashboard_dashboard_payments_id_page",
       "target": "src_components_ui_card",
@@ -10860,7 +10800,7 @@
       "context": "import",
       "confidence": "EXTRACTED",
       "source_file": "src/app/(dashboard)/dashboard/payments/[id]/page.tsx",
-      "source_location": "L9",
+      "source_location": "L8",
       "weight": 1.0,
       "source": "src_app_dashboard_dashboard_payments_id_page",
       "target": "src_components_ui_card_card",
@@ -10871,7 +10811,7 @@
       "context": "import",
       "confidence": "EXTRACTED",
       "source_file": "src/app/(dashboard)/dashboard/payments/[id]/page.tsx",
-      "source_location": "L9",
+      "source_location": "L8",
       "weight": 1.0,
       "source": "src_app_dashboard_dashboard_payments_id_page",
       "target": "src_components_ui_card_cardheader",
@@ -10882,7 +10822,7 @@
       "context": "import",
       "confidence": "EXTRACTED",
       "source_file": "src/app/(dashboard)/dashboard/payments/[id]/page.tsx",
-      "source_location": "L9",
+      "source_location": "L8",
       "weight": 1.0,
       "source": "src_app_dashboard_dashboard_payments_id_page",
       "target": "src_components_ui_card_cardtitle",
@@ -10893,62 +10833,7 @@
       "context": "import",
       "confidence": "EXTRACTED",
       "source_file": "src/app/(dashboard)/dashboard/payments/[id]/page.tsx",
-      "source_location": "L12",
-      "weight": 1.0,
-      "source": "src_app_dashboard_dashboard_payments_id_page",
-      "target": "src_components_ui_dialog",
-      "confidence_score": 1.0
-    },
-    {
-      "relation": "imports",
-      "context": "import",
-      "confidence": "EXTRACTED",
-      "source_file": "src/app/(dashboard)/dashboard/payments/[id]/page.tsx",
-      "source_location": "L12",
-      "weight": 1.0,
-      "source": "src_app_dashboard_dashboard_payments_id_page",
-      "target": "src_components_ui_dialog_dialog",
-      "confidence_score": 1.0
-    },
-    {
-      "relation": "imports_from",
-      "context": "import",
-      "confidence": "EXTRACTED",
-      "source_file": "src/app/(dashboard)/dashboard/payments/[id]/page.tsx",
       "source_location": "L11",
-      "weight": 1.0,
-      "source": "src_app_dashboard_dashboard_payments_id_page",
-      "target": "src_components_ui_input",
-      "confidence_score": 1.0
-    },
-    {
-      "relation": "imports",
-      "context": "import",
-      "confidence": "EXTRACTED",
-      "source_file": "src/app/(dashboard)/dashboard/payments/[id]/page.tsx",
-      "source_location": "L11",
-      "weight": 1.0,
-      "source": "src_app_dashboard_dashboard_payments_id_page",
-      "target": "src_components_ui_input_input",
-      "confidence_score": 1.0
-    },
-    {
-      "relation": "imports",
-      "context": "import",
-      "confidence": "EXTRACTED",
-      "source_file": "src/app/(dashboard)/dashboard/payments/[id]/page.tsx",
-      "source_location": "L11",
-      "weight": 1.0,
-      "source": "src_app_dashboard_dashboard_payments_id_page",
-      "target": "src_components_ui_input_select",
-      "confidence_score": 1.0
-    },
-    {
-      "relation": "imports_from",
-      "context": "import",
-      "confidence": "EXTRACTED",
-      "source_file": "src/app/(dashboard)/dashboard/payments/[id]/page.tsx",
-      "source_location": "L14",
       "weight": 1.0,
       "source": "src_app_dashboard_dashboard_payments_id_page",
       "target": "src_hooks_use_printers",
@@ -10959,7 +10844,7 @@
       "context": "import",
       "confidence": "EXTRACTED",
       "source_file": "src/app/(dashboard)/dashboard/payments/[id]/page.tsx",
-      "source_location": "L14",
+      "source_location": "L11",
       "weight": 1.0,
       "source": "src_app_dashboard_dashboard_payments_id_page",
       "target": "src_hooks_use_printers_useprinters",
@@ -10970,7 +10855,7 @@
       "context": "import",
       "confidence": "EXTRACTED",
       "source_file": "src/app/(dashboard)/dashboard/payments/[id]/page.tsx",
-      "source_location": "L13",
+      "source_location": "L10",
       "weight": 1.0,
       "source": "src_app_dashboard_dashboard_payments_id_page",
       "target": "src_lib_utils",
@@ -10981,7 +10866,7 @@
       "context": "import",
       "confidence": "EXTRACTED",
       "source_file": "src/app/(dashboard)/dashboard/payments/[id]/page.tsx",
-      "source_location": "L13",
+      "source_location": "L10",
       "weight": 1.0,
       "source": "src_app_dashboard_dashboard_payments_id_page",
       "target": "src_lib_utils_formatcurrency",
@@ -10992,32 +10877,10 @@
       "context": "import",
       "confidence": "EXTRACTED",
       "source_file": "src/app/(dashboard)/dashboard/payments/[id]/page.tsx",
-      "source_location": "L13",
+      "source_location": "L10",
       "weight": 1.0,
       "source": "src_app_dashboard_dashboard_payments_id_page",
       "target": "src_lib_utils_formatmonth",
-      "confidence_score": 1.0
-    },
-    {
-      "relation": "imports_from",
-      "context": "import",
-      "confidence": "EXTRACTED",
-      "source_file": "src/app/(dashboard)/dashboard/payments/[id]/page.tsx",
-      "source_location": "L8",
-      "weight": 1.0,
-      "source": "src_app_dashboard_dashboard_payments_id_page",
-      "target": "src_services_catalogs_service",
-      "confidence_score": 1.0
-    },
-    {
-      "relation": "imports",
-      "context": "import",
-      "confidence": "EXTRACTED",
-      "source_file": "src/app/(dashboard)/dashboard/payments/[id]/page.tsx",
-      "source_location": "L8",
-      "weight": 1.0,
-      "source": "src_app_dashboard_dashboard_payments_id_page",
-      "target": "src_services_catalogs_service_catalogsservice",
       "confidence_score": 1.0
     },
     {
@@ -11047,18 +10910,7 @@
       "context": "call",
       "confidence": "EXTRACTED",
       "source_file": "src/app/(dashboard)/dashboard/payments/[id]/page.tsx",
-      "source_location": "L43",
-      "weight": 1.0,
-      "source": "src_app_dashboard_dashboard_payments_id_page_buildvouchertext",
-      "target": "src_app_dashboard_dashboard_payments_id_page_centrar",
-      "confidence_score": 1.0
-    },
-    {
-      "relation": "calls",
-      "context": "call",
-      "confidence": "EXTRACTED",
-      "source_file": "src/app/(dashboard)/dashboard/payments/[id]/page.tsx",
-      "source_location": "L36",
+      "source_location": "L26",
       "weight": 1.0,
       "source": "src_app_dashboard_dashboard_payments_id_page_buildvouchertext",
       "target": "src_lib_utils_formatcurrency",
@@ -11069,7 +10921,7 @@
       "context": "call",
       "confidence": "EXTRACTED",
       "source_file": "src/app/(dashboard)/dashboard/payments/[id]/page.tsx",
-      "source_location": "L36",
+      "source_location": "L26",
       "weight": 1.0,
       "source": "src_app_dashboard_dashboard_payments_id_page_buildvouchertext",
       "target": "src_lib_utils_formatmonth",
@@ -11080,7 +10932,7 @@
       "context": "call",
       "confidence": "EXTRACTED",
       "source_file": "src/app/(dashboard)/dashboard/payments/[id]/page.tsx",
-      "source_location": "L102",
+      "source_location": "L71",
       "weight": 1.0,
       "source": "src_app_dashboard_dashboard_payments_id_page_paymentdetailpage",
       "target": "src_app_dashboard_dashboard_payments_id_page_buildvouchertext",
@@ -11092,7 +10944,7 @@
       "confidence": "EXTRACTED",
       "confidence_score": 1.0,
       "source_file": "src/app/(dashboard)/dashboard/payments/[id]/page.tsx",
-      "source_location": "L93",
+      "source_location": "L64",
       "weight": 1.0,
       "source": "src_app_dashboard_dashboard_payments_id_page_paymentdetailpage",
       "target": "src_hooks_use_printers_useprinters"
@@ -11103,7 +10955,7 @@
       "confidence": "EXTRACTED",
       "confidence_score": 1.0,
       "source_file": "src/app/(dashboard)/dashboard/payments/[id]/page.tsx",
-      "source_location": "L244",
+      "source_location": "L197",
       "weight": 1.0,
       "source": "src_app_dashboard_dashboard_payments_id_page_paymentdetailpage",
       "target": "src_lib_utils_formatcurrency"
@@ -11114,7 +10966,7 @@
       "confidence": "EXTRACTED",
       "confidence_score": 1.0,
       "source_file": "src/app/(dashboard)/dashboard/payments/[id]/page.tsx",
-      "source_location": "L238",
+      "source_location": "L191",
       "weight": 1.0,
       "source": "src_app_dashboard_dashboard_payments_id_page_paymentdetailpage",
       "target": "src_lib_utils_formatmonth"
@@ -17482,16 +17334,6 @@
       "relation": "contains",
       "confidence": "EXTRACTED",
       "source_file": "src/services/payments.service.ts",
-      "source_location": "L67",
-      "weight": 1.0,
-      "source": "src_services_payments_service",
-      "target": "src_services_payments_service_paymenthistoryentry",
-      "confidence_score": 1.0
-    },
-    {
-      "relation": "contains",
-      "confidence": "EXTRACTED",
-      "source_file": "src/services/payments.service.ts",
       "source_location": "L4",
       "weight": 1.0,
       "source": "src_services_payments_service",
@@ -17502,20 +17344,10 @@
       "relation": "contains",
       "confidence": "EXTRACTED",
       "source_file": "src/services/payments.service.ts",
-      "source_location": "L76",
-      "weight": 1.0,
-      "source": "src_services_payments_service",
-      "target": "src_services_payments_service_paymentsservice",
-      "confidence_score": 1.0
-    },
-    {
-      "relation": "contains",
-      "confidence": "EXTRACTED",
-      "source_file": "src/services/payments.service.ts",
       "source_location": "L59",
       "weight": 1.0,
       "source": "src_services_payments_service",
-      "target": "src_services_payments_service_updatepaymentdto",
+      "target": "src_services_payments_service_paymentsservice",
       "confidence_score": 1.0
     },
     {

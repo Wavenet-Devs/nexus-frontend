@@ -13,6 +13,13 @@ export interface CreatedApiKey extends ApiKey {
 }
 
 export const apiKeysService = {
+  rename: (id: string, name: string) =>
+    api.patch<ApiKey>(`/api-keys/${id}`, { name }).then((r) => r.data),
+
+  /** Devuelve el secreto nuevo una sola vez, igual que al crear la clave. */
+  rotate: (id: string) =>
+    api.post<ApiKey & { key: string }>(`/api-keys/${id}/rotate`).then((r) => r.data),
+
   findAll: () =>
     api.get<ApiKey[]>('/api-keys').then((r) => r.data),
 

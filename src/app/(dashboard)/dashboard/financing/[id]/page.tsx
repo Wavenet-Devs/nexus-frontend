@@ -1,11 +1,11 @@
 'use client';
 
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { useParams, useRouter } from 'next/navigation';
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
 import {
   ArrowLeft, CheckCircle2, XCircle, AlertCircle,
-  Landmark, User, CreditCard,
+  Landmark, User, CreditCard, Pencil,
 } from 'lucide-react';
 import { financingService } from '@/services/financing.service';
 import { Card, CardHeader, CardTitle } from '@/components/ui/card';
@@ -27,6 +27,7 @@ export default function FinancingDetailPage() {
 
   const [showPayModal,    setShowPayModal]    = useState(false);
   const [showCancelModal, setShowCancelModal] = useState(false);
+  const [showEditModal, setShowEditModal] = useState(false);
   const [customAmount,    setCustomAmount]    = useState('');
   const [payRef,          setPayRef]          = useState('');
   const [payError,        setPayError]        = useState('');
@@ -104,6 +105,10 @@ export default function FinancingDetailPage() {
           </div>
           {isActive && (
             <div className="flex gap-2 shrink-0">
+              <Button size="sm" variant="outline" onClick={() => setShowEditModal(true)}>
+                <Pencil className="h-3.5 w-3.5" />
+                Corregir
+              </Button>
               <Button size="sm" variant="ghost" className="text-red-600 hover:bg-red-50" onClick={() => setShowCancelModal(true)}>
                 Cancelar plan
               </Button>
@@ -252,6 +257,12 @@ export default function FinancingDetailPage() {
         message={`¿Seguro que quieres cancelar el plan "${plan.name}"? Esta acción no se puede deshacer.`}
         danger
       />
+
+      <CorregirPlanDialog
+        open={showEditModal}
+        onClose={() => setShowEditModal(false)}
+        plan={plan}
+      />
     </div>
   );
 }
@@ -294,5 +305,110 @@ function PageSkeleton() {
       </div>
       <div className="h-32 bg-neutral-100 rounded-xl" />
     </div>
+  );
+}
+
+/**
+ * Corrige un plan activo. Las cuotas ya abonadas no se pierden: el backend
+ * recalcula el saldo descontándolas del valor nuevo, y no deja dejar el plan
+ * con menos cuotas de las que el suscriptor ya pagó.
+ */
+function CorregirPlanDialog({
+  open, onClose, plan,
+}: {
+  open: boolean;
+  onClose: () => void;
+  plan: any;
+}) {
+  const qc = useQueryClient();
+  const [name, setName]     = useState('');
+  const [valor, setValor]   = useState('');
+  const [cuotas, setCuotas] = useState('');
+
+  useEffect(() => {
+    if (!open) return;
+    setName(plan?.name ?? '');
+    setValor(String(plan?.financing_value ?? ''));
+    setCuotas(String(plan?.quotas ?? ''));
+  }, [open, plan]);
+
+  const guardar = useMutation({
+    mutationFn: () => financingService.update(plan.id, {
+      name:           name.trim() || undefined,
+      financingValue: valor  ? Number(valor)  : undefined,
+      quotas:         cuotas ? Number(cuotas) : undefined,
+    }),
+    onSuccess: () => {
+      void qc.invalidateQueries({ queryKey: ['financing', plan.id] });
+      void qc.invalidateQueries({ queryKey: ['financing'] });
+      onClose();
+    },
+  });
+
+  const pagadas = Number(plan?.cancelled_quotas ?? 0);
+  const abonado = Number(plan?.financing_value ?? 0) - Number(plan?.financed_balance ?? 0);
+  const nuevoSaldo = valor ? Math.max(0, Number(valor) - abonado) : null;
+
+  return (
+    <Dialog open={open} onClose={onClose} title="Corregir el plan">
+      <div className="space-y-4">
+        <p className="text-sm text-neutral-600">
+          El suscriptor ya abonó <strong>{pagadas}</strong> cuota{pagadas === 1 ? '' : 's'} por{' '}
+          <strong>{formatCurrency(abonado)}</strong>. Eso no se toca: el saldo se recalcula
+          sobre el valor que dejes aquí.
+        </p>
+
+        <Input
+          label="Nombre del plan"
+          value={name}
+          onChange={(e) => setName(e.target.value)}
+        />
+
+        <div className="grid grid-cols-2 gap-4">
+          <Input
+            label="Valor financiado"
+            type="number"
+            min={1}
+            value={valor}
+            onChange={(e) => setValor(e.target.value)}
+          />
+          <Input
+            label="Número de cuotas"
+            type="number"
+            min={Math.max(1, pagadas)}
+            hint={pagadas > 0 ? `No puede ser menor que ${pagadas}` : undefined}
+            value={cuotas}
+            onChange={(e) => setCuotas(e.target.value)}
+          />
+        </div>
+
+        {nuevoSaldo !== null && (
+          <p className="text-sm text-neutral-600 bg-neutral-50 rounded-lg px-3 py-2">
+            Saldo pendiente tras la corrección: <strong>{formatCurrency(nuevoSaldo)}</strong>
+          </p>
+        )}
+
+        {guardar.isError && (
+          <p className="text-xs text-danger-600">
+            {(() => {
+              const msg = (guardar.error as { response?: { data?: { message?: string | string[] } } })
+                ?.response?.data?.message;
+              return Array.isArray(msg) ? msg.join(', ') : msg ?? 'No se pudo guardar';
+            })()}
+          </p>
+        )}
+
+        <div className="flex justify-end gap-2">
+          <Button variant="outline" onClick={onClose}>Cancelar</Button>
+          <Button
+            loading={guardar.isPending}
+            disabled={!valor || !cuotas || Number(cuotas) < pagadas}
+            onClick={() => guardar.mutate()}
+          >
+            Guardar corrección
+          </Button>
+        </div>
+      </div>
+    </Dialog>
   );
 }

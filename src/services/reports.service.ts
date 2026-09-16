@@ -49,6 +49,13 @@ export interface DashboardPortfolioData {
 }
 
 export const reportsService = {
+  getReadingsPrintUrl: (): string => {
+    const base  = process.env.NEXT_PUBLIC_API_URL ?? 'http://localhost:4000/api/v1';
+    const token = typeof window !== 'undefined' ? localStorage.getItem('access_token') : '';
+    const slug  = typeof window !== 'undefined' ? localStorage.getItem('tenant_slug') : '';
+    return `${base}/reports/readings-list/print?token=${token}&slug=${slug}`;
+  },
+
   // ── Dashboard ────────────────────────────────────────────────────────────
   getSummary: () =>
     api.get<DashboardSummary>('/reports/summary').then((r) => r.data),

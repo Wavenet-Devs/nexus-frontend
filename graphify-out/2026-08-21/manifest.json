@@ -95,8 +95,8 @@
     "semantic_hash": ""
   },
   "src/app/(dashboard)/dashboard/clients/_components/client-form.tsx": {
-    "mtime": 1787435751.7016134,
-    "ast_hash": "2a4c417932fa8832696d463566c7657c",
+    "mtime": 1778712129.087512,
+    "ast_hash": "93a9bebf3809542d1069aacf6966e3b7",
     "semantic_hash": ""
   },
   "src/app/(dashboard)/dashboard/clients/import/page.tsx": {
@@ -110,8 +110,8 @@
     "semantic_hash": ""
   },
   "src/app/(dashboard)/dashboard/clients/page.tsx": {
-    "mtime": 1787435835.8945215,
-    "ast_hash": "322e99fa3d6d28e159686f0dfe65dea1",
+    "mtime": 1778719705.1793826,
+    "ast_hash": "e9a90cbf0dfd0551a18f6e2385a10712",
     "semantic_hash": ""
   },
   "src/app/(dashboard)/dashboard/financing/[id]/page.tsx": {
@@ -135,8 +135,8 @@
     "semantic_hash": ""
   },
   "src/app/(dashboard)/dashboard/payments/[id]/page.tsx": {
-    "mtime": 1787891432.8868673,
-    "ast_hash": "29811137cd8fb5613d20ea86055d5033",
+    "mtime": 1779497106.6428378,
+    "ast_hash": "5d01a4049efab58e19aff01b14f673b8",
     "semantic_hash": ""
   },
   "src/app/(dashboard)/dashboard/payments/new/page.tsx": {
@@ -180,13 +180,13 @@
     "semantic_hash": ""
   },
   "src/app/(dashboard)/dashboard/settings/invoice-template/page.tsx": {
-    "mtime": 1787375209.220175,
-    "ast_hash": "36087c461dac04529da4362baebccef7",
+    "mtime": 1787370668.714665,
+    "ast_hash": "dc79be8903c24bfc3df01904f622cd7f",
     "semantic_hash": ""
   },
   "src/app/(dashboard)/dashboard/settings/page.tsx": {
-    "mtime": 1787372820.4091098,
-    "ast_hash": "2e9e7b2b64c82ec3a7fe657c208dbc4a",
+    "mtime": 1787370789.4508226,
+    "ast_hash": "8238d8c5f28893aeefc4380cb61d7f13",
     "semantic_hash": ""
   },
   "src/app/(dashboard)/dashboard/users/page.tsx": {
@@ -330,8 +330,8 @@
     "semantic_hash": ""
   },
   "src/services/billing.service.ts": {
-    "mtime": 1787375209.204497,
-    "ast_hash": "9278f5b9340a7605fd0e741874493ee5",
+    "mtime": 1787370498.7734804,
+    "ast_hash": "dca8896f4c28f8c1a6a5d63fd7dc2c5c",
     "semantic_hash": ""
   },
   "src/services/budget.service.ts": {
@@ -345,8 +345,8 @@
     "semantic_hash": ""
   },
   "src/services/clients.service.ts": {
-    "mtime": 1787435690.3085456,
-    "ast_hash": "c8b7cdcd84611706a24c53ba975242ed",
+    "mtime": 1784004225.1724374,
+    "ast_hash": "73d70da8e061897dc3fba6385f28eaa0",
     "semantic_hash": ""
   },
   "src/services/financing.service.ts": {
@@ -355,8 +355,8 @@
     "semantic_hash": ""
   },
   "src/services/payments.service.ts": {
-    "mtime": 1787891377.8772058,
-    "ast_hash": "99943fe62e0542dcf645197767a36e9b",
+    "mtime": 1778708793.5196223,
+    "ast_hash": "927d1f8df58312a1582bb9e85f371617",
     "semantic_hash": ""
   },
   "src/services/platform-reports.service.ts": {
@@ -460,18 +460,8 @@
     "semantic_hash": ""
   },
   "src/app/(dashboard)/dashboard/settings/company/page.tsx": {
-    "mtime": 1787372820.3916428,
-    "ast_hash": "63961e14404b13fe995f0751af170fc4",
-    "semantic_hash": ""
-  },
-  "src/app/(dashboard)/dashboard/settings/invoice-banner/page.tsx": {
-    "mtime": 1787374744.7282476,
-    "ast_hash": "790bc0eb9ef171bdaaff61beb95d3522",
-    "semantic_hash": ""
-  },
-  "src/app/(dashboard)/dashboard/clients/groups/page.tsx": {
-    "mtime": 1787435794.7415884,
-    "ast_hash": "c70ef17f3f783bd742bc2934c750d23d",
+    "mtime": 1787370705.3854163,
+    "ast_hash": "da95934b48addb7267059174042ea97e",
     "semantic_hash": ""
   }
 }

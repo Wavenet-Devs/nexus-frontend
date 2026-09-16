@@ -62,7 +62,37 @@ export interface SetPermissionsDto {
   }[];
 }
 
+export interface UserProfile {
+  id:         string;
+  name:       string;
+  email:      string;
+  picture?:   string | null;
+  status:     string;
+  is_new:     boolean;
+  role_name?: string;
+  role_slug?: string;
+  created_at: string;
+}
+
 export const usersService = {
+
+  // ─── Perfil propio ─────────────────────────────────────────────────────────
+
+  getProfile: () =>
+    api.get<UserProfile>('/users/me/profile').then((r) => r.data),
+
+  updateProfile: (dto: { name?: string; email?: string }) =>
+    api.patch<UserProfile>('/users/me/profile', dto).then((r) => r.data),
+
+  uploadPicture: (file: File) => {
+    const form = new FormData();
+    form.append('file', file);
+    return api
+      .post<UserProfile>('/users/me/picture', form, {
+        headers: { 'Content-Type': 'multipart/form-data' },
+      })
+      .then((r) => r.data);
+  },
   // ── Usuarios ──────────────────────────────────────────────────────────────
   findAll:        (page = 1, limit = 50) =>
     api.get<PaginatedResponse<UserListItem>>('/users', { params: { page, limit } }).then((r) => r.data.data),

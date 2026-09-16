@@ -99,6 +99,10 @@ export default function ClientsPage() {
             <Filter className="h-3.5 w-3.5" />
             Filtros{hasFilters ? ` (${[neighborhoodId, stratumId, activeFilter].filter(Boolean).length})` : ''}
           </Button>
+          <Button variant="outline" size="sm" onClick={() => router.push('/dashboard/clients/groups')}>
+            <Users className="h-3.5 w-3.5" />
+            Grupos
+          </Button>
           <Button variant="outline" size="sm" onClick={() => router.push('/dashboard/clients/import')}>
             <Upload className="h-3.5 w-3.5" />
             Importar XLSX

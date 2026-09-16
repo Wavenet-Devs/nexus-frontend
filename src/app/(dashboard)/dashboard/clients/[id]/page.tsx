@@ -1,16 +1,21 @@
 'use client';
 
+import { useState } from 'react';
+
 import { use } from 'react';
 import { useRouter } from 'next/navigation';
-import { useQuery } from '@tanstack/react-query';
+import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
 import {
   ArrowLeft, Edit, Phone, Mail, MapPin,
-  Hash, Zap, CreditCard, FileText,
+  Hash, Zap, CreditCard, FileText, Receipt, RotateCcw,
 } from 'lucide-react';
 import { clientsService } from '@/services/clients.service';
+import { billingService } from '@/services/billing.service';
 import { Card, CardHeader, CardTitle } from '@/components/ui/card';
 import { StatusBadge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
+import { Dialog } from '@/components/ui/dialog';
+import { Input, Select } from '@/components/ui/input';
 import { formatCurrency, formatDate, formatMonth } from '@/lib/utils';
 import { api } from '@/lib/api';
 import { useQuery as useQ } from '@tanstack/react-query';
@@ -26,6 +31,7 @@ function InfoRow({ label, value }: { label: string; value?: string | null }) {
 }
 
 export default function ClientDetailPage({ params }: { params: Promise<{ id: string }> }) {
+  const [notaOpen, setNotaOpen] = useState(false);
   const { id } = use(params);
   const router  = useRouter();
 
@@ -77,6 +83,10 @@ export default function ClientDetailPage({ params }: { params: Promise<{ id: str
           >
             <Edit className="h-3.5 w-3.5" />
             Editar
+          </Button>
+          <Button variant="outline" size="sm" onClick={() => setNotaOpen(true)}>
+            <Receipt className="h-3.5 w-3.5" />
+            Nota de crédito
           </Button>
           <Button
             size="sm"
@@ -183,6 +193,13 @@ export default function ClientDetailPage({ params }: { params: Promise<{ id: str
           </div>
         </Card>
       )}
+
+      <NotaCreditoDeudaDialog
+        open={notaOpen}
+        onClose={() => setNotaOpen(false)}
+        clientId={id as string}
+        clientName={client.name}
+      />
     </div>
   );
 }
@@ -199,5 +216,170 @@ function DetailSkeleton() {
         </div>
       </div>
     </div>
+  );
+}
+
+/**
+ * Nota de crédito sobre la deuda del cliente.
+ *
+ * El descuento se reparte entre las facturas pendientes, de la más antigua a
+ * la más reciente. Se aplica de inmediato y queda revertible, así que la lista
+ * de notas anteriores va en el mismo sitio.
+ */
+function NotaCreditoDeudaDialog({
+  open, onClose, clientId, clientName,
+}: {
+  open: boolean;
+  onClose: () => void;
+  clientId: string;
+  clientName: string;
+}) {
+  const qc = useQueryClient();
+  const [motivo, setMotivo] = useState('');
+  const [monto, setMonto]   = useState('');
+  const [revertir, setRevertir] = useState<string | null>(null);
+  const [motivoRevertir, setMotivoRevertir] = useState('');
+
+  const { data: motivos } = useQuery({
+    queryKey: ['debt-credit-reasons'],
+    queryFn:  billingService.getDebtCreditReasons,
+    enabled:  open,
+  });
+
+  const { data: notas } = useQuery({
+    queryKey: ['debt-credit-notes', clientId],
+    queryFn:  () => billingService.findDebtCreditNotes(clientId),
+    enabled:  open,
+  });
+
+  const refrescar = () => {
+    void qc.invalidateQueries({ queryKey: ['debt-credit-notes', clientId] });
+    void qc.invalidateQueries({ queryKey: ['client', clientId] });
+    void qc.invalidateQueries({ queryKey: ['invoices'] });
+  };
+
+  const crear = useMutation({
+    mutationFn: () => billingService.createDebtCreditNote({
+      clientId, amount: Number(monto), reason: motivo,
+    }),
+    onSuccess: () => { setMonto(''); setMotivo(''); refrescar(); },
+  });
+
+  const revertirNota = useMutation({
+    mutationFn: (id: string) => billingService.revertDebtCreditNote(id, motivoRevertir),
+    onSuccess: () => { setRevertir(null); setMotivoRevertir(''); refrescar(); },
+  });
+
+  const error = crear.error ?? revertirNota.error;
+  const mensaje = (e: unknown) => {
+    const msg = (e as { response?: { data?: { message?: string | string[] } } })
+      ?.response?.data?.message;
+    return Array.isArray(msg) ? msg.join(', ') : msg ?? 'Ocurrió un error';
+  };
+
+  return (
+    <Dialog open={open} onClose={onClose} title="Nota de crédito sobre la deuda" size="lg">
+      <div className="space-y-5">
+        <p className="text-sm text-neutral-600">
+          Descuenta un valor de la deuda de <strong>{clientName}</strong>. Se reparte entre sus
+          facturas pendientes, de la más antigua a la más reciente.
+        </p>
+
+        <div className="grid grid-cols-2 gap-4">
+          <Select label="Motivo" value={motivo} onChange={(e) => setMotivo(e.target.value)}>
+            <option value="">Selecciona un motivo</option>
+            {motivos?.map((m) => <option key={m} value={m}>{m}</option>)}
+          </Select>
+          <Input
+            label="Valor a descontar"
+            type="number"
+            min={1}
+            placeholder="50000"
+            value={monto}
+            onChange={(e) => setMonto(e.target.value)}
+          />
+        </div>
+
+        {error != null && <p className="text-xs text-danger-600">{mensaje(error)}</p>}
+
+        <div className="flex justify-end">
+          <Button
+            loading={crear.isPending}
+            disabled={!motivo || !monto || Number(monto) <= 0}
+            onClick={() => crear.mutate()}
+          >
+            Aplicar nota de crédito
+          </Button>
+        </div>
+
+        {!!notas?.length && (
+          <div className="border-t border-neutral-100 pt-4">
+            <p className="text-xs font-semibold text-neutral-500 uppercase tracking-wide mb-2">
+              Notas anteriores
+            </p>
+            <div className="space-y-2 max-h-60 overflow-y-auto">
+              {notas.map((n) => (
+                <div key={n.id} className="border border-neutral-200 rounded-lg p-3">
+                  <div className="flex items-start justify-between gap-3">
+                    <div className="min-w-0">
+                      <p className="text-sm font-medium text-neutral-800">
+                        {formatCurrency(n.amount)}
+                        <span className="ml-2 text-xs font-normal text-neutral-500">{n.reason}</span>
+                      </p>
+                      <p className="text-xs text-neutral-400 mt-0.5">
+                        {new Date(n.created_at).toLocaleDateString('es-CO', { dateStyle: 'medium' })}
+                        {n.created_by_name ? ` · ${n.created_by_name}` : ''}
+                        {n.snapshot?.applications?.length
+                          ? ` · ${n.snapshot.applications.length} factura(s)`
+                          : ''}
+                      </p>
+                    </div>
+                    {n.status === 'reverted' ? (
+                      <span className="text-xs text-neutral-400 shrink-0">Revertida</span>
+                    ) : (
+                      <button
+                        onClick={() => setRevertir(n.id)}
+                        className="text-xs text-neutral-500 hover:text-danger-600 shrink-0 inline-flex items-center gap-1"
+                      >
+                        <RotateCcw className="h-3 w-3" />
+                        Revertir
+                      </button>
+                    )}
+                  </div>
+
+                  {revertir === n.id && (
+                    <div className="mt-3 pt-3 border-t border-neutral-100 space-y-2">
+                      <Input
+                        label="Motivo de la reversión"
+                        placeholder="Se aplicó al cliente equivocado"
+                        value={motivoRevertir}
+                        onChange={(e) => setMotivoRevertir(e.target.value)}
+                      />
+                      <p className="text-xs text-neutral-500">
+                        Las facturas vuelven al valor que tenían. Si alguna cambió después de la
+                        nota, la reversión se rechaza para no borrar ese cambio.
+                      </p>
+                      <div className="flex justify-end gap-2">
+                        <Button variant="outline" size="sm" onClick={() => setRevertir(null)}>
+                          Cancelar
+                        </Button>
+                        <Button
+                          size="sm"
+                          loading={revertirNota.isPending}
+                          disabled={motivoRevertir.trim().length < 5}
+                          onClick={() => revertirNota.mutate(n.id)}
+                        >
+                          Revertir nota
+                        </Button>
+                      </div>
+                    </div>
+                  )}
+                </div>
+              ))}
+            </div>
+          </div>
+        )}
+      </div>
+    </Dialog>
   );
 }

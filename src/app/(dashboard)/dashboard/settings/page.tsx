@@ -1,15 +1,27 @@
 'use client';
 
 import { useRouter } from 'next/navigation';
-import { FileText, Sliders, ChevronRight, Key } from 'lucide-react';
+import { FileText, Sliders, ChevronRight, Key, Building2, Image as ImageIcon } from 'lucide-react';
 import { Card } from '@/components/ui/card';
 
 const SETTINGS_SECTIONS = [
   {
+    href:  '/dashboard/settings/company',
+    icon:  Building2,
+    title: 'Datos de la empresa',
+    desc:  'Razón social, NIT, contacto y logo. Es lo que dice la factura.',
+  },
+  {
     href:  '/dashboard/settings/invoice-template',
     icon:  FileText,
-    title: 'Plantilla de factura',
-    desc:  'Personaliza el diseño, colores, datos de empresa y módulos de tus facturas.',
+    title: 'Diseño de factura',
+    desc:  'Versiones del diseño, borradores, vista previa y publicación.',
+  },
+  {
+    href:  '/dashboard/settings/invoice-banner',
+    icon:  ImageIcon,
+    title: 'Publicidad en la factura',
+    desc:  'Pieza del bloque «Infórmate con…». Cambia cada mes y queda fija en las facturas de ese período.',
   },
   {
     href:  '/dashboard/settings/billing',

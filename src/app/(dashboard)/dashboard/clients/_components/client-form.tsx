@@ -1,10 +1,12 @@
 'use client';
 
-import { useForm } from 'react-hook-form';
+import { useForm, useWatch, type Control } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { z } from 'zod';
 import { useQuery } from '@tanstack/react-query';
 import { catalogsService } from '@/services/catalogs.service';
+import { clientsService } from '@/services/clients.service';
+import { Users } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Input, Select } from '@/components/ui/input';
 import type { ClientDetail, CreateClientDto } from '@/services/clients.service';
@@ -26,6 +28,7 @@ const schema = z.object({
   codBar:          z.string().optional(),
   reader:          z.string().optional(),
   deliver:         z.string().optional(),
+  groupId:         z.string().optional(),
 });
 
 type FormData = z.infer<typeof schema>;
@@ -44,10 +47,12 @@ export function ClientForm({ defaultValues, onSubmit, isEditing = false }: Clien
   const { data: meters }        = useQuery({ queryKey: ['meters'],         queryFn: catalogsService.getMeters });
   const { data: idTypes }       = useQuery({ queryKey: ['id-types'],       queryFn: catalogsService.getIdentificationTypes });
   const { data: causals }       = useQuery({ queryKey: ['causals'],        queryFn: catalogsService.getCausals });
+  const { data: groups }        = useQuery({ queryKey: ['client-groups'],  queryFn: () => clientsService.listGroups() });
 
   const {
     register,
     handleSubmit,
+    control,
     formState: { errors, isSubmitting },
   } = useForm<FormData>({
     resolver: zodResolver(schema),
@@ -68,6 +73,7 @@ export function ClientForm({ defaultValues, onSubmit, isEditing = false }: Clien
       codBar:         defaultValues?.cod_bar        ?? '',
       reader:         defaultValues?.reader         ?? '',
       deliver:        defaultValues?.deliver        ?? '',
+      groupId:        defaultValues?.group_id       ?? '',
     },
   });
 
@@ -111,11 +117,27 @@ export function ClientForm({ defaultValues, onSubmit, isEditing = false }: Clien
             <option value="">Sin especificar</option>
             {idTypes?.map((t) => <option key={t.id} value={t.id}>{t.name}</option>)}
           </Select>
-          <Input
-            label="Número de identificación"
-            placeholder="1234567890"
-            {...register('idCard')}
-          />
+          <div>
+            <Input
+              label="Número de identificación"
+              placeholder="1234567890"
+              hint="Puede repetirse: una persona puede tener varios medidores"
+              {...register('idCard')}
+            />
+            <IdCardHint control={control} />
+          </div>
+          <Select label="Grupo de titular" {...register('groupId')}>
+            <option value="">Sin grupo</option>
+            {groups?.map((g) => (
+              <option key={g.id} value={g.id}>
+                {g.name}{g.idCard ? ` · ${g.idCard}` : ''} ({g.members})
+              </option>
+            ))}
+          </Select>
+          <p className="text-xs text-neutral-400 -mt-3 sm:col-span-2">
+            El grupo agrupa los medidores que responden a la misma persona, como los
+            apartamentos de un condominio. Cada medidor conserva su contrato y su factura.
+          </p>
           <Select label="Causal" {...register('causalId')}>
             <option value="">Sin causal</option>
             {causals?.filter((c) => c.status === 'active').map((c) => (
@@ -199,5 +221,38 @@ export function ClientForm({ defaultValues, onSubmit, isEditing = false }: Clien
         </Button>
       </div>
     </form>
+  );
+}
+
+/**
+ * Avisa qué hay ya registrado con ese documento en lugar de bloquear el alta.
+ * Antes el backend devolvía 409 y no se podían registrar los medidores de un
+ * condominio; ahora se informa para que el operador decida.
+ */
+function IdCardHint({ control }: { control: Control<FormData> }) {
+  const idCard = useWatch({ control, name: 'idCard' });
+  const clean  = (idCard ?? '').trim();
+
+  const { data } = useQuery({
+    queryKey: ['id-card-lookup', clean],
+    queryFn:  () => clientsService.lookupIdCard(clean),
+    enabled:  clean.length >= 5,
+  });
+
+  if (!data?.clients.length) return null;
+
+  return (
+    <div className="mt-1.5 flex items-start gap-1.5 text-xs text-neutral-600 bg-neutral-50 border border-neutral-200 rounded-lg p-2">
+      <Users className="h-3.5 w-3.5 shrink-0 mt-0.5 text-neutral-400" />
+      <div>
+        <p>
+          Ya hay {data.clients.length} medidor{data.clients.length > 1 ? 'es' : ''} con este
+          documento{data.group ? <> en el grupo <strong>{data.group.name}</strong></> : null}.
+        </p>
+        <p className="text-neutral-500 mt-0.5">
+          {data.clients.map((c) => c.contract).join(' · ')}
+        </p>
+      </div>
+    </div>
   );
 }

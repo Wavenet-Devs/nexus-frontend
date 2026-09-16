@@ -44,6 +44,9 @@ export interface FinancingFilters {
 }
 
 export const financingService = {
+  update: (id: string, dto: { name?: string; financingValue?: number; quotas?: number }) =>
+    api.patch<Record<string, unknown>>(`/financing/${id}`, dto).then((r) => r.data),
+
   findAll: (filters: FinancingFilters = {}) =>
     api.get<PaginatedResponse<FinancingPlan>>('/financing', { params: filters }).then((r) => r.data),
 

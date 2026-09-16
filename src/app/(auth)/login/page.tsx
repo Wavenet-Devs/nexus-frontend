@@ -93,6 +93,14 @@ export default function LoginPage() {
           <Button type="submit" loading={isSubmitting} size="lg" className="mt-2 w-full">
             Ingresar
           </Button>
+
+          <button
+            type="button"
+            onClick={() => router.push('/forgot-password')}
+            className="text-xs text-neutral-500 hover:text-primary-600 transition-colors mt-1"
+          >
+            ¿Olvidaste tu contraseña?
+          </button>
         </form>
       </div>
 

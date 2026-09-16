@@ -27,6 +27,7 @@ const pageTitles: Record<string, string> = {
   '/dashboard/settings/billing':                 'Configuración de facturación',
   '/dashboard/settings/api-keys':               'API Keys',
   '/dashboard/users':                           'Usuarios y roles',
+  '/dashboard/profile':                         'Mi perfil',
   '/dashboard/clients/import':                  'Importar clientes',
 };
 

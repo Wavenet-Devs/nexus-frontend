@@ -2,7 +2,7 @@
 
 import { useState } from 'react';
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
-import { Plus, Copy, Check, Power, Trash2, Key, AlertTriangle } from 'lucide-react';
+import { Plus, Copy, Check, Power, Trash2, Key, AlertTriangle, Pencil, RefreshCw } from 'lucide-react';
 import { apiKeysService, type CreatedApiKey } from '@/services/api-keys.service';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
@@ -44,6 +44,8 @@ export default function ApiKeysPage() {
   const [newKeyName,  setNewKeyName]  = useState('');
   const [createdKey,  setCreatedKey]  = useState<CreatedApiKey | null>(null);
   const [revokeTarget, setRevokeTarget] = useState<string | null>(null);
+  const [renameTarget, setRenameTarget] = useState<{ id: string; name: string } | null>(null);
+  const [rotateTarget, setRotateTarget] = useState<{ id: string; name: string } | null>(null);
 
   const { data: keys = [], isLoading } = useQuery({
     queryKey: ['api-keys'],
@@ -57,6 +59,24 @@ export default function ApiKeysPage() {
       setCreateOpen(false);
       setNewKeyName('');
       setCreatedKey(key);
+    },
+  });
+
+  const renameMutation = useMutation({
+    mutationFn: ({ id, name }: { id: string; name: string }) => apiKeysService.rename(id, name),
+    onSuccess: () => {
+      void qc.invalidateQueries({ queryKey: ['api-keys'] });
+      setRenameTarget(null);
+    },
+  });
+
+  const rotateMutation = useMutation({
+    mutationFn: (id: string) => apiKeysService.rotate(id),
+    onSuccess: (nueva) => {
+      void qc.invalidateQueries({ queryKey: ['api-keys'] });
+      // El secreto nuevo se muestra una sola vez, igual que al crear la clave.
+      setCreatedKey(nueva as CreatedApiKey);
+      setRotateTarget(null);
     },
   });
 
@@ -138,6 +158,20 @@ export default function ApiKeysPage() {
                   <td className="py-3 px-4">
                     <div className="flex items-center gap-1 justify-end">
                       <button
+                        title="Renombrar"
+                        onClick={() => setRenameTarget({ id: k.id, name: k.name })}
+                        className="p-1.5 rounded hover:bg-neutral-100 text-neutral-400 hover:text-neutral-700 transition-colors"
+                      >
+                        <Pencil className="h-3.5 w-3.5" />
+                      </button>
+                      <button
+                        title="Rotar el secreto"
+                        onClick={() => setRotateTarget({ id: k.id, name: k.name })}
+                        className="p-1.5 rounded hover:bg-neutral-100 text-neutral-400 hover:text-amber-600 transition-colors"
+                      >
+                        <RefreshCw className="h-3.5 w-3.5" />
+                      </button>
+                      <button
                         title={k.status === 'active' ? 'Desactivar' : 'Activar'}
                         onClick={() => toggleMutation.mutate(k.id)}
                         className="p-1.5 rounded hover:bg-neutral-100 text-neutral-400 hover:text-neutral-700 transition-colors"
@@ -211,6 +245,61 @@ X-Api-Key: <tu-api-key>`}</pre>
           danger
         />
       )}
+      {renameTarget && (
+        <Dialog open onClose={() => setRenameTarget(null)} title="Renombrar clave">
+          <div className="space-y-4">
+            <p className="text-sm text-neutral-600">
+              Cambia solo el nombre. El secreto sigue siendo el mismo, así que el sistema que
+              la usa no se entera.
+            </p>
+            <Input
+              label="Nombre"
+              value={renameTarget.name}
+              onChange={(e) => setRenameTarget({ ...renameTarget, name: e.target.value })}
+            />
+            <div className="flex gap-3 justify-end pt-2 border-t border-neutral-100">
+              <Button variant="outline" size="sm" onClick={() => setRenameTarget(null)}>Cancelar</Button>
+              <Button
+                size="sm"
+                loading={renameMutation.isPending}
+                disabled={renameTarget.name.trim().length < 3}
+                onClick={() => renameMutation.mutate({ id: renameTarget.id, name: renameTarget.name.trim() })}
+              >
+                Guardar
+              </Button>
+            </div>
+          </div>
+        </Dialog>
+      )}
+
+      {rotateTarget && (
+        <Dialog open onClose={() => setRotateTarget(null)} title="Rotar el secreto">
+          <div className="space-y-4">
+            <p className="text-sm text-neutral-600">
+              Se genera un secreto nuevo para <strong>{rotateTarget.name}</strong>. La clave
+              conserva su nombre y su historial.
+            </p>
+            <div className="flex items-start gap-2.5 p-3 bg-amber-50 border border-amber-200 rounded-lg">
+              <AlertTriangle className="h-4 w-4 text-amber-600 shrink-0 mt-0.5" />
+              <p className="text-xs text-neutral-700 leading-relaxed">
+                El secreto actual <strong>deja de funcionar de inmediato</strong>. Coordina el
+                cambio con quien la esté usando, o ese sistema quedará sin acceso.
+              </p>
+            </div>
+            <div className="flex gap-3 justify-end pt-2 border-t border-neutral-100">
+              <Button variant="outline" size="sm" onClick={() => setRotateTarget(null)}>Cancelar</Button>
+              <Button
+                size="sm"
+                loading={rotateMutation.isPending}
+                onClick={() => rotateMutation.mutate(rotateTarget.id)}
+              >
+                Rotar secreto
+              </Button>
+            </div>
+          </div>
+        </Dialog>
+      )}
+
     </div>
   );
 }

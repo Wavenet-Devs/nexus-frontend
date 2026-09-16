@@ -1,12 +1,15 @@
 'use client';
 
 import { useState } from 'react';
-import { useQuery } from '@tanstack/react-query';
+import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
 import { useParams, useRouter } from 'next/navigation';
-import { ArrowLeft, Printer, CreditCard, CheckCircle2, Wifi, WifiOff, ChevronDown } from 'lucide-react';
+import { ArrowLeft, Printer, CreditCard, CheckCircle2, Wifi, WifiOff, ChevronDown, Pencil, History } from 'lucide-react';
 import { paymentsService } from '@/services/payments.service';
+import { catalogsService } from '@/services/catalogs.service';
 import { Card, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
+import { Input, Select } from '@/components/ui/input';
+import { Dialog } from '@/components/ui/dialog';
 import { formatCurrency, formatMonth } from '@/lib/utils';
 import { usePrinters } from '@/hooks/use-printers';
 
@@ -17,7 +20,14 @@ const TYPE_COLORS:   Record<string, string>  = {
   card:     'bg-purple-100 text-purple-700',
 };
 
-function buildVoucherText(payment: any): string {
+/** Centra un texto en los 32 caracteres de una tirilla de 80 mm. */
+function centrar(t: string): string {
+  const ancho = 32;
+  const texto = t.length > ancho ? t.slice(0, ancho) : t;
+  return ' '.repeat(Math.max(0, Math.floor((ancho - texto.length) / 2))) + texto;
+}
+
+function buildVoucherText(payment: any, empresa?: any): string {
   const line  = '--------------------------------';
   const date  = new Date(payment.created_at).toLocaleString('es-CO', { dateStyle: 'short', timeStyle: 'short' });
   const type  = PAYMENT_TYPES[payment.payment_type] ?? payment.payment_type;
@@ -26,8 +36,21 @@ function buildVoucherText(payment: any): string {
     .map((i: any) => `  ${formatMonth(i.month, i.year).padEnd(16)}${formatCurrency(i.allocated).padStart(12)}`)
     .join('\n');
 
+  // Encabezado de la empresa: el suscriptor se lleva el papel, tiene que decir
+  // quién lo emitió. Sale de Configuración → Datos de la empresa.
+  const encabezado = empresa?.companyName
+    ? [
+        centrar(empresa.companyName),
+        empresa.companyNit     ? centrar(`NIT: ${empresa.companyNit}`) : '',
+        empresa.companyAddress ? centrar(empresa.companyAddress)       : '',
+        empresa.companyPhone   ? centrar(`Tel: ${empresa.companyPhone}`) : '',
+        line,
+      ].filter(Boolean)
+    : [];
+
   return [
-    '         RECIBO DE PAGO',
+    ...encabezado,
+    centrar('RECIBO DE PAGO'),
     line,
     `Ref: ${payment.id?.slice(0, 12).toUpperCase()}`,
     `Fecha: ${date}`,
@@ -61,14 +84,22 @@ export default function PaymentDetailPage() {
     queryFn:  () => paymentsService.findOne(id),
   });
 
+  // El recibo lo conserva el suscriptor: debe decir quién lo emitió.
+  const { data: empresa } = useQuery({
+    queryKey: ['tenant-settings'],
+    queryFn:  catalogsService.getSettings,
+  });
+
   const { printers, connected, requestPrint, lastError } = usePrinters();
 
   if (isLoading) return <PageSkeleton />;
   if (!payment) return null;
 
+  const [editOpen, setEditOpen] = useState(false);
+
   const handlePrintThermal = (printerId: string) => {
     if (!payment) return;
-    requestPrint(printerId, buildVoucherText(payment), payment.id);
+    requestPrint(printerId, buildVoucherText(payment, empresa), payment.id);
     setPrintSent(true);
     setPrinterMenuOpen(false);
     setTimeout(() => setPrintSent(false), 3000);
@@ -86,6 +117,10 @@ export default function PaymentDetailPage() {
           Volver a cobros
         </button>
         <div className="flex items-center gap-2">
+          <Button variant="outline" size="sm" onClick={() => setEditOpen(true)}>
+            <Pencil className="h-3.5 w-3.5 mr-1" />
+            Corregir
+          </Button>
           {/* Browser print */}
           <Button variant="outline" size="sm" onClick={() => window.print()}>
             <Printer className="h-3.5 w-3.5 mr-1" />
@@ -145,6 +180,18 @@ export default function PaymentDetailPage() {
 
       {/* Receipt */}
       <Card padding="md" className="print:shadow-none print:border-0">
+        {/* Encabezado de empresa — solo tiene sentido en el papel */}
+        {empresa?.companyName && (
+          <div className="hidden print:block text-center mb-3">
+            <p className="text-sm font-bold text-neutral-900">{empresa.companyName}</p>
+            <p className="text-[10px] text-neutral-500 leading-relaxed">
+              {empresa.companyNit ? `NIT: ${empresa.companyNit}` : ''}
+              {empresa.companyAddress ? ` · ${empresa.companyAddress}` : ''}
+              {empresa.companyPhone ? ` · Tel: ${empresa.companyPhone}` : ''}
+            </p>
+          </div>
+        )}
+
         {/* Header */}
         <div className="text-center pb-4 border-b border-neutral-100 mb-4">
           <div className="inline-flex items-center justify-center h-12 w-12 rounded-full bg-green-100 mb-3">
@@ -226,6 +273,12 @@ export default function PaymentDetailPage() {
       </Card>
 
       {/* Actions */}
+      <CorregirPagoDialog
+        open={editOpen}
+        onClose={() => setEditOpen(false)}
+        payment={payment}
+      />
+
       <div className="flex gap-2 print:hidden">
         <Button variant="outline" className="flex-1" onClick={() => router.push('/dashboard/payments')}>
           <CreditCard className="h-3.5 w-3.5" />
@@ -254,5 +307,104 @@ function PageSkeleton() {
       <div className="h-8 w-32 bg-neutral-100 rounded" />
       <div className="h-96 bg-neutral-100 rounded-xl" />
     </div>
+  );
+}
+
+/**
+ * Corrige un pago mal registrado. El monto queda fuera a propósito: ya está
+ * repartido entre facturas y movió sus saldos, así que cambiarlo aquí
+ * descuadraría la cartera. Para eso hay que anular y volver a registrar.
+ */
+function CorregirPagoDialog({
+  open, onClose, payment,
+}: {
+  open: boolean;
+  onClose: () => void;
+  payment: any;
+}) {
+  const qc = useQueryClient();
+  const [reason, setReason]   = useState('');
+  const [type, setType]       = useState(payment?.payment_type ?? 'cash');
+  const [date, setDate]       = useState(
+    payment?.created_at ? new Date(payment.created_at).toISOString().slice(0, 10) : '',
+  );
+  const [number, setNumber]   = useState(payment?.payment_number ?? '');
+
+  const update = useMutation({
+    mutationFn: () => paymentsService.update(payment.id, {
+      reason,
+      paymentType:   type,
+      paymentDate:   date ? new Date(`${date}T12:00:00`).toISOString() : undefined,
+      paymentNumber: number || undefined,
+    }),
+    onSuccess: () => {
+      void qc.invalidateQueries({ queryKey: ['payment', payment.id] });
+      void qc.invalidateQueries({ queryKey: ['payments'] });
+      setReason('');
+      onClose();
+    },
+  });
+
+  return (
+    <Dialog open={open} onClose={onClose} title="Corregir pago">
+      <div className="space-y-4">
+        <p className="text-sm text-neutral-600">
+          Puedes corregir la forma de pago, la fecha y el número de comprobante. El monto no
+          se puede cambiar porque ya está aplicado a facturas: para eso hay que anular el pago
+          y registrarlo de nuevo.
+        </p>
+
+        <Select label="Forma de pago" value={type} onChange={(e) => setType(e.target.value)}>
+          <option value="cash">Efectivo</option>
+          <option value="transfer">Transferencia</option>
+          <option value="card">Tarjeta</option>
+          <option value="other">Otro</option>
+        </Select>
+
+        <div className="grid grid-cols-2 gap-4">
+          <Input
+            label="Fecha del pago"
+            type="date"
+            hint="La fecha real en que entró el dinero"
+            value={date}
+            onChange={(e) => setDate(e.target.value)}
+          />
+          <Input
+            label="N° de comprobante"
+            value={number}
+            onChange={(e) => setNumber(e.target.value)}
+          />
+        </div>
+
+        <Input
+          label="Motivo de la corrección"
+          placeholder="Se registró como efectivo pero fue transferencia"
+          hint="Queda en el historial del pago junto con tu nombre"
+          value={reason}
+          onChange={(e) => setReason(e.target.value)}
+        />
+
+        {update.isError && (
+          <p className="text-xs text-danger-600">
+            {(() => {
+              const msg = (update.error as { response?: { data?: { message?: string | string[] } } })
+                ?.response?.data?.message;
+              return Array.isArray(msg) ? msg.join(', ') : msg ?? 'No se pudo guardar la corrección';
+            })()}
+          </p>
+        )}
+
+        <div className="flex justify-end gap-2">
+          <Button variant="outline" onClick={onClose}>Cancelar</Button>
+          <Button
+            loading={update.isPending}
+            disabled={reason.trim().length < 5}
+            onClick={() => update.mutate()}
+          >
+            Guardar corrección
+          </Button>
+        </div>
+      </div>
+    </Dialog>
   );
 }

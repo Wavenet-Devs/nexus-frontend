@@ -1,9 +1,8 @@
 {
-  "0": "page.tsx",
+  "0": "card.tsx",
   "1": "formatCurrency",
   "2": "page.tsx",
   "3": "page.tsx",
-  "4": "page.tsx",
   "5": "dependencies",
   "6": "index.ts",
   "7": "compilerOptions",
@@ -23,5 +22,5 @@
   "21": "page.tsx",
   "22": "page.tsx",
   "24": "payments.service.ts",
-  "25": "page.tsx"
+  "27": "pqr.service.ts"
 }

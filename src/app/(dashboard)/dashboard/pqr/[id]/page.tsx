@@ -3,7 +3,7 @@
 import { useState, use } from 'react';
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
 import { useRouter } from 'next/navigation';
-import { ArrowLeft, Send } from 'lucide-react';
+import { ArrowLeft, Send, Printer } from 'lucide-react';
 import { pqrService } from '@/services/pqr.service';
 import { Card, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
@@ -52,6 +52,32 @@ export default function PqrDetailPage({ params }: { params: Promise<{ id: string
         <Button variant="ghost" size="sm" onClick={() => router.push('/dashboard/pqr')}>
           <ArrowLeft className="h-4 w-4" /> Solicitudes
         </Button>
+
+        <div className="flex items-center gap-2">
+          <Button
+            variant="outline"
+            size="sm"
+            onClick={() => window.open(pqrService.getPrintUrl(id as string, false), '_blank')}
+            title="Constancia de radicación, sin respuestas"
+          >
+            <Printer className="h-3.5 w-3.5 mr-1" />
+            Radicado
+          </Button>
+          <Button
+            variant="outline"
+            size="sm"
+            disabled={!data.responses?.length}
+            title={
+              data.responses?.length
+                ? 'Constancia con la respuesta de la empresa'
+                : 'Todavía no hay respuestas que imprimir'
+            }
+            onClick={() => window.open(pqrService.getPrintUrl(id as string, true), '_blank')}
+          >
+            <Printer className="h-3.5 w-3.5 mr-1" />
+            Con respuesta
+          </Button>
+        </div>
         <div className="flex gap-2">
           {(['new', 'in_progress', 'closed'] as const).map((s) => (
             <button

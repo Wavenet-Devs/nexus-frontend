@@ -4,7 +4,7 @@ import { useState } from 'react';
 import { useQuery } from '@tanstack/react-query';
 import {
   FileSpreadsheet, Download, RefreshCw, FileText,
-  CreditCard, Scissors, BookOpen, AlertCircle,
+  CreditCard, Scissors, BookOpen, AlertCircle, Printer,
 } from 'lucide-react';
 import { reportsService } from '@/services/reports.service';
 import { catalogsService } from '@/services/catalogs.service';
@@ -120,6 +120,16 @@ function BillingReport() {
     consumed: acc.consumed + Number(r.consumed ?? 0),
   }), { total: 0, balance: 0, consumed: 0 });
 
+  // Control del lote antes de imprimir: una factura en cero o negativa casi
+  // siempre delata un error de lectura o de tarifa, no un caso real.
+  const conteo = (data ?? []).reduce((acc, r) => {
+    const t = Number(r.total ?? 0);
+    if (t < 0) acc.negativas++;
+    else if (t === 0) acc.cero++;
+    else acc.positivas++;
+    return acc;
+  }, { positivas: 0, cero: 0, negativas: 0 });
+
   return (
     <div className="space-y-4">
       <ReportToolbar
@@ -133,11 +143,34 @@ function BillingReport() {
       />
 
       {totals && data?.length ? (
-        <div className="grid grid-cols-3 gap-3">
-          <SummaryCard label="Total facturado" value={formatCurrency(totals.total)} />
-          <SummaryCard label="Saldo pendiente" value={formatCurrency(totals.balance)} warn />
-          <SummaryCard label="Total kWh" value={`${totals.consumed.toLocaleString('es-CO')} kWh`} />
-        </div>
+        <>
+          <div className="grid grid-cols-3 gap-3">
+            <SummaryCard label="Total facturado" value={formatCurrency(totals.total)} />
+            <SummaryCard label="Saldo pendiente" value={formatCurrency(totals.balance)} warn />
+            <SummaryCard label="Total kWh" value={`${totals.consumed.toLocaleString('es-CO')} kWh`} />
+          </div>
+
+          <div className="grid grid-cols-3 gap-3">
+            <SummaryCard label="Facturas positivas" value={conteo.positivas.toLocaleString('es-CO')} />
+            <SummaryCard
+              label="Facturas en cero"
+              value={conteo.cero.toLocaleString('es-CO')}
+              warn={conteo.cero > 0}
+            />
+            <SummaryCard
+              label="Facturas negativas"
+              value={conteo.negativas.toLocaleString('es-CO')}
+              warn={conteo.negativas > 0}
+            />
+          </div>
+
+          {(conteo.cero > 0 || conteo.negativas > 0) && (
+            <p className="text-xs text-amber-600">
+              Revisa las facturas en cero o negativas antes de imprimir el lote: suelen venir
+              de una lectura mal digitada o de una tarifa sin cargar.
+            </p>
+          )}
+        </>
       ) : null}
 
       <DataTable
@@ -436,12 +469,23 @@ function ReadingsListReport() {
           <div className="flex-1">
             <h3 className="text-sm font-semibold text-neutral-900 mb-1">Planilla de lecturas</h3>
             <p className="text-sm text-neutral-500 mb-4">
-              Genera un archivo XLSX con una hoja por barrio. Incluye nombre, dirección, medidor, contrato, ruta y lectura anterior. Lista para que el lector registre la lectura actual en campo.
+              Una hoja por barrio, ordenada por ruta, con nombre, dirección, medidor, contrato
+              y lectura anterior. El Excel sirve para el escritorio; la versión impresa lleva
+              casillas en blanco y espacio para la firma del lector.
             </p>
-            <Button loading={downloading} onClick={handleExport}>
-              <Download className="h-3.5 w-3.5" />
-              Descargar planilla
-            </Button>
+            <div className="flex flex-wrap gap-2">
+              <Button loading={downloading} onClick={handleExport}>
+                <Download className="h-3.5 w-3.5" />
+                Descargar Excel
+              </Button>
+              <Button
+                variant="outline"
+                onClick={() => window.open(reportsService.getReadingsPrintUrl(), '_blank')}
+              >
+                <Printer className="h-3.5 w-3.5" />
+                Imprimir planilla
+              </Button>
+            </div>
           </div>
         </div>
       </Card>

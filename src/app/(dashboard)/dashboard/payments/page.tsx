@@ -3,7 +3,7 @@
 import { useState } from 'react';
 import { useQuery } from '@tanstack/react-query';
 import { useRouter } from 'next/navigation';
-import { CreditCard, Search, Filter, Plus } from 'lucide-react';
+import { CreditCard, Search, Filter, Plus, Upload } from 'lucide-react';
 import { paymentsService } from '@/services/payments.service';
 import { useDebounce } from '@/hooks/use-debounce';
 import { Card } from '@/components/ui/card';
@@ -88,6 +88,10 @@ export default function PaymentsPage() {
             className={paymentType ? 'border-primary-500 text-primary-600' : ''}>
             <Filter className="h-3.5 w-3.5" />
             Filtros
+          </Button>
+          <Button variant="outline" size="sm" onClick={() => router.push('/dashboard/payments/import')}>
+            <Upload className="h-3.5 w-3.5" />
+            Recaudo en bloque
           </Button>
           <Button size="sm" onClick={() => router.push('/dashboard/payments/new')}>
             <Plus className="h-3.5 w-3.5" />
