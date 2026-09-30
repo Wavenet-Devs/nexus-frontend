@@ -14,6 +14,8 @@ import {
   BatchStatusBadge, BATCH_STATUS_LABEL, TRANSITION_ACTION, isReopen,
 } from '@/components/readings/batch-status-badge';
 import { billingService, type BatchRecalcResult, type BillingGenerationRun } from '@/services/billing.service';
+import { importsService, isImportActive } from '@/services/imports.service';
+import { useImportJob } from '@/hooks/use-import-job';
 import { catalogsService } from '@/services/catalogs.service';
 import { formatCurrency } from '@/lib/utils';
 import { Card } from '@/components/ui/card';
@@ -40,7 +42,6 @@ export default function ReadingBatchPage() {
 
   const [tab,          setTab]          = useState<Tab>('tariffs');
   const [search,       setSearch]       = useState('');
-  const [importResult, setImportResult] = useState<ImportResult | null>(null);
   const [printNeighborhoodId, setPrintNeighborhoodId] = useState('');
 
   const { data: neighborhoods } = useQuery({
@@ -65,15 +66,55 @@ export default function ReadingBatchPage() {
     enabled:  tab === 'missing',
   });
 
+  // ── Importación XLSX en segundo plano ──
+  // El backend responde 202 con el job; aquí se sigue su avance y, al recargar,
+  // se retoma una importación que siga en curso. El resultado se deriva del job.
+  const [trackedImportId, setTrackedImportId] = useState<string | null>(null);
+  const [dismissedImportId, setDismissedImportId] = useState<string | null>(null);
+  const [uploadError, setUploadError] = useState<string | null>(null);
+  const { data: recentImports } = useQuery({
+    queryKey: ['reading-imports', id],
+    queryFn:  () => importsService.list({ type: 'readings', readingId: id }),
+  });
+  const activeImportId = trackedImportId ?? recentImports?.find(isImportActive)?.id ?? null;
+  const { data: importJob } = useImportJob(activeImportId);
+  const importing = isImportActive(importJob);
+
   const importMutation = useMutation({
     mutationFn: (file: File) => readingsService.importXlsx(id, file),
-    onSuccess: (result) => {
-      setImportResult(result);
-      qc.invalidateQueries({ queryKey: ['reading-batch', id] });
-      qc.invalidateQueries({ queryKey: ['reading-tariffs', id] });
-      qc.invalidateQueries({ queryKey: ['reading-missing', id] });
-    },
+    onMutate: () => setUploadError(null),
+    onSuccess: (job) => setTrackedImportId(job.id),
+    onError: (e: unknown) => setUploadError(apiMessage(e, 'No se pudo subir el archivo')),
   });
+
+  const finishedJob = importJob && !importing && importJob.id === activeImportId && importJob.id !== dismissedImportId
+    ? importJob : null;
+  const importResult: ImportResult | null = finishedJob?.status === 'completed'
+    ? {
+        total:     finishedJob.total,
+        processed: finishedJob.processed,
+        imported:  finishedJob.created + finishedJob.updated,
+        updated:   finishedJob.updated,
+        skipped:   finishedJob.skipped,
+        created:   finishedJob.clientsCreated,
+        errors:    (finishedJob.errors ?? []).map((e) => ({ row: e.row, contract: e.contract ?? '—', reason: e.reason ?? e.message ?? '' })),
+        warnings:  (finishedJob.warnings ?? []).map((w) => ({ row: w.row, contract: w.contract ?? '—', reason: w.reason ?? w.message ?? '' })),
+        jobId:     finishedJob.id,
+        fileName:  finishedJob.fileName,
+      }
+    : null;
+  const importError = uploadError ?? (finishedJob?.status === 'failed' ? finishedJob.failureReason ?? 'La importación falló' : null);
+  const dismissImport = () => { setUploadError(null); if (finishedJob) setDismissedImportId(finishedJob.id); };
+
+  // Al terminar, refrescar el lote y sus lecturas
+  const finishedImportId = finishedJob?.id ?? null;
+  useEffect(() => {
+    if (!finishedImportId) return;
+    qc.invalidateQueries({ queryKey: ['reading-batch', id] });
+    qc.invalidateQueries({ queryKey: ['reading-tariffs', id] });
+    qc.invalidateQueries({ queryKey: ['reading-missing', id] });
+    qc.invalidateQueries({ queryKey: ['reading-imports', id] });
+  }, [finishedImportId, id, qc]);
 
   const [actionError, setActionError] = useState<string | null>(null);
 
@@ -177,7 +218,7 @@ export default function ReadingBatchPage() {
   const handleFileDrop = (e: React.DragEvent) => {
     e.preventDefault();
     const file = e.dataTransfer.files[0];
-    if (file) importMutation.mutate(file);
+    if (file && !importing) importMutation.mutate(file);
   };
 
   const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -325,7 +366,7 @@ export default function ReadingBatchPage() {
               <div>
                 <p className="text-sm font-semibold text-green-800">Importación completada</p>
                 <p className="text-sm text-green-700 mt-0.5">
-                  {importResult.imported} importados · {importResult.created} clientes nuevos · {importResult.skipped} omitidos
+                  {importResult.imported} importados{importResult.updated ? ` (${importResult.updated} reemplazadas)` : ''} · {importResult.created} clientes nuevos · {importResult.skipped} omitidos
                   {importResult.errors.length > 0 && ` · ${importResult.errors.length} errores`}
                   {(importResult.warnings?.length ?? 0) > 0 && ` · ${importResult.warnings!.length} advertencias`}
                 </p>
@@ -337,6 +378,14 @@ export default function ReadingBatchPage() {
                       </p>
                     ))}
                   </div>
+                )}
+                {importResult.jobId && (importResult.errors.length > 0 || (importResult.warnings?.length ?? 0) > 0) && (
+                  <button
+                    onClick={() => importsService.downloadReport({ id: importResult.jobId!, fileName: importResult.fileName ?? '' })}
+                    className="mt-1 text-xs font-medium text-primary-700 underline"
+                  >
+                    Descargar reporte completo (XLSX)
+                  </button>
                 )}
                 {importResult.errors.length > 0 && (
                   <div className="mt-2 space-y-1">
@@ -352,7 +401,21 @@ export default function ReadingBatchPage() {
                 )}
               </div>
             </div>
-            <button onClick={() => setImportResult(null)} className="text-green-400 hover:text-green-700">
+            <button onClick={dismissImport} className="text-green-400 hover:text-green-700">
+              <X className="h-4 w-4" />
+            </button>
+          </div>
+        </Card>
+      )}
+
+      {importError && (
+        <Card padding="md" className="border-red-200 bg-red-50">
+          <div className="flex items-start justify-between gap-3">
+            <div className="flex items-start gap-2">
+              <AlertTriangle className="h-5 w-5 text-red-500 shrink-0 mt-0.5" />
+              <p className="text-sm text-red-800">{importError}</p>
+            </div>
+            <button onClick={dismissImport} className="text-red-400 hover:text-red-700">
               <X className="h-4 w-4" />
             </button>
           </div>
@@ -402,11 +465,11 @@ export default function ReadingBatchPage() {
         onDragOver={(e) => e.preventDefault()}
         onDrop={handleFileDrop}
         className={`border-2 border-dashed rounded-xl p-6 text-center transition-colors ${
-          importMutation.isPending
+          importMutation.isPending || importing
             ? 'border-primary-300 bg-primary-50'
             : 'border-neutral-200 hover:border-primary-300 hover:bg-neutral-50 cursor-pointer'
         }`}
-        onClick={() => !importMutation.isPending && fileRef.current?.click()}
+        onClick={() => !(importMutation.isPending || importing) && fileRef.current?.click()}
       >
         <input
           ref={fileRef}
@@ -415,10 +478,17 @@ export default function ReadingBatchPage() {
           className="hidden"
           onChange={handleFileChange}
         />
-        {importMutation.isPending ? (
+        {importMutation.isPending || importing ? (
           <div className="flex flex-col items-center gap-2">
             <div className="h-8 w-8 rounded-full border-2 border-primary-500 border-t-transparent animate-spin" />
-            <p className="text-sm text-primary-700 font-medium">Procesando XLSX…</p>
+            <p className="text-sm text-primary-700 font-medium">
+              {importMutation.isPending
+                ? 'Subiendo archivo…'
+                : importJob?.status === 'queued'
+                  ? 'Importación en cola…'
+                  : `Importando… ${importJob?.processed.toLocaleString('es-CO') ?? 0} de ${importJob?.total.toLocaleString('es-CO') ?? '…'} filas (${importJob?.percent ?? 0}%)`}
+            </p>
+            {importing && <p className="text-xs text-neutral-500">Puedes seguir trabajando: el proceso continúa en el servidor.</p>}
           </div>
         ) : (
           <div className="flex flex-col items-center gap-2">
