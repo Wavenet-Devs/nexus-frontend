@@ -146,8 +146,16 @@ export const billingService = {
   findByClient: (clientId: string) =>
     api.get<any[]>(`/billing/invoices/client/${clientId}`).then((r) => r.data),
 
+  /** Encola la generación del lote (202). El avance se consulta con getGenerationRun. */
   generate: (readingId: string) =>
-    api.post<any>(`/billing/generate/${readingId}`).then((r) => r.data),
+    api.post<BillingGenerationRun>(`/billing/generate/${readingId}`).then((r) => r.data),
+
+  getGenerationRun: (runId: string) =>
+    api.get<BillingGenerationRun>(`/billing/generation-runs/${runId}`).then((r) => r.data),
+
+  /** Última ejecución del lote (null si nunca se facturó por este flujo). */
+  getLatestGeneration: (readingId: string) =>
+    api.get<BillingGenerationRun | null>(`/billing/generate/${readingId}/latest`).then((r) => r.data || null),
 
   createCreditNote: (invoiceId: string, dto: { reason: string; amount: number }) =>
     api.post<any>(`/billing/invoices/${invoiceId}/credit-note`, dto).then((r) => r.data),
@@ -268,3 +276,22 @@ export const billingService = {
     return `${base}/billing/batch/${readingId}/print?${params.toString()}`;
   },
 };
+
+export interface BillingGenerationRun {
+  id:           string;
+  readingId:    string;
+  period:       { month: number; year: number };
+  status:       'queued' | 'running' | 'completed' | 'failed';
+  total:        number;
+  processed:    number;
+  generated:    number;
+  skipped:      number;
+  errorCount:   number;
+  errors:       { clientId: string; reason: string }[];
+  emailsQueued: number;
+  percent:      number;
+  failureReason: string | null;
+  startedBy:    string;
+  createdAt:    string;
+  finishedAt:   string | null;
+}

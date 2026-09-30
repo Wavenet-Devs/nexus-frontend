@@ -1,4 +1,15 @@
 import { api } from '@/lib/api';
+import type { ImportJob } from '@/services/imports.service';
+
+export type ReadingBatchStatus = 'DRAFT' | 'COLLECTING' | 'READY_TO_BILL' | 'BILLED' | 'CLOSED';
+
+export interface ReadingStatusHistoryEntry {
+  from_status:     ReadingBatchStatus | null;
+  to_status:       ReadingBatchStatus;
+  reason:          string;
+  changed_by_name: string;
+  changed_at:      string;
+}
 
 export interface ReadingBatch {
   id:             string;
@@ -20,6 +31,10 @@ export interface ReadingBatch {
   period_start:   string;
   period_end:     string;
   payment_limit:  string;
+  status:         ReadingBatchStatus;
+  status_changed_at?: string | null;
+  /** Solo en el detalle: estados a los que se puede pasar desde el actual. */
+  allowed_transitions?: ReadingBatchStatus[];
   total_clients:  string;
   total_consumed?: string;
   zero_readings?:  string;
@@ -41,6 +56,12 @@ export interface ReadingTariff {
   edited:         boolean;
   version:        number;
   edited_at:      string | null;
+  /** Causal/novedad de esta lectura (no la del cliente). */
+  causal_id?:          string | null;
+  causal_code?:        number | null;
+  causal_name?:        string | null;
+  causal_result_mode?: 'ZERO_READING' | 'NO_READING' | 'READING_ALLOWED' | null;
+  source?:             'manual' | 'xlsx' | 'lector_app' | 'etl' | 'legacy';
 }
 
 export interface TariffHistoryEntry {
@@ -82,11 +103,19 @@ export interface CreateReadingBatchDto {
   paymentLimit: string;
 }
 
+/** Resultado de una importación de lecturas, tal como lo muestra la página del lote. */
 export interface ImportResult {
+  total?:    number;
+  processed?: number;
   imported: number;
+  updated?: number;
   skipped:  number;
   created:  number;
   errors:   { row: number; contract: string; reason: string }[];
+  warnings?: { row: number; contract: string; reason: string }[];
+  /** Job de bulk-import, para descargar el reporte. */
+  jobId?:    string;
+  fileName?: string;
 }
 
 export const readingsService = {
@@ -102,10 +131,11 @@ export const readingsService = {
   update: (id: string, dto: Partial<CreateReadingBatchDto>) =>
     api.patch<ReadingBatch>(`/readings/${id}`, dto).then((r) => r.data),
 
+  /** Sube el XLSX y encola la importación (202); el avance se sigue con useImportJob. */
   importXlsx: (id: string, file: File) => {
     const form = new FormData();
     form.append('file', file);
-    return api.post<ImportResult>(`/readings/${id}/import`, form, {
+    return api.post<ImportJob>(`/readings/${id}/import`, form, {
       headers: { 'Content-Type': 'multipart/form-data' },
     }).then((r) => r.data);
   },
@@ -120,6 +150,12 @@ export const readingsService = {
     api.patch<{ tariff: ReadingTariff; hasInvoice: boolean; invoiceId: string | null }>(
       `/readings/tariffs/${tariffId}`, dto,
     ).then((r) => r.data),
+
+  changeStatus: (id: string, status: ReadingBatchStatus, reason?: string) =>
+    api.patch<ReadingBatch>(`/readings/${id}/status`, { status, reason }).then((r) => r.data),
+
+  getStatusHistory: (id: string) =>
+    api.get<ReadingStatusHistoryEntry[]>(`/readings/${id}/status-history`).then((r) => r.data),
 
   getTariffHistory: (tariffId: string) =>
     api.get<TariffHistoryEntry[]>(`/readings/tariffs/${tariffId}/history`).then((r) => r.data),

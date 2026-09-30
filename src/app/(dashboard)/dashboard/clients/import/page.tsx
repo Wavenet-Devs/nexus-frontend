@@ -5,6 +5,8 @@ import { useRouter } from 'next/navigation';
 import { useMutation } from '@tanstack/react-query';
 import { ArrowLeft, Upload, FileSpreadsheet, CheckCircle2, AlertCircle, Download } from 'lucide-react';
 import { clientsService } from '@/services/clients.service';
+import { importsService, isImportActive } from '@/services/imports.service';
+import { useImportJob } from '@/hooks/use-import-job';
 import { Button } from '@/components/ui/button';
 import { Card } from '@/components/ui/card';
 
@@ -39,13 +41,20 @@ export default function ClientImportPage() {
   const [file, setFile]       = useState<File | null>(null);
   const [dragging, setDragging] = useState(false);
 
+  // La importación corre en segundo plano: el POST devuelve el job y aquí se
+  // sigue su avance hasta que termina.
+  const [jobId, setJobId] = useState<string | null>(null);
   const importMutation = useMutation({
     mutationFn: (f: File) => clientsService.importXlsx(f),
+    onSuccess: (job) => setJobId(job.id),
   });
+  const { data: job } = useImportJob(jobId);
+  const processing = isImportActive(job);
 
   const handleFile = (f: File) => {
     if (!f.name.match(/\.(xlsx|xls|csv)$/i)) return;
     setFile(f);
+    setJobId(null);
     importMutation.reset();
   };
 
@@ -60,8 +69,10 @@ export default function ClientImportPage() {
     if (file) importMutation.mutate(file);
   };
 
-  const result = importMutation.data;
-  const isDone = importMutation.isSuccess;
+  const result = job?.status === 'completed' ? job : null;
+  const isDone = !!result;
+  const failed = job?.status === 'failed';
+  const errors = result?.errors ?? [];
 
   return (
     <div className="space-y-6">
@@ -151,6 +162,21 @@ export default function ClientImportPage() {
         )}
       </div>
 
+      {/* Progreso */}
+      {(processing || (importMutation.isSuccess && !job)) && (
+        <Card padding="md">
+          <p className="text-sm font-semibold text-neutral-800">
+            {job?.status === 'running'
+              ? `Importando… ${job.processed.toLocaleString('es-CO')} de ${job.total.toLocaleString('es-CO')} filas`
+              : 'Importación en cola…'}
+          </p>
+          <div className="mt-2 h-2 rounded-full bg-neutral-100 overflow-hidden">
+            <div className="h-full rounded-full bg-primary-500 transition-all" style={{ width: `${job?.percent ?? 0}%` }} />
+          </div>
+          <p className="text-xs text-neutral-500 mt-2">Puedes salir de esta página: el proceso continúa en el servidor.</p>
+        </Card>
+      )}
+
       {/* Result */}
       {isDone && result && (
         <Card padding="md">
@@ -167,24 +193,30 @@ export default function ClientImportPage() {
                   <p className="text-2xl font-bold text-neutral-700">{result.updated}</p>
                   <p className="text-xs text-neutral-500 mt-0.5">Actualizados</p>
                 </div>
-                <div className={`rounded-lg p-3 ${result.errors.length > 0 ? 'bg-danger-50' : 'bg-neutral-50'}`}>
-                  <p className={`text-2xl font-bold ${result.errors.length > 0 ? 'text-danger-700' : 'text-neutral-400'}`}>
-                    {result.errors.length}
+                <div className={`rounded-lg p-3 ${result.errorCount > 0 ? 'bg-danger-50' : 'bg-neutral-50'}`}>
+                  <p className={`text-2xl font-bold ${result.errorCount > 0 ? 'text-danger-700' : 'text-neutral-400'}`}>
+                    {result.errorCount}
                   </p>
                   <p className="text-xs text-neutral-500 mt-0.5">Errores</p>
                 </div>
               </div>
-              {result.errors.length > 0 && (
+              {errors.length > 0 && (
                 <div className="space-y-1">
-                  {result.errors.slice(0, 10).map((e: any, i: number) => (
+                  {errors.slice(0, 10).map((e, i) => (
                     <div key={i} className="flex items-start gap-2 text-xs text-danger-700">
                       <AlertCircle className="h-3.5 w-3.5 shrink-0 mt-0.5" />
-                      <span>Fila {e.row}: {e.message}</span>
+                      <span>Fila {e.row}: {e.message ?? e.reason}</span>
                     </div>
                   ))}
-                  {result.errors.length > 10 && (
-                    <p className="text-xs text-neutral-400">… y {result.errors.length - 10} errores más</p>
+                  {result.errorCount > 10 && (
+                    <p className="text-xs text-neutral-400">… y {result.errorCount - 10} errores más</p>
                   )}
+                  <button
+                    onClick={() => importsService.downloadReport(result)}
+                    className="text-xs font-medium text-primary-700 underline"
+                  >
+                    Descargar reporte completo (XLSX)
+                  </button>
                 </div>
               )}
             </div>
@@ -192,10 +224,12 @@ export default function ClientImportPage() {
         </Card>
       )}
 
-      {importMutation.isError && (
+      {(importMutation.isError || failed) && (
         <div className="bg-danger-50 border border-danger-200 rounded-lg px-4 py-3 text-sm text-danger-700 flex items-center gap-2">
           <AlertCircle className="h-4 w-4 shrink-0" />
-          Error al procesar el archivo. Verifica que sea un XLSX o CSV válido.
+          {failed && job?.failureReason
+            ? `La importación falló: ${job.failureReason}`
+            : 'Error al procesar el archivo. Verifica que sea un XLSX válido.'}
         </div>
       )}
 
@@ -205,12 +239,12 @@ export default function ClientImportPage() {
           Cancelar
         </Button>
         <Button
-          disabled={!file || importMutation.isPending}
-          loading={importMutation.isPending}
+          disabled={!file || importMutation.isPending || processing}
+          loading={importMutation.isPending || processing}
           onClick={handleImport}
         >
           <Upload className="h-4 w-4 mr-1.5" />
-          {importMutation.isPending ? 'Importando...' : 'Importar clientes'}
+          {importMutation.isPending || processing ? 'Importando...' : 'Importar clientes'}
         </Button>
         {isDone && (
           <Button variant="outline" onClick={() => router.push('/dashboard/clients')}>
