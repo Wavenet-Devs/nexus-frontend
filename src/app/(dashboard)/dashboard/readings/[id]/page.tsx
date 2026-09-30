@@ -1,6 +1,6 @@
 'use client';
 
-import { useState, useRef } from 'react';
+import { useState, useRef, useEffect } from 'react';
 import { useParams, useRouter } from 'next/navigation';
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
 import {
@@ -13,7 +13,7 @@ import {
 import {
   BatchStatusBadge, BATCH_STATUS_LABEL, TRANSITION_ACTION, isReopen,
 } from '@/components/readings/batch-status-badge';
-import { billingService, type BatchRecalcResult } from '@/services/billing.service';
+import { billingService, type BatchRecalcResult, type BillingGenerationRun } from '@/services/billing.service';
 import { catalogsService } from '@/services/catalogs.service';
 import { formatCurrency } from '@/lib/utils';
 import { Card } from '@/components/ui/card';
@@ -77,13 +77,45 @@ export default function ReadingBatchPage() {
 
   const [actionError, setActionError] = useState<string | null>(null);
 
+  // ── Generación de facturas en segundo plano ──
+  // El backend responde 202 y procesa en una cola; aquí se sigue el avance.
+  // Al recargar la página se retoma la última ejecución del lote.
+  const [runId, setRunId] = useState<string | null>(null);
+
+  const { data: latestRun } = useQuery({
+    queryKey: ['billing-generation-latest', id],
+    queryFn:  () => billingService.getLatestGeneration(id),
+  });
+  const trackedRunId = runId ?? (latestRun && ['queued', 'running'].includes(latestRun.status) ? latestRun.id : null);
+
+  const { data: run } = useQuery({
+    queryKey: ['billing-generation-run', trackedRunId],
+    queryFn:  () => billingService.getGenerationRun(trackedRunId!),
+    enabled:  !!trackedRunId,
+    refetchInterval: (query) => {
+      const status = query.state.data?.status;
+      return status === 'completed' || status === 'failed' ? false : 1500;
+    },
+  });
+  const generating = !!run && (run.status === 'queued' || run.status === 'running');
+
+  // Al terminar, refrescar el lote (queda BILLED)
+  const finishedRunId = run && !generating ? run.id : null;
+  useEffect(() => {
+    if (!finishedRunId) return;
+    qc.invalidateQueries({ queryKey: ['reading-batch', id] });
+    qc.invalidateQueries({ queryKey: ['reading-batches'] });
+  }, [finishedRunId, id, qc]);
+
   const generateMutation = useMutation({
     mutationFn: () => billingService.generate(id),
-    onSuccess: () => {
-      qc.invalidateQueries({ queryKey: ['reading-batch', id] });
-      router.push(`/dashboard/billing?readingId=${id}`);
+    onSuccess: (started) => setRunId(started.id),
+    onError: (e: unknown) => {
+      // Ya hay una ejecución en curso: seguir esa en vez de mostrar error
+      const runningId = (e as { response?: { data?: { runId?: string } } })?.response?.data?.runId;
+      if (runningId) setRunId(runningId);
+      else setActionError(apiMessage(e, 'No se pudieron generar las facturas'));
     },
-    onError: (e: unknown) => setActionError(apiMessage(e, 'No se pudieron generar las facturas')),
   });
 
   // ── Cambio de estado del lote ──
@@ -205,8 +237,8 @@ export default function ReadingBatchPage() {
           </Button>
           <Button
             onClick={() => { setActionError(null); generateMutation.mutate(); }}
-            loading={generateMutation.isPending}
-            disabled={totalClients === 0 || !canGenerate}
+            loading={generateMutation.isPending || generating}
+            disabled={totalClients === 0 || !canGenerate || generating}
             title={canGenerate ? undefined : 'Cierra la captura (Listo para facturar) antes de generar facturas'}
           >
             <Play className="h-3.5 w-3.5" />
@@ -354,6 +386,14 @@ export default function ReadingBatchPage() {
             </button>
           </div>
         </Card>
+      )}
+
+      {run && (run.status !== 'completed' || runId) && (
+        <GenerationProgressCard
+          run={run}
+          onViewInvoices={() => router.push(`/dashboard/billing?readingId=${id}`)}
+          onDismiss={() => setRunId(null)}
+        />
       )}
 
       {/* XLSX Upload zone */}
@@ -820,5 +860,69 @@ function RecalcularPeriodoDialog({
         </div>
       </div>
     </Dialog>
+  );
+}
+
+function GenerationProgressCard({
+  run, onViewInvoices, onDismiss,
+}: {
+  run: BillingGenerationRun;
+  onViewInvoices: () => void;
+  onDismiss: () => void;
+}) {
+  const active = run.status === 'queued' || run.status === 'running';
+  const failed = run.status === 'failed';
+  const tone = failed
+    ? 'border-red-200 bg-red-50'
+    : active ? 'border-primary-200 bg-primary-50' : 'border-green-200 bg-green-50';
+
+  return (
+    <Card padding="md" className={tone}>
+      <div className="flex items-start justify-between gap-3">
+        <div className="flex-1 min-w-0">
+          <p className="text-sm font-semibold text-neutral-800">
+            {run.status === 'queued' && 'Facturación en cola…'}
+            {run.status === 'running' && `Generando facturas… ${run.percent}%`}
+            {run.status === 'completed' && 'Facturación completada'}
+            {failed && 'La facturación falló'}
+          </p>
+          {(active || run.total > 0) && (
+            <div className="mt-2 h-2 rounded-full bg-white/70 overflow-hidden">
+              <div
+                className={`h-full rounded-full transition-all ${failed ? 'bg-red-500' : 'bg-primary-500'}`}
+                style={{ width: `${run.percent}%` }}
+              />
+            </div>
+          )}
+          <p className="text-xs text-neutral-600 mt-2">
+            {run.processed.toLocaleString('es-CO')} de {run.total.toLocaleString('es-CO')} procesadas ·{' '}
+            {run.generated.toLocaleString('es-CO')} generadas · {run.skipped.toLocaleString('es-CO')} ya existían
+            {run.errorCount > 0 && ` · ${run.errorCount} con error`}
+            {run.status === 'completed' && run.emailsQueued > 0 && ` · ${run.emailsQueued} correos en envío`}
+          </p>
+          {failed && run.failureReason && <p className="text-xs text-red-700 mt-1">{run.failureReason}</p>}
+          {run.errors.length > 0 && (
+            <div className="mt-2 space-y-0.5">
+              {run.errors.slice(0, 5).map((e, i) => (
+                <p key={i} className="text-xs text-red-700">Cliente {e.clientId.slice(0, 8)}…: {e.reason}</p>
+              ))}
+            </div>
+          )}
+          {active && (
+            <p className="text-xs text-neutral-500 mt-1">
+              Puedes seguir trabajando o recargar la página: el proceso continúa en el servidor.
+            </p>
+          )}
+        </div>
+        {!active && (
+          <div className="flex items-center gap-2 shrink-0">
+            {run.status === 'completed' && <Button size="sm" onClick={onViewInvoices}>Ver facturas</Button>}
+            <button onClick={onDismiss} className="text-neutral-400 hover:text-neutral-700">
+              <X className="h-4 w-4" />
+            </button>
+          </div>
+        )}
+      </div>
+    </Card>
   );
 }
