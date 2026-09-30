@@ -1,4 +1,5 @@
 import { api } from '@/lib/api';
+import type { ImportJob } from '@/services/imports.service';
 import type { PaginatedResponse } from '@/types';
 
 export interface ClientGroup {
@@ -156,7 +157,8 @@ export const clientsService = {
   importXlsx: (file: File) => {
     const form = new FormData();
     form.append('file', file);
-    return api.post<{ created: number; updated: number; errors: { row: number; message: string }[] }>(
+    // Encola la importación (202); el avance se sigue con useImportJob.
+    return api.post<ImportJob>(
       '/clients/import-xlsx',
       form,
       { headers: { 'Content-Type': 'multipart/form-data' } },
