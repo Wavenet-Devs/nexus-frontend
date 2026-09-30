@@ -1,4 +1,5 @@
 import { api } from '@/lib/api';
+import type { ImportJob } from '@/services/imports.service';
 
 export type ReadingBatchStatus = 'DRAFT' | 'COLLECTING' | 'READY_TO_BILL' | 'BILLED' | 'CLOSED';
 
@@ -102,12 +103,19 @@ export interface CreateReadingBatchDto {
   paymentLimit: string;
 }
 
+/** Resultado de una importación de lecturas, tal como lo muestra la página del lote. */
 export interface ImportResult {
+  total?:    number;
+  processed?: number;
   imported: number;
+  updated?: number;
   skipped:  number;
   created:  number;
   errors:   { row: number; contract: string; reason: string }[];
   warnings?: { row: number; contract: string; reason: string }[];
+  /** Job de bulk-import, para descargar el reporte. */
+  jobId?:    string;
+  fileName?: string;
 }
 
 export const readingsService = {
@@ -123,10 +131,11 @@ export const readingsService = {
   update: (id: string, dto: Partial<CreateReadingBatchDto>) =>
     api.patch<ReadingBatch>(`/readings/${id}`, dto).then((r) => r.data),
 
+  /** Sube el XLSX y encola la importación (202); el avance se sigue con useImportJob. */
   importXlsx: (id: string, file: File) => {
     const form = new FormData();
     form.append('file', file);
-    return api.post<ImportResult>(`/readings/${id}/import`, form, {
+    return api.post<ImportJob>(`/readings/${id}/import`, form, {
       headers: { 'Content-Type': 'multipart/form-data' },
     }).then((r) => r.data);
   },
