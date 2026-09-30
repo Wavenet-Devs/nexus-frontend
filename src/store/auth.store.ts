@@ -9,8 +9,10 @@ interface AuthState {
   accessToken:  string | null;
   refreshToken: string | null;
   tenantSlug:   string | null;
+  /** Nombre de la empresa resuelto por el hostname (para mostrarlo en el panel). */
+  tenantName:   string | null;
   isAuth:       boolean;
-  setAuth: (user: AuthUser, accessToken: string, refreshToken: string) => void;
+  setAuth: (user: AuthUser, accessToken: string, refreshToken: string, tenantName?: string | null) => void;
   clearAuth: () => void;
 }
 
@@ -21,16 +23,17 @@ export const useAuthStore = create<AuthState>()(
       accessToken:  null,
       refreshToken: null,
       tenantSlug:   null,
+      tenantName:   null,
       isAuth:       false,
 
-      setAuth: (user, accessToken, refreshToken) => {
+      setAuth: (user, accessToken, refreshToken, tenantName = null) => {
         // Sync con localStorage para el interceptor de axios
         if (typeof window !== 'undefined') {
           localStorage.setItem('access_token', accessToken);
           localStorage.setItem('refresh_token', refreshToken);
           localStorage.setItem('tenant_slug', user.tenantSlug);
         }
-        set({ user, accessToken, refreshToken, tenantSlug: user.tenantSlug, isAuth: true });
+        set({ user, accessToken, refreshToken, tenantSlug: user.tenantSlug, tenantName, isAuth: true });
       },
 
       clearAuth: () => {
@@ -39,7 +42,7 @@ export const useAuthStore = create<AuthState>()(
           localStorage.removeItem('refresh_token');
           localStorage.removeItem('tenant_slug');
         }
-        set({ user: null, accessToken: null, refreshToken: null, tenantSlug: null, isAuth: false });
+        set({ user: null, accessToken: null, refreshToken: null, tenantSlug: null, tenantName: null, isAuth: false });
       },
     }),
     {
@@ -49,6 +52,7 @@ export const useAuthStore = create<AuthState>()(
         accessToken:  state.accessToken,
         refreshToken: state.refreshToken,
         tenantSlug:   state.tenantSlug,
+        tenantName:   state.tenantName,
         isAuth:       state.isAuth,
       }),
     },

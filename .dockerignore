@@ -1,7 +1,11 @@
 node_modules
 .next
+.git
+graphify-out
+coverage
+*.log
 .env
 .env.*
 !.env.example
-*.log
-.git
+Dockerfile.dev
+tsconfig.tsbuildinfo

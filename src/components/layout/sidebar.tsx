@@ -33,7 +33,7 @@ interface SidebarProps {
 export function Sidebar({ open, onClose }: SidebarProps) {
   const pathname = usePathname();
   const router   = useRouter();
-  const { user, tenantSlug, clearAuth } = useAuthStore();
+  const { user, tenantSlug, tenantName, clearAuth } = useAuthStore();
 
   function handleLogout() {
     clearAuth();
@@ -78,7 +78,7 @@ export function Sidebar({ open, onClose }: SidebarProps) {
         {tenantSlug && (
           <div className="px-5 py-3 border-b border-neutral-100 bg-neutral-50">
             <p className="text-xs text-neutral-400 uppercase tracking-wider font-medium mb-0.5">Empresa</p>
-            <p className="text-sm font-semibold text-neutral-700 truncate">{tenantSlug}</p>
+            <p className="text-sm font-semibold text-neutral-700 truncate" title={tenantSlug}>{tenantName ?? tenantSlug}</p>
           </div>
         )}
 
