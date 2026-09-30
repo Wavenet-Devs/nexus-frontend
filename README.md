@@ -19,6 +19,7 @@ Dashboard web multi-tenant para la plataforma Nexus. Construido con Next.js 15 A
 |-----------------------------|------------------------------------------|----------------------------------|
 | `NEXT_PUBLIC_API_URL`       | URL base del backend                     | `http://localhost:4000/api/v1`   |
 | `NEXT_PUBLIC_SA_TENANT_SLUG`| Slug del tenant super admin              | `super-admin`                    |
+| `NEXT_PUBLIC_DEV_TENANT_SLUG`| Solo desarrollo: empresa a usar en `localhost` (si falta, el login pide el slug) | — |
 
 ## Estructura de páginas
 
@@ -70,5 +71,21 @@ El frontend mantiene dos stores Zustand independientes con `persist` en `localSt
 
 - `auth.store.ts` — sesión del usuario de tenant (`/dashboard/*`)
 - `super-admin-auth.store.ts` — sesión del super admin (`/super-admin/*`)
+
+### Empresa por hostname
+
+El usuario no escribe el slug: `spone.nexus-esp.com` (o un custom domain
+registrado en el backend) identifica la empresa. Al cargar, `src/lib/tenant.ts`
+consulta `GET /public/tenant/resolve?host=<hostname>` y el login muestra el
+logo, nombre y color primario de la empresa, pidiendo solo correo y contraseña.
+
+| Situación | Pantalla |
+|---|---|
+| Hostname de un tenant activo | Login con su marca |
+| Hostname sin tenant | «Empresa no configurada» |
+| Tenant inactivo | «Empresa inactiva» |
+| `localhost` / IP | `NEXT_PUBLIC_DEV_TENANT_SLUG`, o un campo de slug marcado «solo desarrollo» |
+
+El mismo build sirve para todos los tenants.
 
 El token de acceso expira en 15 minutos. El cliente Axios (`src/lib/api.ts`) intercepta los 401 y rota automáticamente el refresh token sin cerrar sesión.
