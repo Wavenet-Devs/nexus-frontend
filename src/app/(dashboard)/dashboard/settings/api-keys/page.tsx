@@ -1,6 +1,7 @@
 'use client';
 
-import { useState } from 'react';
+import { useState, useSyncExternalStore } from 'react';
+import { BASE_URL } from '@/lib/api';
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
 import { Plus, Copy, Check, Power, Trash2, Key, AlertTriangle, Pencil, RefreshCw } from 'lucide-react';
 import { apiKeysService, type CreatedApiKey } from '@/services/api-keys.service';
@@ -39,6 +40,7 @@ function NewKeyReveal({ apiKey }: { apiKey: CreatedApiKey }) {
 }
 
 export default function ApiKeysPage() {
+  const integrationsUrl = useSyncExternalStore(noopSubscribe, integrationsBaseUrl, () => INTEGRATIONS_BASE_URL);
   const qc = useQueryClient();
   const [createOpen,  setCreateOpen]  = useState(false);
   const [newKeyName,  setNewKeyName]  = useState('');
@@ -197,11 +199,12 @@ export default function ApiKeysPage() {
       {/* Usage note */}
       <Card padding="md" className="bg-neutral-50 border-neutral-100">
         <p className="text-xs font-semibold text-neutral-600 mb-2">Uso de la API</p>
-        <p className="text-xs text-neutral-500 mb-2">Incluye estos headers en cada request:</p>
-        <pre className="text-xs font-mono bg-neutral-900 text-green-400 rounded-lg p-3 overflow-x-auto">{`Authorization: Bearer <token>
-X-Api-Key: <tu-api-key>`}</pre>
+        <p className="text-xs text-neutral-500 mb-2">
+          Las integraciones se autentican solo con la API key (sin usuario ni contraseña); la empresa sale de la clave:
+        </p>
+        <pre className="text-xs font-mono bg-neutral-900 text-green-400 rounded-lg p-3 overflow-x-auto">{`X-API-Key: <tu-api-key>`}</pre>
         <p className="text-xs text-neutral-400 mt-2">
-          Base URL: <code className="bg-neutral-100 px-1 rounded">{process.env.NEXT_PUBLIC_API_URL ?? 'http://localhost:4000/api/v1'}</code>
+          Lector App: <code className="bg-neutral-100 px-1 rounded">{integrationsUrl}</code>
         </p>
       </Card>
 
@@ -303,3 +306,18 @@ X-Api-Key: <tu-api-key>`}</pre>
     </div>
   );
 }
+
+/**
+ * Base de la integración Lector App. Vive fuera de /api/v1 y en producción se
+ * publica en el host de API (api.nexus-esp.com), no en el del panel.
+ */
+const INTEGRATIONS_BASE_URL = process.env.NEXT_PUBLIC_INTEGRATIONS_URL
+  ?? BASE_URL.replace(/\/api\/v1\/?$/, '') + '/integrations/lector-app/v1';
+
+function integrationsBaseUrl() {
+  return /^https?:\/\//.test(INTEGRATIONS_BASE_URL)
+    ? INTEGRATIONS_BASE_URL
+    : `${window.location.origin}${INTEGRATIONS_BASE_URL}`;
+}
+
+const noopSubscribe = () => () => {};
