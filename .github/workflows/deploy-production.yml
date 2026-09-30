@@ -1,0 +1,42 @@
+name: Deploy production frontend
+
+on:
+  push:
+    branches:
+      - main
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: nexus-production-frontend-deploy
+  cancel-in-progress: false
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    environment: production
+    steps:
+      - name: Configure SSH
+        shell: bash
+        run: |
+          install -m 700 -d ~/.ssh
+          printf '%s\n' "${{ secrets.NEXUS_PROD_SSH_KEY }}" > ~/.ssh/nexus_prod
+          chmod 600 ~/.ssh/nexus_prod
+          printf '%s\n' "${{ secrets.NEXUS_PROD_KNOWN_HOSTS }}" > ~/.ssh/known_hosts
+          chmod 600 ~/.ssh/known_hosts
+
+      - name: Deploy frontend
+        shell: bash
+        env:
+          HOST: ${{ secrets.NEXUS_PROD_HOST }}
+          USER: ${{ secrets.NEXUS_PROD_USER }}
+          PORT: ${{ secrets.NEXUS_PROD_PORT }}
+        run: |
+          ssh \
+            -i ~/.ssh/nexus_prod \
+            -o IdentitiesOnly=yes \
+            -p "$PORT" \
+            "$USER@$HOST" \
+            "sudo /usr/local/sbin/nexus-deploy frontend '$GITHUB_SHA'"
