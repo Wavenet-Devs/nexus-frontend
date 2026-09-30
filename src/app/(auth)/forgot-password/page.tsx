@@ -5,20 +5,28 @@ import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { z } from 'zod';
 import { useRouter } from 'next/navigation';
-import { Zap, MailCheck, ArrowLeft } from 'lucide-react';
+import { MailCheck, ArrowLeft } from 'lucide-react';
 import { api } from '@/lib/api';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
+import { TenantGate } from '@/components/auth/tenant-gate';
+import { resolvedSlug, type TenantResolution } from '@/lib/tenant';
 
 const schema = z.object({
-  tenantSlug: z.string().min(1, 'Ingresa el identificador de tu empresa'),
+  // Solo se pide en desarrollo (localhost sin NEXT_PUBLIC_DEV_TENANT_SLUG)
+  tenantSlug: z.string().optional(),
   email:      z.string().email('Correo inválido'),
 });
 
 type FormData = z.infer<typeof schema>;
 
 export default function ForgotPasswordPage() {
+  return <TenantGate>{(tenant) => <ForgotPasswordForm tenant={tenant} />}</TenantGate>;
+}
+
+function ForgotPasswordForm({ tenant }: { tenant: TenantResolution }) {
   const router = useRouter();
+  const manual = tenant.mode === 'manual';
   const [enviado, setEnviado] = useState(false);
 
   const {
@@ -29,32 +37,29 @@ export default function ForgotPasswordPage() {
   } = useForm<FormData>({ resolver: zodResolver(schema) });
 
   async function onSubmit(data: FormData) {
+    const slug = manual ? data.tenantSlug?.trim().toLowerCase() : resolvedSlug(tenant);
+    if (!slug) {
+      setError('tenantSlug', { message: 'Ingresa el identificador de tu empresa' });
+      return;
+    }
     try {
       await api.post(
         '/auth/forgot-password',
         { email: data.email },
-        { headers: { 'X-Tenant-Slug': data.tenantSlug } },
+        { headers: { 'X-Tenant-Slug': slug } },
       );
       // La respuesta es la misma exista o no la cuenta: no revelamos quién
       // está registrado, así que siempre se muestra el mismo mensaje.
       setEnviado(true);
     } catch {
       setError('root', {
-        message: 'No pudimos procesar la solicitud. Verifica el identificador de tu empresa.',
+        message: 'No pudimos procesar la solicitud. Intenta de nuevo en unos minutos.',
       });
     }
   }
 
   return (
-    <div className="w-full max-w-sm">
-      <div className="flex items-center justify-center gap-2 mb-8">
-        <div className="p-2 rounded-xl bg-primary-600">
-          <Zap className="h-5 w-5 text-white" />
-        </div>
-        <span className="text-xl font-bold text-neutral-900 tracking-tight">Nexus</span>
-      </div>
-
-      <div className="bg-white rounded-2xl border border-neutral-200 shadow-sm p-8">
+    <>
         {enviado ? (
           <div className="text-center">
             <div className="inline-flex items-center justify-center h-12 w-12 rounded-full bg-green-100 mb-4">
@@ -83,12 +88,14 @@ export default function ForgotPasswordPage() {
             </div>
 
             <form onSubmit={handleSubmit(onSubmit)} className="flex flex-col gap-4">
-              <Input
-                label="Empresa (slug)"
-                placeholder="ej: electronuqui"
-                error={errors.tenantSlug?.message}
-                {...register('tenantSlug')}
-              />
+              {manual && (
+                <Input
+                  label="Empresa (slug) — solo desarrollo"
+                  placeholder="ej: electronuqui"
+                  error={errors.tenantSlug?.message}
+                  {...register('tenantSlug')}
+                />
+              )}
               <Input
                 label="Correo electrónico"
                 type="email"
@@ -118,7 +125,6 @@ export default function ForgotPasswordPage() {
             </form>
           </>
         )}
-      </div>
-    </div>
+    </>
   );
 }

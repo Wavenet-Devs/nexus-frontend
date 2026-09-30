@@ -1,6 +1,6 @@
 import axios from 'axios';
 
-const BASE_URL = process.env.NEXT_PUBLIC_API_URL ?? 'http://localhost:4000/api/v1';
+export const BASE_URL = process.env.NEXT_PUBLIC_API_URL ?? 'http://localhost:4000/api/v1';
 
 export const api = axios.create({
   baseURL: BASE_URL,
@@ -25,7 +25,10 @@ api.interceptors.response.use(
   (res) => res,
   async (error) => {
     const original = error.config;
-    if (error.response?.status === 401 && !original._retry) {
+    // Un 401 de login/recuperación es "credenciales inválidas", no una sesión
+    // vencida: se devuelve tal cual para que el formulario muestre el error.
+    const isAuthCall = /\/auth\/(login|refresh|forgot-password|reset-password)/.test(original?.url ?? '');
+    if (error.response?.status === 401 && !original._retry && !isAuthCall) {
       original._retry = true;
       try {
         const refreshToken = localStorage.getItem('refresh_token');
