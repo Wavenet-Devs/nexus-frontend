@@ -1,5 +1,6 @@
 import axios from 'axios';
 
+/** Relativa (/api/v1) en producción same-origin; absoluta en desarrollo. */
 export const BASE_URL = process.env.NEXT_PUBLIC_API_URL ?? 'http://localhost:4000/api/v1';
 
 export const api = axios.create({
