@@ -8,6 +8,7 @@ import { Card } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { EmptyState } from '@/components/ui/empty-state';
 import { formatMonth } from '@/lib/utils';
+import { BatchStatusBadge } from '@/components/readings/batch-status-badge';
 
 const MONTHS = ['Ene','Feb','Mar','Abr','May','Jun','Jul','Ago','Sep','Oct','Nov','Dic'];
 
@@ -68,7 +69,10 @@ export default function ReadingsPage() {
 
                   {/* Info */}
                   <div className="flex-1 min-w-0">
-                    <p className="text-sm font-semibold text-neutral-900">{formatMonth(b.month, b.year)}</p>
+                    <div className="flex items-center gap-2">
+                      <p className="text-sm font-semibold text-neutral-900">{formatMonth(b.month, b.year)}</p>
+                      {b.status && <BatchStatusBadge status={b.status} />}
+                    </div>
                     <div className="flex flex-wrap gap-3 mt-1">
                       <span className="flex items-center gap-1 text-xs text-neutral-500">
                         <Users className="h-3 w-3" />

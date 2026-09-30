@@ -7,7 +7,12 @@ import {
   ArrowLeft, Upload, Zap, Users, AlertTriangle,
   CheckCircle2, FileSpreadsheet, Search, Play, X, Pencil, Printer, Calculator,
 } from 'lucide-react';
-import { readingsService, type ImportResult, type ReadingTariff } from '@/services/readings.service';
+import {
+  readingsService, type ImportResult, type ReadingTariff, type ReadingBatchStatus,
+} from '@/services/readings.service';
+import {
+  BatchStatusBadge, BATCH_STATUS_LABEL, TRANSITION_ACTION, isReopen,
+} from '@/components/readings/batch-status-badge';
 import { billingService, type BatchRecalcResult } from '@/services/billing.service';
 import { catalogsService } from '@/services/catalogs.service';
 import { formatCurrency } from '@/lib/utils';
@@ -19,6 +24,12 @@ import { EmptyState } from '@/components/ui/empty-state';
 import { formatMonth } from '@/lib/utils';
 
 type Tab = 'tariffs' | 'missing';
+
+/** Mensaje de error que devuelve el API, o el texto por defecto. */
+function apiMessage(e: unknown, fallback: string): string {
+  const msg = (e as { response?: { data?: { message?: string | string[] } } })?.response?.data?.message;
+  return Array.isArray(msg) ? msg.join('. ') : msg ?? fallback;
+}
 
 export default function ReadingBatchPage() {
   const [recalcOpen, setRecalcOpen] = useState(false);
@@ -64,12 +75,37 @@ export default function ReadingBatchPage() {
     },
   });
 
+  const [actionError, setActionError] = useState<string | null>(null);
+
   const generateMutation = useMutation({
     mutationFn: () => billingService.generate(id),
     onSuccess: () => {
+      qc.invalidateQueries({ queryKey: ['reading-batch', id] });
       router.push(`/dashboard/billing?readingId=${id}`);
     },
+    onError: (e: unknown) => setActionError(apiMessage(e, 'No se pudieron generar las facturas')),
   });
+
+  // ── Cambio de estado del lote ──
+  const [transitionTo, setTransitionTo] = useState<ReadingBatchStatus | null>(null);
+  const [transitionReason, setTransitionReason] = useState('');
+  const [transitionError, setTransitionError] = useState('');
+
+  const statusMutation = useMutation({
+    mutationFn: () => readingsService.changeStatus(id, transitionTo!, transitionReason.trim() || undefined),
+    onSuccess: () => {
+      qc.invalidateQueries({ queryKey: ['reading-batch', id] });
+      qc.invalidateQueries({ queryKey: ['reading-batches'] });
+      setTransitionTo(null);
+    },
+    onError: (e: unknown) => setTransitionError(apiMessage(e, 'No se pudo cambiar el estado')),
+  });
+
+  function openTransition(to: ReadingBatchStatus) {
+    setTransitionTo(to);
+    setTransitionReason('');
+    setTransitionError('');
+  }
 
   // ── Edición de una lectura ──
   const [editTariff, setEditTariff] = useState<ReadingTariff | null>(null);
@@ -121,6 +157,13 @@ export default function ReadingBatchPage() {
   if (isLoading) return <PageSkeleton />;
   if (!batch) return null;
 
+  const status: ReadingBatchStatus = batch.status ?? 'COLLECTING';
+  const canImport   = status === 'DRAFT' || status === 'COLLECTING';
+  const canGenerate = status === 'READY_TO_BILL' || status === 'BILLED';
+  const canRecalc   = status === 'BILLED';
+  const canEdit     = status !== 'CLOSED';
+  const transitions = (batch.allowed_transitions ?? []).filter((t) => TRANSITION_ACTION[status]?.[t]);
+
   const totalClients  = Number(batch.total_clients ?? 0);
   const totalConsumed = Number(batch.total_consumed ?? 0);
   const zeroReadings  = Number(batch.zero_readings ?? 0);
@@ -145,15 +188,26 @@ export default function ReadingBatchPage() {
           <ArrowLeft className="h-4 w-4" />
           Volver a lecturas
         </button>
-        <div className="flex items-center gap-2">
-          <Button variant="outline" onClick={() => setRecalcOpen(true)}>
+        <div className="flex flex-wrap items-center gap-2">
+          {transitions.map((t) => (
+            <Button key={t} variant="outline" onClick={() => openTransition(t)}>
+              {TRANSITION_ACTION[status]![t]}
+            </Button>
+          ))}
+          <Button
+            variant="outline"
+            onClick={() => setRecalcOpen(true)}
+            disabled={!canRecalc}
+            title={canRecalc ? undefined : 'Solo se recalcula un lote facturado'}
+          >
             <Calculator className="h-3.5 w-3.5" />
             Recalcular período
           </Button>
           <Button
-            onClick={() => generateMutation.mutate()}
+            onClick={() => { setActionError(null); generateMutation.mutate(); }}
             loading={generateMutation.isPending}
-            disabled={totalClients === 0}
+            disabled={totalClients === 0 || !canGenerate}
+            title={canGenerate ? undefined : 'Cierra la captura (Listo para facturar) antes de generar facturas'}
           >
             <Play className="h-3.5 w-3.5" />
             Generar facturas
@@ -165,7 +219,10 @@ export default function ReadingBatchPage() {
       <Card padding="md">
         <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
           <div>
-            <h1 className="text-lg font-semibold text-neutral-900">{formatMonth(batch.month, batch.year)}</h1>
+            <div className="flex items-center gap-2">
+              <h1 className="text-lg font-semibold text-neutral-900">{formatMonth(batch.month, batch.year)}</h1>
+              <BatchStatusBadge status={status} />
+            </div>
             <p className="text-sm text-neutral-500 mt-0.5">
               {batch.period_start && batch.period_end
                 ? `${new Date(batch.period_start).toLocaleDateString('es-CO')} — ${new Date(batch.period_end).toLocaleDateString('es-CO')}`
@@ -275,7 +332,22 @@ export default function ReadingBatchPage() {
         </Card>
       )}
 
+      {actionError && (
+        <Card padding="md" className="border-red-200 bg-red-50">
+          <div className="flex items-start justify-between gap-3">
+            <div className="flex items-start gap-2">
+              <AlertTriangle className="h-5 w-5 text-red-500 shrink-0 mt-0.5" />
+              <p className="text-sm text-red-800">{actionError}</p>
+            </div>
+            <button onClick={() => setActionError(null)} className="text-red-400 hover:text-red-700">
+              <X className="h-4 w-4" />
+            </button>
+          </div>
+        </Card>
+      )}
+
       {/* XLSX Upload zone */}
+      {canImport ? (
       <div
         onDragOver={(e) => e.preventDefault()}
         onDrop={handleFileDrop}
@@ -308,6 +380,13 @@ export default function ReadingBatchPage() {
           </div>
         )}
       </div>
+      ) : (
+        <div className="border border-neutral-200 rounded-xl p-4 text-sm text-neutral-500 bg-neutral-50">
+          El lote está en estado <span className="font-medium text-neutral-700">{BATCH_STATUS_LABEL[status]}</span>:
+          no admite nuevas lecturas.
+          {status === 'READY_TO_BILL' && ' Reabre la captura si necesitas importar más.'}
+        </div>
+      )}
 
       {/* Tabs */}
       <div className="border-b border-neutral-200">
@@ -392,8 +471,9 @@ export default function ReadingBatchPage() {
                       <td className="px-4 py-3 text-right">
                         <button
                           onClick={() => openEdit(t)}
-                          className="p-1.5 rounded-lg text-neutral-400 hover:text-primary-600 hover:bg-neutral-100 transition-colors"
-                          title="Corregir lectura"
+                          disabled={!canEdit}
+                          className="p-1.5 rounded-lg text-neutral-400 hover:text-primary-600 hover:bg-neutral-100 transition-colors disabled:opacity-40 disabled:pointer-events-none"
+                          title={canEdit ? 'Corregir lectura' : 'El período está cerrado'}
                         >
                           <Pencil className="h-3.5 w-3.5" />
                         </button>
@@ -447,6 +527,41 @@ export default function ReadingBatchPage() {
         </Card>
       )}
       {/* Diálogo: corregir lectura */}
+      <Dialog
+        open={!!transitionTo}
+        onClose={() => setTransitionTo(null)}
+        title={transitionTo ? `${TRANSITION_ACTION[status]?.[transitionTo] ?? 'Cambiar estado'} — ${formatMonth(batch.month, batch.year)}` : ''}
+        size="sm"
+      >
+        {transitionTo && (
+          <div className="space-y-4">
+            <p className="text-sm text-neutral-600">
+              El lote pasará de <span className="font-medium">{BATCH_STATUS_LABEL[status]}</span> a{' '}
+              <span className="font-medium">{BATCH_STATUS_LABEL[transitionTo]}</span>.
+              {transitionTo === 'READY_TO_BILL' && ' Dejará de recibir lecturas (importación y Lector App) y podrá facturarse.'}
+              {transitionTo === 'CLOSED' && ' No se podrán corregir lecturas ni recalcular facturas del período.'}
+            </p>
+            <Input
+              label={isReopen(status, transitionTo) ? 'Motivo (obligatorio)' : 'Motivo (opcional)'}
+              value={transitionReason}
+              onChange={(e) => setTransitionReason(e.target.value)}
+              placeholder="Queda en el historial del lote"
+            />
+            {transitionError && <p className="text-sm text-red-600">{transitionError}</p>}
+            <div className="flex justify-end gap-2">
+              <Button variant="outline" onClick={() => setTransitionTo(null)}>Cancelar</Button>
+              <Button
+                onClick={() => statusMutation.mutate()}
+                loading={statusMutation.isPending}
+                disabled={isReopen(status, transitionTo) && !transitionReason.trim()}
+              >
+                Confirmar
+              </Button>
+            </div>
+          </div>
+        )}
+      </Dialog>
+
       <Dialog open={!!editTariff} onClose={() => setEditTariff(null)} title={`Corregir lectura — ${editTariff?.name ?? ''}`} size="md">
         {editError && <div className="mb-4 rounded-lg bg-danger-50 border border-red-200 px-4 py-2 text-sm text-danger-600">{editError}</div>}
         <form onSubmit={(e) => { e.preventDefault(); setEditError(''); editTariffMutation.mutate(); }} className="space-y-4">

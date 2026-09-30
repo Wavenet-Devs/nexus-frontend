@@ -1,5 +1,15 @@
 import { api } from '@/lib/api';
 
+export type ReadingBatchStatus = 'DRAFT' | 'COLLECTING' | 'READY_TO_BILL' | 'BILLED' | 'CLOSED';
+
+export interface ReadingStatusHistoryEntry {
+  from_status:     ReadingBatchStatus | null;
+  to_status:       ReadingBatchStatus;
+  reason:          string;
+  changed_by_name: string;
+  changed_at:      string;
+}
+
 export interface ReadingBatch {
   id:             string;
   month:          number;
@@ -20,6 +30,10 @@ export interface ReadingBatch {
   period_start:   string;
   period_end:     string;
   payment_limit:  string;
+  status:         ReadingBatchStatus;
+  status_changed_at?: string | null;
+  /** Solo en el detalle: estados a los que se puede pasar desde el actual. */
+  allowed_transitions?: ReadingBatchStatus[];
   total_clients:  string;
   total_consumed?: string;
   zero_readings?:  string;
@@ -120,6 +134,12 @@ export const readingsService = {
     api.patch<{ tariff: ReadingTariff; hasInvoice: boolean; invoiceId: string | null }>(
       `/readings/tariffs/${tariffId}`, dto,
     ).then((r) => r.data),
+
+  changeStatus: (id: string, status: ReadingBatchStatus, reason?: string) =>
+    api.patch<ReadingBatch>(`/readings/${id}/status`, { status, reason }).then((r) => r.data),
+
+  getStatusHistory: (id: string) =>
+    api.get<ReadingStatusHistoryEntry[]>(`/readings/${id}/status-history`).then((r) => r.data),
 
   getTariffHistory: (tariffId: string) =>
     api.get<TariffHistoryEntry[]>(`/readings/tariffs/${tariffId}/history`).then((r) => r.data),
