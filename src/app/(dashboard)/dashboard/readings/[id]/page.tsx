@@ -295,7 +295,17 @@ export default function ReadingBatchPage() {
                 <p className="text-sm text-green-700 mt-0.5">
                   {importResult.imported} importados · {importResult.created} clientes nuevos · {importResult.skipped} omitidos
                   {importResult.errors.length > 0 && ` · ${importResult.errors.length} errores`}
+                  {(importResult.warnings?.length ?? 0) > 0 && ` · ${importResult.warnings!.length} advertencias`}
                 </p>
+                {(importResult.warnings?.length ?? 0) > 0 && (
+                  <div className="mt-2 space-y-1">
+                    {importResult.warnings!.slice(0, 5).map((w, i) => (
+                      <p key={i} className="text-xs text-amber-700">
+                        Fila {w.row} ({w.contract}): {w.reason}
+                      </p>
+                    ))}
+                  </div>
+                )}
                 {importResult.errors.length > 0 && (
                   <div className="mt-2 space-y-1">
                     {importResult.errors.slice(0, 5).map((e, i) => (
@@ -455,6 +465,19 @@ export default function ReadingBatchPage() {
                           {t.edited && (
                             <span className="inline-flex items-center px-1.5 py-0.5 rounded text-[10px] font-semibold bg-amber-100 text-amber-700" title={`Modificada · v${t.version}`}>
                               Modificada
+                            </span>
+                          )}
+                          {t.causal_name && (
+                            <span
+                              className="inline-flex items-center px-1.5 py-0.5 rounded text-[10px] font-semibold bg-neutral-100 text-neutral-600"
+                              title={`Causal de esta lectura${t.causal_code ? ` (código ${t.causal_code})` : ''}`}
+                            >
+                              {t.causal_name}
+                            </span>
+                          )}
+                          {t.source === 'lector_app' && (
+                            <span className="inline-flex items-center px-1.5 py-0.5 rounded text-[10px] font-semibold bg-blue-50 text-blue-700" title="Capturada en campo con Lector App">
+                              Lector App
                             </span>
                           )}
                         </div>

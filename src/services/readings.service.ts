@@ -55,6 +55,12 @@ export interface ReadingTariff {
   edited:         boolean;
   version:        number;
   edited_at:      string | null;
+  /** Causal/novedad de esta lectura (no la del cliente). */
+  causal_id?:          string | null;
+  causal_code?:        number | null;
+  causal_name?:        string | null;
+  causal_result_mode?: 'ZERO_READING' | 'NO_READING' | 'READING_ALLOWED' | null;
+  source?:             'manual' | 'xlsx' | 'lector_app' | 'etl' | 'legacy';
 }
 
 export interface TariffHistoryEntry {
@@ -101,6 +107,7 @@ export interface ImportResult {
   skipped:  number;
   created:  number;
   errors:   { row: number; contract: string; reason: string }[];
+  warnings?: { row: number; contract: string; reason: string }[];
 }
 
 export const readingsService = {
