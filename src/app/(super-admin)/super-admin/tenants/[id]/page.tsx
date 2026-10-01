@@ -75,6 +75,7 @@ export default function TenantDetailPage() {
     handleSubmit,
     formState: { errors, isDirty },
     watch,
+    setValue,
   } = useForm<UpdateForm>({
     resolver: zodResolver(updateSchema),
     values: tenant
@@ -284,8 +285,14 @@ export default function TenantDetailPage() {
                   <input
                     type="color"
                     value={primaryColor || '#16a34a'}
+                    onChange={(e) =>
+                      setValue('primaryColor', e.target.value, {
+                        shouldDirty: true,
+                        shouldValidate: true,
+                      })
+                    }
                     className="h-9 w-14 rounded border border-neutral-200 cursor-pointer p-0.5"
-                    {...register('primaryColor')}
+                    aria-label="Seleccionar color primario"
                   />
                   <Input
                     placeholder="#16a34a"
@@ -301,8 +308,14 @@ export default function TenantDetailPage() {
                   <input
                     type="color"
                     value={secondaryColor || '#15803d'}
+                    onChange={(e) =>
+                      setValue('secondaryColor', e.target.value, {
+                        shouldDirty: true,
+                        shouldValidate: true,
+                      })
+                    }
                     className="h-9 w-14 rounded border border-neutral-200 cursor-pointer p-0.5"
-                    {...register('secondaryColor')}
+                    aria-label="Seleccionar color secundario"
                   />
                   <Input
                     placeholder="#15803d"
