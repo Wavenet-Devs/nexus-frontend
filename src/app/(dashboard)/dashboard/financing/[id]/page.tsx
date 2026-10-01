@@ -10,7 +10,7 @@ import {
 import { financingService } from '@/services/financing.service';
 import { Card, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
-import { Input } from '@/components/ui/input';
+import { Input, Select } from '@/components/ui/input';
 import { ConfirmDialog, Dialog } from '@/components/ui/dialog';
 import { formatCurrency, formatDate } from '@/lib/utils';
 
@@ -29,6 +29,7 @@ export default function FinancingDetailPage() {
   const [showCancelModal, setShowCancelModal] = useState(false);
   const [showEditModal, setShowEditModal] = useState(false);
   const [customAmount,    setCustomAmount]    = useState('');
+  const [paymentType,     setPaymentType]     = useState<'cash' | 'transfer' | 'card'>('cash');
   const [payRef,          setPayRef]          = useState('');
   const [payError,        setPayError]        = useState('');
 
@@ -40,6 +41,7 @@ export default function FinancingDetailPage() {
   const payMutation = useMutation({
     mutationFn: () => financingService.payQuota(id, {
       amount:           customAmount ? parseFloat(customAmount) : undefined,
+      paymentType,
       paymentReference: payRef       || undefined,
     }),
     onSuccess: (result) => {
@@ -47,6 +49,7 @@ export default function FinancingDetailPage() {
       qc.invalidateQueries({ queryKey: ['financing'] });
       setShowPayModal(false);
       setCustomAmount('');
+      setPaymentType('cash');
       setPayRef('');
       setPayError('');
     },
@@ -197,7 +200,7 @@ export default function FinancingDetailPage() {
       {/* Pay quota dialog */}
       <Dialog
         open={showPayModal}
-        onClose={() => { setShowPayModal(false); setCustomAmount(''); setPayRef(''); setPayError(''); }}
+        onClose={() => { setShowPayModal(false); setCustomAmount(''); setPaymentType('cash'); setPayRef(''); setPayError(''); }}
         title="Registrar pago de cuota"
       >
         <div className="space-y-4">
@@ -219,6 +222,16 @@ export default function FinancingDetailPage() {
             value={customAmount}
             onChange={(e) => setCustomAmount(e.target.value)}
           />
+          <Select
+            label="Forma de pago"
+            value={paymentType}
+            onChange={(e) => setPaymentType(e.target.value as 'cash' | 'transfer' | 'card')}
+          >
+            <option value="cash">Efectivo</option>
+            <option value="transfer">Transferencia</option>
+            <option value="card">Tarjeta</option>
+          </Select>
+
           <Input
             label="Referencia de pago"
             placeholder="N° recibo o transferencia (opcional)"
@@ -234,7 +247,7 @@ export default function FinancingDetailPage() {
           )}
 
           <div className="flex justify-end gap-2 pt-1">
-            <Button variant="ghost" onClick={() => { setShowPayModal(false); setCustomAmount(''); setPayRef(''); setPayError(''); }}>
+            <Button variant="ghost" onClick={() => { setShowPayModal(false); setCustomAmount(''); setPaymentType('cash'); setPayRef(''); setPayError(''); }}>
               Cancelar
             </Button>
             <Button
