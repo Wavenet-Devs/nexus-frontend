@@ -55,6 +55,11 @@ export default function InvoiceDetailPage() {
     onSuccess: () => qc.invalidateQueries({ queryKey: ['invoice', id] }),
   });
 
+  const discardMutation = useMutation({
+    mutationFn: (noteId: string) => billingService.discardCreditNote(noteId),
+    onSuccess: () => qc.invalidateQueries({ queryKey: ['invoice', id] }),
+  });
+
   const emailMutation = useMutation({
     mutationFn: () => billingService.sendEmail(id),
     onSuccess:  () => { setEmailSent(true); setTimeout(() => setEmailSent(false), 4000); },
@@ -251,6 +256,14 @@ export default function InvoiceDetailPage() {
                       <span className="flex items-center gap-1 text-xs text-amber-600">
                         <Clock className="h-3 w-3" /> Pendiente
                       </span>
+                      <Button
+                        size="sm"
+                        variant="ghost"
+                        loading={discardMutation.isPending}
+                        onClick={() => discardMutation.mutate(cn.id)}
+                      >
+                        Descartar
+                      </Button>
                       <Button
                         size="sm"
                         variant="ghost"
