@@ -6,13 +6,14 @@ import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
 import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { z } from 'zod';
-import { Plus, Power, ChevronRight, LogOut, ShieldCheck, Building2 } from 'lucide-react';
+import { Plus, Power, ChevronRight, LogOut, Building2 } from 'lucide-react';
 import { tenantsService, type TenantListItem } from '@/services/tenants.service';
 import { useSAAuthStore } from '@/store/super-admin-auth.store';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Dialog } from '@/components/ui/dialog';
 import { Card } from '@/components/ui/card';
+import { NexusBrand } from '@/components/brand/nexus-logo';
 
 // ─── Plan badge ───────────────────────────────────────────────────────────────
 
@@ -215,11 +216,8 @@ export default function TenantsPage() {
       <header className="bg-white border-b border-neutral-200 px-6 py-4">
         <div className="max-w-6xl mx-auto flex items-center justify-between">
           <div className="flex items-center gap-3">
-            <div className="h-8 w-8 rounded-lg bg-primary-600 flex items-center justify-center">
-              <ShieldCheck className="h-4 w-4 text-white" />
-            </div>
             <div>
-              <span className="font-semibold text-neutral-900">Nexus Super Admin</span>
+              <NexusBrand label="Nexus Super Admin" markClassName="h-8 w-8 rounded-lg" textClassName="text-sm font-semibold" />
               {saUser && (
                 <span className="text-xs text-neutral-400 ml-2">· {saUser.email}</span>
               )}
