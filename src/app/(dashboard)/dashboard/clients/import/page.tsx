@@ -11,14 +11,22 @@ import { Button } from '@/components/ui/button';
 import { Card } from '@/components/ui/card';
 
 const COLUMNS = [
-  { col: 'A', header: 'Contrato *',        example: '001-2024',           note: 'Obligatorio. Si ya existe, actualiza.' },
-  { col: 'B', header: 'Documento *',        example: '12345678',           note: 'Obligatorio para clientes nuevos.' },
-  { col: 'C', header: 'Nombre completo *',  example: 'Juan Pérez',         note: 'Obligatorio.' },
-  { col: 'D', header: 'Dirección',          example: 'Calle 1 # 2-3',      note: 'Opcional.' },
-  { col: 'E', header: 'Teléfono',           example: '3001234567',         note: 'Opcional.' },
-  { col: 'F', header: 'Correo',             example: 'j@correo.com',       note: 'Opcional.' },
-  { col: 'G', header: 'Ruta',               example: 'RUTA-01',            note: 'Opcional.' },
-  { col: 'H', header: 'Código de barras',   example: '001234',             note: 'Opcional.' },
+  { col: 'A', header: 'Contrato *',                   example: '001-2024',              note: 'Obligatorio. Si ya existe, actualiza.' },
+  { col: 'B', header: 'Documento *',                  example: '12345678',              note: 'Obligatorio para clientes nuevos.' },
+  { col: 'C', header: 'Nombre completo *',            example: 'Juan Pérez',            note: 'Obligatorio.' },
+  { col: 'D', header: 'Dirección',                    example: 'Calle 1 # 2-3',         note: 'Opcional.' },
+  { col: 'E', header: 'Teléfono',                     example: '3001234567',            note: 'Opcional.' },
+  { col: 'F', header: 'Correo',                       example: 'j@correo.com',          note: 'Opcional.' },
+  { col: 'G', header: 'Ruta',                         example: 'Ruta 01 - Centro',       note: 'Opcional.' },
+  { col: 'H', header: 'Código de barras',             example: '001234',                note: 'Opcional.' },
+  { col: 'I', header: 'Tipo de identificación',       example: 'Cédula de ciudadanía',  note: 'Debe existir en Catálogos.' },
+  { col: 'J', header: 'Estrato',                      example: 'R1',                    note: 'Acepta nombre o código del catálogo.' },
+  { col: 'K', header: 'Barrio',                       example: 'Centro',                note: 'Debe existir en Catálogos.' },
+  { col: 'L', header: 'Circuito',                     example: 'Circuito Norte',        note: 'Debe existir en Catálogos.' },
+  { col: 'M', header: 'Tipo / marca de medidor',      example: 'Hexing Monofásico',     note: 'Debe existir en Catálogos.' },
+  { col: 'N', header: 'Número / serial del medidor',  example: 'MED-000001',            note: 'Opcional.' },
+  { col: 'O', header: 'Lector',                       example: 'LEC-01',                note: 'Máximo 10 caracteres.' },
+  { col: 'P', header: 'Repartidor',                   example: 'REP-01',                note: 'Máximo 10 caracteres.' },
 ];
 
 function downloadTemplate() {
@@ -121,7 +129,7 @@ export default function ClientImportPage() {
           </table>
         </div>
         <p className="text-xs text-neutral-400 mt-3 border-t border-neutral-100 pt-3">
-          Si el contrato ya existe, se actualiza nombre/dirección/teléfono/email/ruta/código de barras.
+          Si el contrato ya existe, se actualizan también su clasificación, medidor y datos operativos.
           Si no existe, se crea como nuevo cliente activo.
         </p>
       </Card>
