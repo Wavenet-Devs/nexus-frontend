@@ -163,6 +163,9 @@ export const billingService = {
   approveCreditNote: (noteId: string) =>
     api.patch<any>(`/billing/credit-notes/${noteId}/approve`).then((r) => r.data),
 
+  discardCreditNote: (noteId: string) =>
+    api.delete<{ deleted: true }>(`/billing/credit-notes/${noteId}`).then((r) => r.data),
+
   // ─── Diseño de factura ────────────────────────────────────────────────────
 
   getActiveTemplate: () =>
