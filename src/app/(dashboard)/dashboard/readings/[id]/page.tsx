@@ -66,7 +66,7 @@ export default function ReadingBatchPage() {
     enabled:  tab === 'missing',
   });
 
-  // ── Importación XLSX en segundo plano ──
+  // ── Importación XLSX/CSV en segundo plano ──
   // El backend responde 202 con el job; aquí se sigue su avance y, al recargar,
   // se retoma una importación que siga en curso. El resultado se deriva del job.
   const [trackedImportId, setTrackedImportId] = useState<string | null>(null);
@@ -474,7 +474,7 @@ export default function ReadingBatchPage() {
         <input
           ref={fileRef}
           type="file"
-          accept=".xlsx,.xls"
+          accept=".xlsx,.csv"
           className="hidden"
           onChange={handleFileChange}
         />
@@ -493,7 +493,7 @@ export default function ReadingBatchPage() {
         ) : (
           <div className="flex flex-col items-center gap-2">
             <Upload className="h-8 w-8 text-neutral-300" />
-            <p className="text-sm font-medium text-neutral-600">Arrastra el XLSX o haz clic para subir</p>
+            <p className="text-sm font-medium text-neutral-600">Arrastra un XLSX o CSV, o haz clic para subir</p>
             <p className="text-xs text-neutral-400">
               Columnas: Contrato · Nombre · Dirección · Medidor · L.anterior · L.actual · Consumo · Ruta · Causal
             </p>
@@ -548,7 +548,7 @@ export default function ReadingBatchPage() {
             <EmptyState
               icon={FileSpreadsheet}
               title="Sin lecturas"
-              message="Sube el archivo XLSX para importar las lecturas de este período."
+              message="Sube un archivo XLSX o CSV para importar las lecturas de este período."
             />
           ) : (
             <div className="overflow-x-auto">
