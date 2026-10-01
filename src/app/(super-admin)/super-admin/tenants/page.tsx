@@ -67,6 +67,7 @@ function CreateTenantDialog({ onClose }: { onClose: () => void }) {
     formState: { errors, isSubmitting },
     watch,
     setError,
+    setValue,
   } = useForm<CreateForm>({
     resolver:      zodResolver(createSchema),
     defaultValues: { plan: 'starter', primaryColor: '#16a34a' },
@@ -135,8 +136,15 @@ function CreateTenantDialog({ onClose }: { onClose: () => void }) {
               <div className="flex items-center gap-2">
                 <input
                   type="color"
+                  value={primaryColor || '#16a34a'}
+                  onChange={(e) =>
+                    setValue('primaryColor', e.target.value, {
+                      shouldDirty: true,
+                      shouldValidate: true,
+                    })
+                  }
                   className="h-9 w-14 rounded border border-neutral-200 cursor-pointer p-0.5"
-                  {...register('primaryColor')}
+                  aria-label="Seleccionar color primario"
                 />
                 <Input
                   placeholder="#16a34a"
