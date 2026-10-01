@@ -4,11 +4,12 @@ import Link from 'next/link';
 import { usePathname } from 'next/navigation';
 import {
   LayoutDashboard, Users, FileText, CreditCard, BarChart2,
-  Settings, LogOut, Zap, BookOpen, Gauge, Banknote, Wallet, MessageSquare, X,
+  Settings, LogOut, BookOpen, Gauge, Banknote, Wallet, MessageSquare, X,
 } from 'lucide-react';
 import { cn } from '@/lib/utils';
 import { useAuthStore } from '@/store/auth.store';
 import { useRouter } from 'next/navigation';
+import { NexusBrand } from '@/components/brand/nexus-logo';
 
 const navItems = [
   { label: 'Dashboard',    href: '/dashboard',          icon: LayoutDashboard },
@@ -62,10 +63,7 @@ export function Sidebar({ open, onClose }: SidebarProps) {
       >
         {/* Logo */}
         <div className="flex items-center gap-3 px-5 h-16 border-b border-neutral-100 shrink-0">
-          <div className="flex h-9 w-9 items-center justify-center rounded-lg bg-primary-600 shadow-sm">
-            <Zap className="h-5 w-5 text-white" />
-          </div>
-          <span className="font-bold text-neutral-900 text-base tracking-tight">Nexus</span>
+          <NexusBrand textClassName="text-base" />
           <button
             onClick={onClose}
             className="lg:hidden ml-auto p-1.5 rounded-lg text-neutral-400 hover:bg-neutral-100"
@@ -86,7 +84,9 @@ export function Sidebar({ open, onClose }: SidebarProps) {
         <nav className="flex-1 overflow-y-auto px-3 py-4 scrollbar-thin">
           <ul className="space-y-1">
             {navItems.map((item) => {
-              const active = pathname === item.href || pathname.startsWith(item.href + '/');
+              const active = item.href === '/dashboard'
+                ? pathname === '/dashboard'
+                : pathname === item.href || pathname.startsWith(item.href + '/');
               return (
                 <li key={item.href}>
                   <Link
