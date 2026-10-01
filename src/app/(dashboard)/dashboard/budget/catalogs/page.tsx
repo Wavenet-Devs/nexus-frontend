@@ -3,7 +3,7 @@
 import { useState } from 'react';
 import { useRouter } from 'next/navigation';
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
-import { ArrowLeft, Plus, Pencil, Trash2 } from 'lucide-react';
+import { ArrowLeft, Plus, Pencil, Trash2, FileText } from 'lucide-react';
 import { budgetService } from '@/services/budget.service';
 import { Card, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
@@ -86,9 +86,14 @@ export default function BudgetCatalogsPage() {
         <Button variant="ghost" size="sm" onClick={() => router.push('/dashboard/budget')}>
           <ArrowLeft className="h-4 w-4" /> Presupuestos
         </Button>
-        <Button size="sm" onClick={openCreate}>
-          <Plus className="h-3.5 w-3.5" /> Nuevo
-        </Button>
+        <div className="flex gap-2">
+          <Button size="sm" variant="outline" onClick={() => router.push('/dashboard/budget/template')}>
+            <FileText className="h-3.5 w-3.5" /> Plantilla certificados
+          </Button>
+          <Button size="sm" onClick={openCreate}>
+            <Plus className="h-3.5 w-3.5" /> Nuevo
+          </Button>
+        </div>
       </div>
 
       <div className="flex gap-2">
