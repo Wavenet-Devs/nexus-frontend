@@ -21,11 +21,13 @@ export function formatNumber(value: number | string): string {
 }
 
 export function formatDate(date: string | Date): string {
-  // PostgreSQL DATE llega como YYYY-MM-DD. new Date('YYYY-MM-DD') lo interpreta
-  // en UTC y en Colombia puede mostrarse como el día anterior.
+  // Los campos SQL DATE pueden serializarse como YYYY-MM-DD o como
+  // YYYY-MM-DDT00:00:00.000Z. En ambos casos representan una fecha de
+  // calendario, no un instante; usar new Date() en Colombia los mueve al día
+  // anterior. Conservamos directamente año/mes/día.
   if (typeof date === 'string') {
     const match = /^(\d{4})-(\d{2})-(\d{2})(?:$|T)/.exec(date);
-    if (match && !date.includes('T')) {
+    if (match) {
       const [, year, month, day] = match;
       return `${day}/${month}/${year}`;
     }
