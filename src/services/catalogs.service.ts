@@ -13,10 +13,11 @@ export interface Stratum extends CatalogItem {
 }
 
 export interface Causal {
-  id:      string;
-  name:    string;
-  code?:   number;
-  status:  string;
+  id:          string;
+  name:        string;
+  code?:       number;
+  result_mode: 'ZERO_READING' | 'NO_READING' | 'READING_ALLOWED';
+  status:      string;
 }
 
 export interface Meter {
