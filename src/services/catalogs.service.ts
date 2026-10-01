@@ -34,7 +34,7 @@ export interface UnitCost {
   marketing:    number;
   losses:       number;
   cu:           number;
-  active:       boolean;
+  status:       'active' | 'inactive';
   created_at:   string;
 }
 
