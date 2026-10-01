@@ -21,6 +21,16 @@ export function formatNumber(value: number | string): string {
 }
 
 export function formatDate(date: string | Date): string {
+  // PostgreSQL DATE llega como YYYY-MM-DD. new Date('YYYY-MM-DD') lo interpreta
+  // en UTC y en Colombia puede mostrarse como el día anterior.
+  if (typeof date === 'string') {
+    const match = /^(\d{4})-(\d{2})-(\d{2})(?:$|T)/.exec(date);
+    if (match && !date.includes('T')) {
+      const [, year, month, day] = match;
+      return `${day}/${month}/${year}`;
+    }
+  }
+
   return new Intl.DateTimeFormat('es-CO', {
     day: '2-digit',
     month: '2-digit',
