@@ -17,7 +17,7 @@ import { billingService, type BatchRecalcResult, type BillingGenerationRun } fro
 import { importsService, isImportActive } from '@/services/imports.service';
 import { useImportJob } from '@/hooks/use-import-job';
 import { catalogsService } from '@/services/catalogs.service';
-import { formatCurrency } from '@/lib/utils';
+import { formatCurrency, formatDate } from '@/lib/utils';
 import { Card } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
@@ -298,13 +298,13 @@ export default function ReadingBatchPage() {
             </div>
             <p className="text-sm text-neutral-500 mt-0.5">
               {batch.period_start && batch.period_end
-                ? `${new Date(batch.period_start).toLocaleDateString('es-CO')} — ${new Date(batch.period_end).toLocaleDateString('es-CO')}`
+                ? `${formatDate(batch.period_start)} — ${formatDate(batch.period_end)}`
                 : 'Sin fechas de período'}
             </p>
           </div>
           <div className="text-sm text-neutral-500">
             Vence: <span className="font-medium text-neutral-800">
-              {batch.payment_limit ? new Date(batch.payment_limit).toLocaleDateString('es-CO') : '—'}
+              {batch.payment_limit ? formatDate(batch.payment_limit) : '—'}
             </span>
           </div>
         </div>
