@@ -8,7 +8,7 @@ import { zodResolver } from '@hookform/resolvers/zod';
 import { z } from 'zod';
 import {
   ArrowLeft, Power, ChevronDown, ChevronUp,
-  ShieldCheck, LogOut, Save,
+  LogOut, Save,
 } from 'lucide-react';
 import { tenantsService, type UpdateTenantDto } from '@/services/tenants.service';
 import { useSAAuthStore } from '@/store/super-admin-auth.store';
@@ -16,6 +16,7 @@ import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Card } from '@/components/ui/card';
 import { ConfirmDialog } from '@/components/ui/confirm-dialog';
+import { NexusBrand } from '@/components/brand/nexus-logo';
 
 // ─── Schemas ──────────────────────────────────────────────────────────────────
 
@@ -158,10 +159,7 @@ export default function TenantDetailPage() {
       <header className="bg-white border-b border-neutral-200 px-6 py-4">
         <div className="max-w-4xl mx-auto flex items-center justify-between">
           <div className="flex items-center gap-3">
-            <div className="h-8 w-8 rounded-lg bg-primary-600 flex items-center justify-center">
-              <ShieldCheck className="h-4 w-4 text-white" />
-            </div>
-            <span className="font-semibold text-neutral-900">Nexus Super Admin</span>
+            <NexusBrand label="Nexus Super Admin" markClassName="h-8 w-8 rounded-lg" textClassName="text-sm font-semibold" />
           </div>
           <nav className="hidden sm:flex items-center gap-1 text-sm">
             <button
