@@ -7,7 +7,7 @@ import { readingsService } from '@/services/readings.service';
 import { Card } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { EmptyState } from '@/components/ui/empty-state';
-import { formatMonth } from '@/lib/utils';
+import { formatMonth, formatDate } from '@/lib/utils';
 import { BatchStatusBadge } from '@/components/readings/batch-status-badge';
 
 const MONTHS = ['Ene','Feb','Mar','Abr','May','Jun','Jul','Ago','Sep','Oct','Nov','Dic'];
@@ -92,7 +92,7 @@ export default function ReadingsPage() {
 
                   {/* Dates */}
                   <div className="hidden sm:flex flex-col items-end shrink-0 text-xs text-neutral-400">
-                    <span>Vence: {b.payment_limit ? new Date(b.payment_limit).toLocaleDateString('es-CO') : '—'}</span>
+                    <span>Vence: {b.payment_limit ? formatDate(b.payment_limit) : '—'}</span>
                     <span className="mt-0.5">{b.days} días</span>
                   </div>
 
