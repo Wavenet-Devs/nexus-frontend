@@ -42,66 +42,68 @@ export interface IdCardLookup {
 }
 
 export interface ClientListItem {
-  id:               string;
-  contract:         string;
-  group_id?:        string | null;
-  group_name?:      string | null;
-  name:             string;
-  address:          string;
-  phone?:           string;
-  active:           boolean;
-  stratum_name?:    string;
-  stratum_code?:    string;
+  id:                 string;
+  contract:           string;
+  group_id?:          string | null;
+  group_name?:        string | null;
+  name:               string;
+  address:            string;
+  phone?:             string;
+  status:             'active' | 'inactive';
+  stratum_name?:      string;
+  stratum_code?:      string;
   neighborhood_name?: string;
 }
 
 export interface ClientDetail extends ClientListItem {
-  email?:           string;
-  id_card?:         string;
-  id_type_name?:    string;
-  cod_bar?:         string;
-  reader?:          string;
-  deliver?:         string;
-  meter_serial?:    string;
-  circuit_name?:    string;
-  route_name?:      string;
-  stratum_id?:      string;
-  neighborhood_id?: string;
-  circuit_id?:      string;
-  route_id?:        string;
-  meter_id?:        string;
-  id_type_id?:      string;
-  causal_id?:       string;
-  group_name?:      string | null;
-  group_id_card?:   string | null;
+  email?:                    string;
+  id_card?:                  string;
+  identification_type_id?:   string;
+  identification_type_name?: string;
+  cod_bar?:                  string;
+  reader?:                   string;
+  deliver?:                  string;
+  meter_number?:             string;
+  meter_mark?:               string;
+  circuit_name?:             string;
+  route?:                    string;
+  stratum_id?:               string;
+  neighborhood_id?:          string;
+  circuit_id?:               string;
+  meter_id?:                 string;
+  causal_id?:                string;
+  group_name?:               string | null;
+  group_id_card?:            string | null;
 }
 
 export interface ClientFilters {
-  search?:         string;
+  search?:          string;
   neighborhoodId?: string;
-  stratumId?:      string;
-  active?:         string;
-  page?:           number;
-  limit?:          number;
+  stratumId?:       string;
+  status?:          'active' | 'inactive';
+  page?:            number;
+  limit?:           number;
 }
 
 export interface CreateClientDto {
-  contract:        string;
-  name:            string;
-  address:         string;
-  idTypeId?:       string;
-  idCard?:         string;
-  phone?:          string;
-  email?:          string;
-  stratumId?:      string;
-  neighborhoodId?: string;
-  circuitId?:      string;
-  routeId?:        string;
-  meterId?:        string;
-  codBar?:         string;
-  reader?:         string;
-  deliver?:        string;
-  groupId?:        string | null;
+  contract:             string;
+  name:                 string;
+  address:              string;
+  identificationTypeId?: string;
+  idCard?:              string;
+  causalId?:            string;
+  phone?:               string;
+  email?:               string;
+  stratumId?:           string;
+  neighborhoodId?:      string;
+  circuitId?:           string;
+  route?:               string;
+  meterId?:             string;
+  meterNumber?:         string;
+  codBar?:              string;
+  reader?:              string;
+  deliver?:             string;
+  groupId?:             string | null;
 }
 
 export const clientsService = {
