@@ -8,12 +8,13 @@ import {
 } from 'recharts';
 import {
   Building2, Users, FileText, TrendingUp,
-  AlertCircle, Banknote, ArrowLeft, LogOut, ShieldCheck,
+  AlertCircle, Banknote, ArrowLeft, LogOut,
 } from 'lucide-react';
 import { platformReportsService, type TenantStats } from '@/services/platform-reports.service';
 import { useSAAuthStore } from '@/store/super-admin-auth.store';
 import { Card } from '@/components/ui/card';
 import { formatCurrency, formatNumber } from '@/lib/utils';
+import { NexusBrand } from '@/components/brand/nexus-logo';
 
 // ─── Helpers ──────────────────────────────────────────────────────────────────
 
@@ -165,10 +166,7 @@ export default function PlatformReportsPage() {
       <header className="bg-white border-b border-neutral-200 px-6 py-4">
         <div className="max-w-7xl mx-auto flex items-center justify-between">
           <div className="flex items-center gap-3">
-            <div className="h-8 w-8 rounded-lg bg-primary-600 flex items-center justify-center">
-              <ShieldCheck className="h-4 w-4 text-white" />
-            </div>
-            <span className="font-semibold text-neutral-900">Nexus Super Admin</span>
+            <NexusBrand label="Nexus Super Admin" markClassName="h-8 w-8 rounded-lg" textClassName="text-sm font-semibold" />
           </div>
           <nav className="hidden sm:flex items-center gap-1 text-sm">
             <button
