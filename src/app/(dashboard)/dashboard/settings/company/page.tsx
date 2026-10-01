@@ -126,13 +126,13 @@ export default function CompanySettingsPage() {
         <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
           <Input
             label="Razón social"
-            placeholder="Electronuquí S.A. E.S.P."
+            placeholder="Empresa Demo S.A.S. E.S.P."
             value={form.companyName}
             onChange={(e) => setField('companyName', e.target.value)}
           />
           <Input
             label="NIT"
-            placeholder="900.123.456-7"
+            placeholder="900.000.000-0"
             value={form.companyNit}
             onChange={(e) => setField('companyNit', e.target.value)}
           />
@@ -146,26 +146,26 @@ export default function CompanySettingsPage() {
         <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
           <Input
             label="Dirección"
-            placeholder="Calle 5 # 10-32, Nuquí"
+            placeholder="Carrera 10 # 20-30"
             value={form.companyAddress}
             onChange={(e) => setField('companyAddress', e.target.value)}
           />
           <Input
             label="Teléfono"
-            placeholder="(604) 123 4567"
+            placeholder="+57 300 000 0000"
             value={form.companyPhone}
             onChange={(e) => setField('companyPhone', e.target.value)}
           />
           <Input
             label="Correo electrónico"
             type="email"
-            placeholder="contacto@empresa.com"
+            placeholder="contacto@empresa-demo.com"
             value={form.companyEmail}
             onChange={(e) => setField('companyEmail', e.target.value)}
           />
           <Input
             label="Sitio web"
-            placeholder="www.empresa.com"
+            placeholder="www.empresa-demo.com"
             value={form.companyWebsite}
             onChange={(e) => setField('companyWebsite', e.target.value)}
           />
@@ -195,32 +195,32 @@ export default function CompanySettingsPage() {
           />
           <Input
             label="Número de cuenta"
-            placeholder="53686114970"
+            placeholder="12345678901"
             value={form.bankAccountNumber}
             onChange={(e) => setField('bankAccountNumber', e.target.value)}
           />
           <Input
             label="Titular de la cuenta"
-            placeholder="Electro Nuquí ESP"
+            placeholder="Empresa Demo S.A.S. E.S.P."
             value={form.bankAccountHolder}
             onChange={(e) => setField('bankAccountHolder', e.target.value)}
           />
           <Input
             label="Correo para comprobantes"
             type="email"
-            placeholder="facturacion@empresa.com"
+            placeholder="pagos@empresa-demo.com"
             value={form.paymentEmail}
             onChange={(e) => setField('paymentEmail', e.target.value)}
           />
           <Input
             label="Teléfono / WhatsApp de pagos"
-            placeholder="+57 316 010 4010"
+            placeholder="+57 300 000 0000"
             value={form.paymentPhone}
             onChange={(e) => setField('paymentPhone', e.target.value)}
           />
           <Input
             label="Redes sociales"
-            placeholder="@empresa"
+            placeholder="@empresa_demo"
             hint="Aparece en el pie de la factura"
             value={form.socialHandle}
             onChange={(e) => setField('socialHandle', e.target.value)}
