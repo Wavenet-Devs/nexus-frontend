@@ -27,8 +27,8 @@ const schema = z.object({
   meterNumber:     z.string().optional(),
   meterId:         z.string().optional(),
   codBar:          z.string().optional(),
-  reader:          z.string().optional(),
-  deliver:         z.string().optional(),
+  reader:          z.string().max(10, 'Máximo 10 caracteres').optional(),
+  deliver:         z.string().max(10, 'Máximo 10 caracteres').optional(),
   groupId:         z.string().optional(),
 });
 
@@ -84,6 +84,14 @@ export function ClientForm({ defaultValues, onSubmit, isEditing = false }: Clien
     const clean = Object.fromEntries(
       Object.entries(data).map(([k, v]) => [k, v === '' ? undefined : v]),
     ) as unknown as CreateClientDto;
+
+    // El contrato identifica el punto de servicio y no se puede modificar.
+    // En edición se muestra deshabilitado, pero react-hook-form conserva su
+    // valor; hay que retirarlo explícitamente antes de hacer PATCH.
+    if (isEditing) {
+      delete (clean as Partial<CreateClientDto>).contract;
+    }
+
     await onSubmit(clean);
   }
 
@@ -213,8 +221,18 @@ export function ClientForm({ defaultValues, onSubmit, isEditing = false }: Clien
         </h3>
         <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
           <Input label="Código de barras" {...register('codBar')} />
-          <Input label="Lector" {...register('reader')} />
-          <Input label="Repartidor" {...register('deliver')} />
+          <Input
+            label="Lector"
+            hint="Código de hasta 10 caracteres"
+            error={errors.reader?.message}
+            {...register('reader')}
+          />
+          <Input
+            label="Repartidor"
+            hint="Código de hasta 10 caracteres"
+            error={errors.deliver?.message}
+            {...register('deliver')}
+          />
         </div>
       </section>
 
