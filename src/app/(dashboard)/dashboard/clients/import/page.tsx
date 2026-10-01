@@ -52,7 +52,7 @@ export default function ClientImportPage() {
   const processing = isImportActive(job);
 
   const handleFile = (f: File) => {
-    if (!f.name.match(/\.(xlsx|xls|csv)$/i)) return;
+    if (!f.name.match(/\.(xlsx|csv)$/i)) return;
     setFile(f);
     setJobId(null);
     importMutation.reset();
@@ -143,7 +143,7 @@ export default function ClientImportPage() {
         <input
           ref={inputRef}
           type="file"
-          accept=".xlsx,.xls,.csv"
+          accept=".xlsx,.csv"
           className="hidden"
           onChange={(e) => { const f = e.target.files?.[0]; if (f) handleFile(f); }}
         />
@@ -157,7 +157,7 @@ export default function ClientImportPage() {
           <div className="flex flex-col items-center gap-2">
             <Upload className="h-10 w-10 text-neutral-300" />
             <p className="text-sm font-medium text-neutral-600">Arrastra tu archivo aquí o haz clic para seleccionar</p>
-            <p className="text-xs text-neutral-400">Formatos aceptados: .xlsx, .xls, .csv</p>
+            <p className="text-xs text-neutral-400">Formatos aceptados: .xlsx, .csv</p>
           </div>
         )}
       </div>
@@ -229,7 +229,7 @@ export default function ClientImportPage() {
           <AlertCircle className="h-4 w-4 shrink-0" />
           {failed && job?.failureReason
             ? `La importación falló: ${job.failureReason}`
-            : 'Error al procesar el archivo. Verifica que sea un XLSX válido.'}
+            : 'Error al procesar el archivo. Verifica que sea un XLSX o CSV válido.'}
         </div>
       )}
 
