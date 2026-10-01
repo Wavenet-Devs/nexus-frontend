@@ -4,11 +4,12 @@ import { useState } from 'react';
 import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { z } from 'zod';
-import { Eye, EyeOff, ShieldCheck } from 'lucide-react';
+import { Eye, EyeOff } from 'lucide-react';
 import { saApi } from '@/lib/super-admin-api';
 import { useSAAuthStore } from '@/store/super-admin-auth.store';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
+import { NexusMark } from '@/components/brand/nexus-logo';
 
 const SA_TENANT_SLUG = process.env.NEXT_PUBLIC_SA_TENANT_SLUG ?? 'super-admin';
 
@@ -47,9 +48,7 @@ export default function SuperAdminLoginPage() {
       <div className="w-full max-w-sm">
         {/* Logo / brand */}
         <div className="flex flex-col items-center mb-8">
-          <div className="h-12 w-12 rounded-xl bg-primary-600 flex items-center justify-center mb-4">
-            <ShieldCheck className="h-6 w-6 text-white" />
-          </div>
+          <NexusMark className="h-12 w-12 mb-4" iconClassName="h-7 w-7" />
           <h1 className="text-xl font-bold text-white">Nexus Super Admin</h1>
           <p className="text-sm text-neutral-400 mt-1">Panel de gestión de tenants</p>
         </div>
