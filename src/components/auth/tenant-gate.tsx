@@ -1,10 +1,11 @@
 'use client';
 
 import type { CSSProperties, ReactNode } from 'react';
-import { AlertTriangle, Building2, Loader2, WifiOff, Zap } from 'lucide-react';
+import { AlertTriangle, Building2, Loader2, WifiOff } from 'lucide-react';
 import { useTenant } from '@/hooks/use-tenant';
 import { Button } from '@/components/ui/button';
 import type { TenantResolution } from '@/lib/tenant';
+import { NexusBrand } from '@/components/brand/nexus-logo';
 
 const HEX = /^#[0-9a-fA-F]{6}$/;
 
@@ -89,12 +90,7 @@ function Shell({
           // eslint-disable-next-line @next/next/no-img-element
           <img src={tenant.logoUrl} alt={tenant.name} className="h-14 max-w-[220px] object-contain" />
         ) : (
-          <div className="flex items-center gap-2">
-            <div className="flex h-9 w-9 items-center justify-center rounded-lg bg-primary-600">
-              <Zap className="h-5 w-5 text-white" />
-            </div>
-            <span className="text-xl font-bold text-neutral-900 tracking-tight">Nexus</span>
-          </div>
+          <NexusBrand textClassName="text-xl" />
         )}
         {tenant && <p className="text-sm font-medium text-neutral-600 text-center">{tenant.name}</p>}
         {devSlug && <p className="text-xs text-neutral-400">Desarrollo · {devSlug}</p>}
