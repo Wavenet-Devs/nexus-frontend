@@ -113,7 +113,15 @@ export default function ClientDetailPage({ params }: { params: Promise<{ id: str
             <InfoRow label="Teléfono"   value={client.phone} />
             <InfoRow label="Email"      value={client.email} />
             <InfoRow label="Documento"  value={client.id_card ? `${client.identification_type_name ?? ''} ${client.id_card}`.trim() : undefined} />
-            <InfoRow label="Medidor"    value={client.meter_number ?? client.meter_mark} />
+            <InfoRow
+              label="Medidor"
+              value={
+                client.meter_mark && client.meter_number
+                  ? `${client.meter_mark} · ${client.meter_number}`
+                  : client.meter_number ?? client.meter_mark
+              }
+            />
+            <InfoRow label="Circuito"   value={client.circuit_name} />
             <InfoRow label="Ruta"       value={client.route} />
             <InfoRow label="Lector"     value={client.reader} />
             <InfoRow label="Repartidor" value={client.deliver} />
