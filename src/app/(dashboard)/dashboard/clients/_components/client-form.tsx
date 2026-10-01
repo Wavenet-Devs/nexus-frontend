@@ -15,7 +15,7 @@ const schema = z.object({
   contract:        z.string().min(1, 'Requerido'),
   name:            z.string().min(2, 'Mínimo 2 caracteres'),
   address:         z.string().min(3, 'Requerido'),
-  idTypeId:        z.string().optional(),
+  identificationTypeId: z.string().optional(),
   idCard:          z.string().optional(),
   causalId:        z.string().optional(),
   phone:           z.string().optional(),
@@ -23,7 +23,8 @@ const schema = z.object({
   stratumId:       z.string().optional(),
   neighborhoodId:  z.string().optional(),
   circuitId:       z.string().optional(),
-  routeId:         z.string().optional(),
+  route:           z.string().optional(),
+  meterNumber:     z.string().optional(),
   meterId:         z.string().optional(),
   codBar:          z.string().optional(),
   reader:          z.string().optional(),
@@ -60,7 +61,7 @@ export function ClientForm({ defaultValues, onSubmit, isEditing = false }: Clien
       contract:       defaultValues?.contract       ?? '',
       name:           defaultValues?.name           ?? '',
       address:        defaultValues?.address        ?? '',
-      idTypeId:       defaultValues?.id_type_id     ?? '',
+      identificationTypeId: defaultValues?.identification_type_id ?? '',
       idCard:         defaultValues?.id_card        ?? '',
       causalId:       defaultValues?.causal_id      ?? '',
       phone:          defaultValues?.phone          ?? '',
@@ -68,7 +69,8 @@ export function ClientForm({ defaultValues, onSubmit, isEditing = false }: Clien
       stratumId:      defaultValues?.stratum_id     ?? '',
       neighborhoodId: defaultValues?.neighborhood_id ?? '',
       circuitId:      defaultValues?.circuit_id     ?? '',
-      routeId:        defaultValues?.route_id       ?? '',
+      route:          defaultValues?.route          ?? '',
+      meterNumber:    defaultValues?.meter_number   ?? '',
       meterId:        defaultValues?.meter_id       ?? '',
       codBar:         defaultValues?.cod_bar        ?? '',
       reader:         defaultValues?.reader         ?? '',
@@ -113,7 +115,7 @@ export function ClientForm({ defaultValues, onSubmit, isEditing = false }: Clien
             {...register('address')}
             className="sm:col-span-2"
           />
-          <Select label="Tipo de identificación" {...register('idTypeId')}>
+          <Select label="Tipo de identificación" {...register('identificationTypeId')}>
             <option value="">Sin especificar</option>
             {idTypes?.map((t) => <option key={t.id} value={t.id}>{t.name}</option>)}
           </Select>
@@ -184,18 +186,23 @@ export function ClientForm({ defaultValues, onSubmit, isEditing = false }: Clien
               <option key={c.id} value={c.id}>{c.name}</option>
             ))}
           </Select>
-          <Select label="Ruta" {...register('routeId')}>
+          <Select label="Ruta" {...register('route')}>
             <option value="">Sin ruta</option>
             {routes?.filter((r) => r.status === 'active').map((r) => (
-              <option key={r.id} value={r.id}>{r.name}</option>
+              <option key={r.id} value={r.name}>{r.name}</option>
             ))}
           </Select>
-          <Select label="Medidor" {...register('meterId')}>
+          <Select label="Tipo / marca de medidor" {...register('meterId')}>
             <option value="">Sin medidor</option>
             {meters?.filter((m) => m.status === 'active').map((m) => (
               <option key={m.id} value={m.id}>{m.mark}</option>
             ))}
           </Select>
+          <Input
+            label="Número / serial del medidor"
+            placeholder="MED-000123"
+            {...register('meterNumber')}
+          />
         </div>
       </section>
 
