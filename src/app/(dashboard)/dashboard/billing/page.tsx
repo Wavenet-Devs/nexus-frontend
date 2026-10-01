@@ -13,7 +13,7 @@ import { Select } from '@/components/ui/input';
 import { StatusBadge } from '@/components/ui/badge';
 import { Pagination } from '@/components/ui/pagination';
 import { EmptyState } from '@/components/ui/empty-state';
-import { formatCurrency, formatMonth } from '@/lib/utils';
+import { formatCurrency, formatMonth, formatDate } from '@/lib/utils';
 
 const LIMIT = 20;
 const CURRENT_YEAR  = new Date().getFullYear();
@@ -195,7 +195,7 @@ export default function BillingPage() {
                       <td className="px-5 py-3.5 text-right font-semibold text-neutral-900">{formatCurrency(inv.balance)}</td>
                       <td className="px-5 py-3.5"><StatusBadge status={inv.status} /></td>
                       <td className="px-5 py-3.5 text-xs text-neutral-500">
-                        {inv.payment_limit ? new Date(inv.payment_limit).toLocaleDateString('es-CO') : '—'}
+                        {inv.payment_limit ? formatDate(inv.payment_limit) : '—'}
                       </td>
                       <td className="px-5 py-3.5" onClick={(e) => e.stopPropagation()}>
                         <Button
