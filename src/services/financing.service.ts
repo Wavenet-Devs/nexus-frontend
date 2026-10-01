@@ -32,6 +32,7 @@ export interface CreateFinancingDto {
 
 export interface PayQuotaDto {
   amount?:           number;
+  paymentType?:      'cash' | 'transfer' | 'card';
   paymentReference?: string;
 }
 
