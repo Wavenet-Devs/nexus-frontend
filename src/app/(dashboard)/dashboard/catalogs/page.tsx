@@ -384,7 +384,11 @@ function CausalsTab() {
   const qc = useQueryClient();
   const [open,    setOpen]    = useState(false);
   const [editing, setEditing] = useState<Causal | null>(null);
-  const [form,    setForm]    = useState({ name: '', code: '' });
+  const [form,    setForm]    = useState({
+    name: '',
+    code: '',
+    resultMode: 'READING_ALLOWED' as Causal['result_mode'],
+  });
   const [err,     setErr]     = useState('');
 
   const { data, isLoading } = useQuery({ queryKey: ['causals'], queryFn: catalogsService.getCausals });
@@ -392,7 +396,11 @@ function CausalsTab() {
 
   const saveMutation = useMutation({
     mutationFn: () => {
-      const dto = { name: form.name.trim(), code: form.code ? parseInt(form.code, 10) : undefined };
+      const dto = {
+        name: form.name.trim(),
+        code: form.code ? parseInt(form.code, 10) : undefined,
+        resultMode: form.resultMode,
+      };
       return editing
         ? catalogsService.updateCausal(editing.id, dto)
         : catalogsService.createCausal(dto);
@@ -406,34 +414,73 @@ function CausalsTab() {
     onSuccess: invalidate,
   });
 
-  const openCreate = () => { setEditing(null); setForm({ name: '', code: '' }); setErr(''); setOpen(true); };
-  const openEdit   = (c: Causal) => { setEditing(c); setForm({ name: c.name, code: c.code ? String(c.code) : '' }); setErr(''); setOpen(true); };
+  const openCreate = () => {
+    setEditing(null);
+    setForm({ name: '', code: '', resultMode: 'READING_ALLOWED' });
+    setErr('');
+    setOpen(true);
+  };
+  const openEdit = (c: Causal) => {
+    setEditing(c);
+    setForm({
+      name: c.name,
+      code: c.code ? String(c.code) : '',
+      resultMode: c.result_mode ?? 'READING_ALLOWED',
+    });
+    setErr('');
+    setOpen(true);
+  };
+
+  const resultLabel: Record<Causal['result_mode'], string> = {
+    ZERO_READING: 'Consumo cero',
+    NO_READING: 'Sin lectura',
+    READING_ALLOWED: 'Lectura permitida',
+  };
+
+  const resultDescription: Record<Causal['result_mode'], string> = {
+    ZERO_READING: 'Registra el período con consumo en cero.',
+    NO_READING: 'Registra la novedad sin una lectura válida.',
+    READING_ALLOWED: 'La causal puede acompañar una lectura normal.',
+  };
+
+  const handleCodeChange = (value: string) => {
+    const numeric = parseInt(value, 10);
+    setForm((f) => ({
+      ...f,
+      code: value,
+      // Compatibilidad con el comportamiento histórico de Nexus.
+      resultMode: numeric === 2 || numeric === 3 ? 'ZERO_READING' : f.resultMode,
+    }));
+  };
 
   return (
     <CatalogShell label="Causal" onAdd={openCreate}>
       <div className="mb-3 p-3 rounded-lg bg-amber-50 border border-amber-100 text-xs text-amber-700">
-        Los códigos <strong>2 y 3</strong> generan consumo cero automáticamente al importar lecturas.
+        Cada causal define qué ocurre con la lectura del período. Por compatibilidad histórica,
+        los códigos <strong>2 y 3</strong> se proponen automáticamente como <strong>Consumo cero</strong>,
+        pero el efecto puede configurarse.
       </div>
       <Card padding="none">
         <table className="w-full text-sm">
           <thead>
             <tr className="border-b border-neutral-100 bg-neutral-50">
-              <Th>Nombre</Th><Th>Código</Th><Th>Estado</Th><Th />
+              <Th>Nombre</Th><Th>Código</Th><Th>Efecto</Th><Th>Estado</Th><Th />
             </tr>
           </thead>
           <tbody>
-            {isLoading && <tr><td colSpan={4} className="px-4 py-8 text-center"><LoadingCell /></td></tr>}
-            {!isLoading && !data?.length && <EmptyRow cols={4} />}
+            {isLoading && <tr><td colSpan={5} className="px-4 py-8 text-center"><LoadingCell /></td></tr>}
+            {!isLoading && !data?.length && <EmptyRow cols={5} />}
             {data?.map((c) => (
               <tr key={c.id} className="border-b border-neutral-50 hover:bg-neutral-50 transition-colors">
                 <td className="px-4 py-3 font-medium text-neutral-900">{c.name}</td>
                 <td className="px-4 py-3">
                   {c.code ? (
-                    <span className={`inline-flex items-center px-2 py-0.5 rounded-full text-xs font-mono font-bold ${
-                      (c.code === 2 || c.code === 3) ? 'bg-amber-100 text-amber-700' : 'bg-neutral-100 text-neutral-600'
-                    }`}>{c.code}</span>
+                    <span className="inline-flex items-center px-2 py-0.5 rounded-full text-xs font-mono font-bold bg-neutral-100 text-neutral-600">
+                      {c.code}
+                    </span>
                   ) : '—'}
                 </td>
+                <td className="px-4 py-3 text-neutral-600 text-xs">{resultLabel[c.result_mode] ?? c.result_mode}</td>
                 <td className="px-4 py-3"><StatusChip status={c.status} /></td>
                 <td className="px-4 py-3">
                   <div className="flex items-center justify-end gap-1">
@@ -455,10 +502,23 @@ function CausalsTab() {
           <Input
             label="Código numérico"
             type="number" min={1} step={1}
-            hint="Códigos 2 y 3 generan lectura cero"
+            hint="Código usado por importaciones y Lector App"
             value={form.code}
-            onChange={(e) => setForm((f) => ({ ...f, code: e.target.value }))}
+            onChange={(e) => handleCodeChange(e.target.value)}
           />
+          <div>
+            <label className="block text-sm font-medium text-neutral-700 mb-1">Efecto sobre la lectura</label>
+            <select
+              value={form.resultMode}
+              onChange={(e) => setForm((f) => ({ ...f, resultMode: e.target.value as Causal['result_mode'] }))}
+              className="h-9 w-full rounded-lg border border-neutral-300 bg-white px-3 text-sm focus:outline-none focus:ring-2 focus:ring-primary-500"
+            >
+              <option value="READING_ALLOWED">Lectura permitida</option>
+              <option value="ZERO_READING">Consumo cero</option>
+              <option value="NO_READING">Sin lectura</option>
+            </select>
+            <p className="text-xs text-neutral-400 mt-1">{resultDescription[form.resultMode]}</p>
+          </div>
           {err && <p className="text-sm text-red-600 flex items-center gap-1"><AlertCircle className="h-4 w-4" />{err}</p>}
           <div className="flex justify-end gap-2">
             <Button variant="ghost" onClick={() => setOpen(false)}>Cancelar</Button>
