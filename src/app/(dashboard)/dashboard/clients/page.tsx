@@ -37,7 +37,7 @@ export default function ClientsPage() {
       search: debouncedSearch || undefined,
       neighborhoodId: neighborhoodId || undefined,
       stratumId:      stratumId || undefined,
-      active:         activeFilter || undefined,
+      status:         (activeFilter || undefined) as 'active' | 'inactive' | undefined,
       page,
       limit: LIMIT,
     }),
@@ -105,7 +105,7 @@ export default function ClientsPage() {
           </Button>
           <Button variant="outline" size="sm" onClick={() => router.push('/dashboard/clients/import')}>
             <Upload className="h-3.5 w-3.5" />
-            Importar XLSX
+            Importar XLSX/CSV
           </Button>
           <Button size="sm" onClick={() => router.push('/dashboard/clients/new')}>
             <Plus className="h-3.5 w-3.5" />
@@ -144,8 +144,8 @@ export default function ClientsPage() {
               onChange={(e) => handleFilter('active', e.target.value)}
             >
               <option value="">Todos</option>
-              <option value="true">Activos</option>
-              <option value="false">Inactivos</option>
+              <option value="active">Activos</option>
+              <option value="inactive">Inactivos</option>
             </Select>
           </div>
           {hasFilters && (
@@ -204,7 +204,7 @@ export default function ClientsPage() {
                       <td className="px-5 py-3.5 text-neutral-600">{client.neighborhood_name ?? '—'}</td>
                       <td className="px-5 py-3.5 text-neutral-600">{client.stratum_name ?? '—'}</td>
                       <td className="px-5 py-3.5">
-                        <StatusBadge status={client.active ? 'active' : 'inactive'} />
+                        <StatusBadge status={client.status} />
                       </td>
                       <td className="px-5 py-3.5" onClick={(e) => e.stopPropagation()}>
                         <div className="flex items-center justify-end gap-1">
@@ -215,10 +215,10 @@ export default function ClientsPage() {
                             Editar
                           </button>
                           <button
-                            onClick={() => setToggleTarget({ id: client.id, name: client.name, active: client.active })}
+                            onClick={() => setToggleTarget({ id: client.id, name: client.name, active: client.status === 'active' })}
                             className="px-2.5 h-7 rounded-md text-xs font-medium text-neutral-500 hover:bg-neutral-100 hover:text-neutral-800 transition-colors"
                           >
-                            {client.active ? 'Desactivar' : 'Activar'}
+                            {client.status === 'active' ? 'Desactivar' : 'Activar'}
                           </button>
                         </div>
                       </td>
@@ -243,7 +243,7 @@ export default function ClientsPage() {
                     <p className="text-sm font-medium text-neutral-900 truncate">{client.name}</p>
                     <p className="text-xs text-neutral-500 truncate">{client.contract} · {client.neighborhood_name ?? client.address}</p>
                   </div>
-                  <StatusBadge status={client.active ? 'active' : 'inactive'} />
+                  <StatusBadge status={client.status} />
                 </div>
               ))}
             </div>
