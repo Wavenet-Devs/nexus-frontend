@@ -78,6 +78,7 @@ export default function PaymentDetailPage() {
   const router    = useRouter();
   const [printerMenuOpen, setPrinterMenuOpen] = useState(false);
   const [printSent, setPrintSent] = useState(false);
+  const [editOpen, setEditOpen] = useState(false);
 
   const { data: payment, isLoading } = useQuery({
     queryKey: ['payment', id],
@@ -94,8 +95,6 @@ export default function PaymentDetailPage() {
 
   if (isLoading) return <PageSkeleton />;
   if (!payment) return null;
-
-  const [editOpen, setEditOpen] = useState(false);
 
   const handlePrintThermal = (printerId: string) => {
     if (!payment) return;
