@@ -75,7 +75,7 @@ export default function ClientDetailPage({ params }: { params: Promise<{ id: str
           <p className="text-xs text-neutral-500">Contrato {client.contract}</p>
         </div>
         <div className="flex items-center gap-2 shrink-0">
-          <StatusBadge status={client.active ? 'active' : 'inactive'} />
+          <StatusBadge status={client.status} />
           <Button
             variant="outline"
             size="sm"
@@ -112,9 +112,9 @@ export default function ClientDetailPage({ params }: { params: Promise<{ id: str
             <InfoRow label="Dirección"  value={client.address} />
             <InfoRow label="Teléfono"   value={client.phone} />
             <InfoRow label="Email"      value={client.email} />
-            <InfoRow label="Documento"  value={client.id_card ? `${client.id_type_name ?? ''} ${client.id_card}` : undefined} />
-            <InfoRow label="Medidor"    value={client.meter_serial} />
-            <InfoRow label="Ruta"       value={client.route_name} />
+            <InfoRow label="Documento"  value={client.id_card ? `${client.identification_type_name ?? ''} ${client.id_card}`.trim() : undefined} />
+            <InfoRow label="Medidor"    value={client.meter_number ?? client.meter_mark} />
+            <InfoRow label="Ruta"       value={client.route} />
             <InfoRow label="Lector"     value={client.reader} />
             <InfoRow label="Repartidor" value={client.deliver} />
           </dl>
