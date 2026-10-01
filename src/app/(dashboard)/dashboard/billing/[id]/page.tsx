@@ -155,7 +155,7 @@ export default function InvoiceDetailPage() {
             </div>
             <span className="text-sm text-neutral-500">{formatMonth(inv.month, inv.year)}</span>
             {inv.payment_limit && (
-              <span className="text-xs text-neutral-400">Vence: {new Date(inv.payment_limit).toLocaleDateString('es-CO')}</span>
+              <span className="text-xs text-neutral-400">Vence: {formatDate(inv.payment_limit)}</span>
             )}
           </div>
         </div>
@@ -191,10 +191,10 @@ export default function InvoiceDetailPage() {
             <ReadingBox label="Consumo kWh" value={consumed} accent />
           </div>
           <dl className="mt-4 grid grid-cols-2 gap-x-6 gap-y-2 text-sm">
-            <InfoRow label="Fecha lectura"   value={inv.reading_date ? new Date(inv.reading_date).toLocaleDateString('es-CO') : '—'} />
+            <InfoRow label="Fecha lectura"   value={inv.reading_date ? formatDate(inv.reading_date) : '—'} />
             <InfoRow label="Días facturados" value={inv.days ?? '—'} />
             <InfoRow label="Estrato"         value={inv.stratum_name ? `${inv.stratum_name} (${inv.stratum_code})` : '—'} />
-            <InfoRow label="Ruta"            value={inv.reader ?? '—'} />
+            <InfoRow label="Ruta"            value={inv.route ?? '—'} />
           </dl>
         </Card>
 
