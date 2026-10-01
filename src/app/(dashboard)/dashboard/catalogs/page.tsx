@@ -639,7 +639,7 @@ function UnitCostsTab() {
     onError: (e: any) => setErr(e?.response?.data?.message ?? 'Error al guardar'),
   });
 
-  const active = history?.find((c) => c.active);
+  const active = history?.find((c) => c.status === 'active');
   const set = (k: string, v: string) => setForm((f) => ({ ...f, [k]: v }));
 
   const openNew = () => {
@@ -709,7 +709,7 @@ function UnitCostsTab() {
                 <td className="px-4 py-3 font-mono text-xs">{formatCurrency(c.losses)}</td>
                 <td className="px-4 py-3 font-mono text-xs font-semibold text-neutral-900">{formatCurrency(c.cu)}</td>
                 <td className="px-4 py-3">
-                  {c.active
+                  {c.status === 'active'
                     ? <span className="inline-flex items-center px-2 py-0.5 rounded-full text-xs font-medium bg-green-100 text-green-700">Activo</span>
                     : <span className="inline-flex items-center px-2 py-0.5 rounded-full text-xs font-medium bg-neutral-100 text-neutral-500">Histórico</span>
                   }
